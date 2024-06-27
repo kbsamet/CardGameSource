@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cip36jni5jcjx"]
+
+[ext_resource type="Script" path="res://Scenes/EnemyController.gd" id="1_g6pye"]
+
+[node name="EnemyController" type="Container"]
+script = ExtResource("1_g6pye")

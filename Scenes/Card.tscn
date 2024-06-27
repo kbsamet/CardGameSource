@@ -1,0 +1,140 @@
+[gd_scene load_steps=11 format=3 uid="uid://d3nep0t7at7fd"]
+
+[ext_resource type="Script" path="res://Scenes/Card.gd" id="1_db5ta"]
+[ext_resource type="Texture2D" uid="uid://b66myg4i0q2fu" path="res://Sprites/cards/block.png" id="2_5ghu6"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="3_cm64p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_jatbe"]
+font = ExtResource("3_cm64p")
+font_size = 32
+outline_size = 2
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_f2bmu"]
+font = ExtResource("3_cm64p")
+font_size = 32
+outline_size = 2
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_jpt33"]
+font = ExtResource("3_cm64p")
+outline_size = 2
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_7vquw"]
+font = ExtResource("3_cm64p")
+outline_size = 2
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="Animation" id="Animation_04c04"]
+resource_name = "hover"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 0.0507659),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+}
+
+[sub_resource type="Animation" id="Animation_rmwds"]
+resource_name = "restore"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 8),
+"update": 0,
+"values": [Vector2(1.5, 1.5), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1hmm7"]
+_data = {
+"hover": SubResource("Animation_04c04"),
+"restore": SubResource("Animation_rmwds")
+}
+
+[node name="Card" type="Node2D"]
+z_index = 5
+script = ExtResource("1_db5ta")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)
+texture = ExtResource("2_5ghu6")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -78.0
+offset_top = -159.0
+offset_right = 79.0
+offset_bottom = 159.0
+
+[node name="ManaLabel" type="Label" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 131.333
+offset_top = 169.667
+offset_right = 149.333
+offset_bottom = 201.667
+text = "3"
+label_settings = SubResource("LabelSettings_jatbe")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TypeLabel" type="Label" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 6.0
+offset_top = 166.333
+offset_right = 24.0
+offset_bottom = 198.333
+text = "R"
+label_settings = SubResource("LabelSettings_f2bmu")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="NameLabel" type="Label" parent="Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 42.6667
+offset_top = 181.0
+offset_right = 108.667
+offset_bottom = 202.0
+text = "Block"
+label_settings = SubResource("LabelSettings_jpt33")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Control"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.972
+anchor_bottom = 0.982
+offset_left = 2.66667
+offset_top = 208.333
+offset_right = 0.0626678
+offset_bottom = 0.057312
+text = "Block 5 damage"
+label_settings = SubResource("LabelSettings_7vquw")
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 131
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1hmm7")
+}
+
+[connection signal="gui_input" from="Control" to="." method="_on_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_hover"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_hover_over"]

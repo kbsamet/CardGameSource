@@ -1,0 +1,40 @@
+{
+	"sheets": [
+		{
+			"name": "cards",
+			"columns": [
+				{
+					"typeStr": "0",
+					"name": "id"
+				},
+				{
+					"typeStr": "1",
+					"name": "name",
+					"display": null
+				},
+				{
+					"typeStr": "1",
+					"name": "description",
+					"display": null
+				},
+				{
+					"typeStr": "5:Action,Reaction",
+					"name": "Type",
+					"display": null
+				}
+			],
+			"lines": [
+				{
+					"id": "",
+					"name": "",
+					"description": "",
+					"Type": 0
+				}
+			],
+			"separators": [],
+			"props": {}
+		}
+	],
+	"customTypes": [],
+	"compress": false
+}

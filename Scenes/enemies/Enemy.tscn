@@ -1,0 +1,163 @@
+[gd_scene load_steps=8 format=3 uid="uid://bjrjps2akf3w2"]
+
+[ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
+[ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
+[ext_resource type="Texture2D" uid="uid://d2y6kkvtrttwx" path="res://Sprites/enemies/Zombie.png" id="2_mm60a"]
+[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
+
+[sub_resource type="Animation" id="Animation_53017"]
+resource_name = "attack_rise"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 100)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.4, 1.4)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.129154, 0.129154, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_1yf6e"]
+resource_name = "attack_end"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(0, 100), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1.4, 1.4), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oafv5"]
+_data = {
+"attack_end": SubResource("Animation_1yf6e"),
+"attack_rise": SubResource("Animation_53017")
+}
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_iuwds")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(3, 3)
+texture = ExtResource("2_mm60a")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -81.0
+offset_top = -251.0
+offset_right = 78.0
+offset_bottom = 202.0
+
+[node name="HealthBar" type="Sprite2D" parent="Control"]
+position = Vector2(81, -4)
+texture = ExtResource("2_6xp31")
+
+[node name="HealthBarRect" type="ColorRect" parent="Control/HealthBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -14.0
+offset_right = -67.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.662745, 0.286275, 0.286275, 1)
+
+[node name="HealthLabel" type="Label" parent="Control/HealthBar"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.969
+offset_left = -61.0
+offset_top = -14.0
+offset_right = -67.0
+offset_bottom = -18.008
+text = "10/10
+"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaminaBar" type="Sprite2D" parent="Control"]
+position = Vector2(81, 32)
+texture = ExtResource("2_6xp31")
+
+[node name="StaminaBarRect" type="ColorRect" parent="Control/StaminaBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -13.0
+offset_right = -67.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.333333, 0.490196, 0.333333, 1)
+
+[node name="StaminaLabel" type="Label" parent="Control/StaminaBar"]
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.969
+offset_left = -61.0
+offset_top = -13.0
+offset_right = -67.0
+offset_bottom = -18.008
+text = "3/3
+"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_oafv5")
+}
+
+[connection signal="gui_input" from="Control" to="." method="_on_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_hover"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_hover_end"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]

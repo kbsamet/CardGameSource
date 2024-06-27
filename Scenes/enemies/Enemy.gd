@@ -1,0 +1,71 @@
+extends Node2D
+
+var enemy_data : db.Enemy
+var is_card_selected = false
+var id : int
+signal on_clicked_signal(id)
+signal attack_rise_done(id)
+signal attack_end_done(id)
+@onready var sprite = $Sprite
+@onready var healthBarRect = $Control/HealthBar/HealthBarRect
+@onready var healthLabel = $Control/HealthBar/HealthLabel
+@onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
+@onready var staminaLabel = $Control/StaminaBar/StaminaLabel
+@onready var animationPlayer = $AnimationPlayer
+@onready var outlineShader = preload("res://Shaders/outline_red.tres")
+
+var stamina_bar_full_width
+var health_bar_full_width
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	sprite.texture = load("res://Sprites/enemies/"+enemy_data._name+".png")
+	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
+	health_bar_full_width = healthBarRect.size.x
+	stamina_bar_full_width = staminaBarRect.size.x
+	
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+func damage(amount):
+	enemy_data.health -= amount
+	healthBarRect.size.x = (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width)
+	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+func _on_hover():
+	if is_card_selected:
+		sprite.material = outlineShader
+
+
+func _on_hover_end():
+	sprite.material = null
+
+func get_attack():
+	return enemy_data.attacks.pick_random()
+
+func _on_input(event):
+	if event is InputEventMouseButton:
+		if event.is_released() && is_card_selected:
+			on_clicked_signal.emit(id)
+
+
+func _on_animation_finished(anim_name):
+	if anim_name == "attack_rise":
+		attack_rise_done.emit(id)
+	elif anim_name == "attack_end":
+		attack_end_done.emit(id)
+		z_index = 0
+
+func start_attack_animation():
+	z_index = 1
+	var tween = create_tween()
+	tween.tween_property(self,"position",Vector2(0,position.y),0.2)
+	await get_tree().create_timer(0.2).timeout
+	animationPlayer.play("attack_rise")
+	
+func start_attack_end_animation():
+	animationPlayer.play("attack_end")
+

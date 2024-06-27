@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxj0poh31buc8"]
+
+[ext_resource type="Script" path="res://Scenes/Hand.gd" id="1_usoam"]
+
+[node name="Hand" type="Container"]
+script = ExtResource("1_usoam")

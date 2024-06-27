@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://ccugtg3ly1noj"]
+
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="1_m5oyk"]
+
+[resource]
+font = ExtResource("1_m5oyk")
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
