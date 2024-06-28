@@ -9,6 +9,7 @@ extends Control
 @onready var endTurnButton = $Container/EndTurnButton
 @onready var endTurnButtonLabel = $Container/EndTurnButton/EndTurnlabel
 @onready var statusEffects = $StatusEffectsContainer
+@onready var deckCountLabel = $Deck/DeckCountLabel
 
 signal end_turn_clicked
 
@@ -39,7 +40,8 @@ func update_ui_values():
 	healthBarLabel.text =  str(db.Player.health) + " / " + str(db.Player.maxHealth)
 	tween.tween_method(func(value): apBar.material.set_shader_parameter("cutoff", value),apBar.material.get_shader_parameter("cutoff"),float(db.Player.ap) / float(db.Player.maxAp),0.2)
 	tween.tween_method(func(value): rpBar.material.set_shader_parameter("cutoff", value),rpBar.material.get_shader_parameter("cutoff"),float(db.Player.rp) / float(db.Player.maxRp),0.2)
-
+	deckCountLabel.text = str(db.Player.deck.size()) + " / " + str(db.Player.deckSize )
+	
 func turn_changed(new_turn):
 	match new_turn:
 		db.Turn.PlayerAction:

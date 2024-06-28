@@ -4,17 +4,22 @@ signal _on_card_used(enemy_id)
 signal enemy_turn_done
 signal enemy_action_done(enemy_id)
 var attacking_enemy_id = -1
-var enemies : Array[Node] = []
+var enemies : Dictionary = {}
+var id_count = 0
+var enemy_generator 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
 func add_enemy(enemy : Node):
-	enemies.append(enemy)
+	enemies[id_count] = enemy
+	enemy.id = id_count
+	id_count += 1
 	enemy.on_clicked_signal.connect(_on_enemy_clicked)
 	enemy.attack_rise_done.connect(_enemy_attack_rise_done)
 	enemy.attack_end_done.connect(_enemy_attack_end_done)
-	enemy.id = enemies.size() - 1
+	enemy.enemy_dead.connect(_enemy_dead)
+	
 	add_child(enemy)
 	center_enemies()
 
@@ -24,27 +29,39 @@ func _on_enemy_clicked(enemy_id):
 func center_enemies():
 	if enemies.is_empty():
 		return
-	var enemy_sprite : Sprite2D = enemies[0].find_child("Sprite")
+	var enemy_sprite : Sprite2D = enemies.values()[0].find_child("Sprite")
 	var enemy_width = enemy_sprite.texture.get_size().x
-	var enemy_count = enemies.size()
+	var enemy_count = enemies.keys().size()
 	var tween = create_tween()
 	for i in range(enemy_count):
 		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
-		tween.tween_property(enemies[i],"position",Vector2((i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),enemies[i].position.y),0.2)
+		tween.tween_property(enemies[enemies.keys()[i]],"position",Vector2((i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),enemies[enemies.keys()[i]].position.y),0.2)
 
 func set_card_selected(new_state):
-	for enemy in enemies:
+	for enemy in enemies.values():
 		enemy.is_card_selected = new_state
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
-func play_turn(enemy_id):
-	if enemy_id > enemies.size() -1 :
+func start_turn():
+	var gen = ArrayIterator.Iterator.new(enemies.keys())
+	enemy_generator = gen
+	play_turn(gen)
+	
+func play_turn(gen:ArrayIterator.Iterator):
+	assert(gen != null, "generator null")
+	if !gen.has_next():
 		enemy_turn_done.emit()
 		return
-	enemies[enemy_id].start_attack_animation()
-	attacking_enemy_id = enemy_id
+	var id = gen.next()
+	while !(id in enemies):
+		if !gen.has_next():
+			enemy_turn_done.emit()
+			return
+		id = gen.next()
+	enemies[id].start_attack_animation()
+	attacking_enemy_id = id
 	
 
 func _enemy_attack_rise_done(enemy_id):
@@ -66,4 +83,14 @@ func end_enemy_attack():
 func _enemy_attack_end_done(enemy_id):
 	center_enemies()
 	await get_tree().create_timer(0.2).timeout
-	play_turn(enemy_id+1)
+	play_turn(enemy_generator)
+	
+func _enemy_dead(enemy_id):
+	remove_child(enemies[enemy_id])
+	enemies[enemy_id].queue_free()
+	enemies.erase(enemy_id)
+	center_enemies()
+	
+func array_generator(arr):
+	for element in arr:
+		await element

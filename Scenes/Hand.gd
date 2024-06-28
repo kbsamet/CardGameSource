@@ -3,6 +3,8 @@ extends Container
 var cards : Dictionary = {}
 var id_count = 0
 var selected_card = -1
+var random = RandomNumberGenerator.new()
+@export var cardScene = preload("res://Scenes/Card.tscn")
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
 # Called when the node enters the scene tree for the first time.
@@ -59,8 +61,21 @@ func _on_card_clicked(id):
 		selected_card_state_changed.emit(true)
 
 func discard(id):
+	
+	db.Player.discardPile.push_back(cards[id].card_data)
 	remove_child(cards[id])
 	cards[id].queue_free()
 	cards.erase(id)
 	center_cards()
 	selected_card = -1
+
+func deal_hand():
+	while cards.size() < db.Player.handSize:
+		if db.Player.deck.size() == 0:
+			db.shuffle_discard_to_deck()
+		var index = random.randi_range(0,db.Player.deck.size() -1)
+		var card = db.Player.deck[index]
+		var new_card = cardScene.instantiate()
+		new_card.card_data = card
+		add_card(new_card)
+		db.remove_from_deck(index)

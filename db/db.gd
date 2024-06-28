@@ -7,12 +7,16 @@ signal turn_changed(new_turn)
 var Player = {
 	"maxHealth" : 20,
 	"health" : 20,
-	"maxAp" : 3,
-	"ap" : 3,
-	"maxRp" : 3,
-	"rp" : 3,
+	"maxAp" : 2,
+	"ap" : 2,
+	"maxRp" : 2,
+	"rp" : 2,
+	"handSize" : 5,
+	"deckSize": 10,
 	"statusEffects": {
-	}
+	},
+	"deck": [],
+	"discardPile":[]
 }
 
 enum Turn {
@@ -106,15 +110,27 @@ class Enemy:
 		status_effects = enemy_data["statusEffects"].duplicate()
 
 func damage_player(amount):
-	if Player.statusEffects.block > amount:
-		change_player_status_effect("block", Player.statusEffects.block - amount)
-		return
-	change_player_stat("health", Player.health - (amount - Player.statusEffects.block))
-	if Player.statusEffects.block != 0:
-		change_player_status_effect("block", 0)
+	if "block" in Player.statusEffects:
+		if Player.statusEffects.block > amount:
+			change_player_status_effect("block", Player.statusEffects.block - amount)
+			return
+		change_player_stat("health", Player.health - (amount - Player.statusEffects.block))
+		if Player.statusEffects.block != 0:
+			change_player_status_effect("block", 0)
+	else:
+		change_player_stat("health", Player.health - amount)
 		
 func change_player_stat(stat,new_stat):
 	Player[stat] = new_stat
+	player_state_changed.emit()
+	
+func remove_from_deck(card_index):
+	Player.deck.remove_at(card_index)
+	player_state_changed.emit()
+
+func shuffle_discard_to_deck():
+	Player.deck = Player.discardPile.duplicate(true)
+	Player.discardPile = []
 	player_state_changed.emit()
 	
 func change_player_status_effect(effect,new_stat):

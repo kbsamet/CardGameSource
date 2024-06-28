@@ -1,29 +1,24 @@
 extends Control
 
 
-var rng = RandomNumberGenerator.new()
 @onready var playerUI = $Control/FightPlayerUI
 @onready var hand = $Control/Hand
 @onready var enemyController = $Control/EnemyController
 @onready var fightUI = $Control/FightPlayerUI
-@export var cardScene = preload("res://Scenes/Card.tscn")
 @export var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
 
 var card_selected = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if db.Player.deck.is_empty():
+		create_deck()
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
-	hand.play_card.connect(use_card)
-	enemyController._on_card_used.connect(use_card)
-	enemyController.enemy_turn_done.connect(enemy_turn_done)
-	enemyController.enemy_action_done.connect(enemy_action_done)
-	fightUI.end_turn_clicked.connect(end_turn_clicked)
-	spawn_random_card()
-	spawn_random_card()
-	spawn_random_card()
-	spawn_random_card()
-	spawn_random_card()
-	spawn_random_card()
+	hand.play_card.connect(_use_card)
+	enemyController._on_card_used.connect(_use_card)
+	enemyController.enemy_turn_done.connect(_enemy_turn_done)
+	enemyController.enemy_action_done.connect(_enemy_action_done)
+	fightUI.end_turn_clicked.connect(_end_turn_clicked)
+	hand.deal_hand()
 	spawn_zombie()
 	spawn_zombie()
 	pass # Replace with function body.
@@ -36,20 +31,13 @@ func _on_card_select_state_changed(newstate):
 func _process(delta):
 	pass
 	
-func spawn_random_card():
-	var card_key = db.cards.keys()[rng.randi_range(0,db.cards.keys().size() - 1)]
-	var card = db.cards[card_key]
-	var new_card = cardScene.instantiate()
-	new_card.card_data = db.Card.new(card_key)
-	hand.add_card(new_card)
-	
 func spawn_zombie():
 	var new_zombie = enemyScene.instantiate() 
 	new_zombie.enemy_data = db.Enemy.new("Zombie")
 	enemyController.add_enemy(new_zombie)
 
 
-func use_card(enemy_id):
+func _use_card(enemy_id):
 	var card_id = hand.selected_card
 	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
@@ -75,19 +63,28 @@ func use_card(enemy_id):
 	hand.discard(card_id)
 
 
-func end_turn_clicked():
+func _end_turn_clicked():
 	if db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
 	if db.current_turn == db.Turn.PlayerAction:
 		db.set_turn(db.Turn.EnemyAction)
-		enemyController.play_turn(0)
+		enemyController.start_turn()
 	else:
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
-func enemy_turn_done():
+		
+func _enemy_turn_done():
+	db.change_player_stat("ap", db.Player.maxAp)
+	db.change_player_stat("rp", db.Player.maxRp)
 	db.set_turn(db.Turn.PlayerAction)
+	hand.deal_hand()
 
-func enemy_action_done(enemy_id):
+func _enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)
 
+func create_deck():
+	for i in range(5):
+		db.Player.deck.push_back(db.Card.new("Strike"))
+		db.Player.deck.push_back(db.Card.new("Block"))
+	fightUI.update_ui_values()
 

@@ -6,6 +6,7 @@ var id : int
 signal on_clicked_signal(id)
 signal attack_rise_done(id)
 signal attack_end_done(id)
+signal enemy_dead(id)
 @onready var sprite = $Sprite
 @onready var healthBarRect = $Control/HealthBar/HealthBarRect
 @onready var healthLabel = $Control/HealthBar/HealthLabel
@@ -47,6 +48,8 @@ func damage(amount):
 	enemy_data.health -= amount
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+	if enemy_data.health <= 0:
+		enemy_dead.emit(id)
 func _on_hover():
 	if is_card_selected:
 		sprite.material = outlineShader
