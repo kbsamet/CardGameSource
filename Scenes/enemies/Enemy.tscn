@@ -152,6 +152,13 @@ label_settings = ExtResource("3_22tp7")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="InfoPopup" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = -87.0
+offset_top = 104.0
+offset_right = 8.0
+offset_bottom = 364.0
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_oafv5")

@@ -13,6 +13,9 @@ signal attack_end_done(id)
 @onready var staminaLabel = $Control/StaminaBar/StaminaLabel
 @onready var animationPlayer = $AnimationPlayer
 @onready var outlineShader = preload("res://Shaders/outline_red.tres")
+@onready var attackIcon = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
+@onready var statusEffectIcon = preload("res://Scenes/ui/StatusEffectIcon.tscn")
+@onready var infoPopup = $Control/InfoPopup
 
 var stamina_bar_full_width
 var health_bar_full_width
@@ -32,9 +35,17 @@ func _ready():
 func _process(delta):
 	pass
 
+func change_stamina(amount):
+	var tween =  create_tween()
+	enemy_data.stamina += amount
+	tween.tween_property(staminaBarRect,"size:x", (float(enemy_data.stamina) / float(enemy_data.max_stamina)) * float(stamina_bar_full_width),0.2)
+	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
+	if enemy_data.stamina == 0:
+		add_status_effect("dazed",1)
 func damage(amount):
+	var tween =  create_tween()
 	enemy_data.health -= amount
-	healthBarRect.size.x = (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width)
+	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 func _on_hover():
 	if is_card_selected:
@@ -45,7 +56,20 @@ func _on_hover_end():
 	sprite.material = null
 
 func get_attack():
-	selected_attack = enemy_data.attacks.pick_random()
+	var dazed_amount = get_status_effect("dazed")
+	if dazed_amount != null:
+		if dazed_amount == 1:
+			add_status_effect("dazed",-1)
+			if enemy_data.stamina == 0:
+				change_stamina(enemy_data.max_stamina)
+		selected_attack = {}
+		return {}
+	var available_attacks = enemy_data.attacks.filter(func(attack): return attack.staminaCost <= enemy_data.stamina)
+	if available_attacks.is_empty():
+		selected_attack = {}
+		return {}
+	available_attacks.sort_custom(func(a,b): return a.staminaCost > b.staminaCost )
+	selected_attack = available_attacks[0]
 	return selected_attack
 
 func _on_input(event):
@@ -57,8 +81,10 @@ func _on_input(event):
 func _on_animation_finished(anim_name):
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
+		set_attack_info()
 	elif anim_name == "attack_end":
 		attack_end_done.emit(id)
+		remove_attack_info()
 		z_index = 0
 
 func start_attack_animation():
@@ -70,4 +96,45 @@ func start_attack_animation():
 	
 func start_attack_end_animation():
 	animationPlayer.play("attack_end")
+	
+func set_attack_info():
+	for attack in selected_attack.keys():
+		var icon = attackIcon.instantiate()
+		icon.add_to_group("attack_icon")
+		infoPopup.add_child(icon)
+		icon.set_data(attack,selected_attack[attack])
 
+func set_status_effect_info():
+	for effect in enemy_data.status_effects.keys():
+		var icon = statusEffectIcon.instantiate()
+		icon.add_to_group("status_effect")
+		infoPopup.add_child(icon)
+		icon.set_data(effect,enemy_data.status_effects[effect])
+
+func remove_status_effect_info():
+	for n in infoPopup.get_children():
+		if n.is_in_group("status_effect"):
+			infoPopup.remove_child(n)
+			n.queue_free()
+
+func remove_attack_info():
+	for n in infoPopup.get_children():
+		if n.is_in_group("attack_icon"):
+			infoPopup.remove_child(n)
+			n.queue_free()
+
+func add_status_effect(effect,amount):
+	if effect in enemy_data.status_effects:
+		if enemy_data.status_effects[effect] <= -amount:
+			enemy_data.status_effects.erase(effect)
+		else:
+			enemy_data.status_effects[effect] += amount
+	else:
+		enemy_data.status_effects[effect] = amount
+	remove_status_effect_info()
+	set_status_effect_info()
+	
+func get_status_effect(effect):
+	if effect in enemy_data.status_effects:
+		return enemy_data.status_effects[effect]
+	return null

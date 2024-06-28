@@ -60,6 +60,7 @@ func _on_card_clicked(id):
 
 func discard(id):
 	remove_child(cards[id])
+	cards[id].queue_free()
 	cards.erase(id)
 	center_cards()
 	selected_card = -1

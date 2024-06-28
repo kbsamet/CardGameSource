@@ -37,6 +37,7 @@ func turn_changed(new_turn):
 		_on_hover_over()
 	if (new_turn == db.Turn.PlayerAction && card_data.type == db.CardType.Reaction) || \
 	 (new_turn == db.Turn.PlayerReaction && card_data.type == db.CardType.Action) || \
+	 new_turn == db.Turn.EnemyAction || new_turn == db.Turn.EnemyReaction || \
 		(card_data.type == db.CardType.Action && db.Player.ap < card_data.cost) ||\
 		(card_data.type == db.CardType.Reaction && db.Player.rp < card_data.cost):
 		sprite.material = disabledShader

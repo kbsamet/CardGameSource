@@ -1,6 +1,7 @@
 extends Node
 
 signal player_state_changed
+signal player_status_effect_changed
 signal turn_changed(new_turn)
 
 var Player = {
@@ -10,8 +11,7 @@ var Player = {
 	"ap" : 3,
 	"maxRp" : 3,
 	"rp" : 3,
-	"status_effects": {
-		"block" : 0
+	"statusEffects": {
 	}
 }
 
@@ -52,12 +52,19 @@ const cards = {
 const enemies = {
 	"Zombie" : {
 		"health" : 15,
-		"stamina" : 5,
+		"stamina" : 3,
 		"attacks": [
 			{
-				"damage" : 3
+				"damage" : 3,
+				"staminaCost" : 2
+			},
+			{
+				"damage" : 1,
+				"staminaCost" : 1
 			}
-		]
+		],
+		"statusEffects": {
+		}
 	}
 }
 
@@ -86,6 +93,7 @@ class Enemy:
 	var max_health : int
 	var max_stamina : int
 	var attacks : Array
+	var status_effects : Dictionary
 	func _init(key:String):
 		assert(db.enemies.has(key),"The Enemy " + key + " does not exist.")
 		_name = key
@@ -95,11 +103,24 @@ class Enemy:
 		max_health = health
 		max_stamina = stamina
 		attacks = enemy_data["attacks"]
+		status_effects = enemy_data["statusEffects"].duplicate()
 
+func damage_player(amount):
+	if Player.statusEffects.block > amount:
+		change_player_status_effect("block", Player.statusEffects.block - amount)
+		return
+	change_player_stat("health", Player.health - (amount - Player.statusEffects.block))
+	if Player.statusEffects.block != 0:
+		change_player_status_effect("block", 0)
+		
 func change_player_stat(stat,new_stat):
 	Player[stat] = new_stat
 	player_state_changed.emit()
-
+	
+func change_player_status_effect(effect,new_stat):
+	Player.statusEffects[effect] = new_stat
+	player_status_effect_changed.emit()
+	
 func set_turn(newTurn : Turn):
 	current_turn = newTurn
 	turn_changed.emit(newTurn)

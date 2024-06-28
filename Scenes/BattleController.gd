@@ -1,8 +1,6 @@
 extends Control
 
 
-
-
 var rng = RandomNumberGenerator.new()
 @onready var playerUI = $Control/FightPlayerUI
 @onready var hand = $Control/Hand
@@ -64,6 +62,12 @@ func use_card(enemy_id):
 	for effect in card_effects.keys():
 		if effect == db.CardEffect.Damage:
 			enemyController.enemies[enemy_id].damage(card_effects[effect])
+		elif effect == db.CardEffect.Block:
+			if "block" in db.Player.statusEffects:
+				db.change_player_status_effect("block", db.Player.statusEffects.block + card_effects[effect])
+			else:
+				db.change_player_status_effect("block", card_effects[effect])
+				
 	if selected_card.card_data.type == db.CardType.Action:
 		db.change_player_stat("ap",db.Player.ap - selected_card.card_data.cost)
 	else:
@@ -85,3 +89,5 @@ func enemy_turn_done():
 
 func enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)
+
+

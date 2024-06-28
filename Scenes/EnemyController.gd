@@ -58,7 +58,9 @@ func end_enemy_attack():
 	assert(attack != null,"Enemy does not have an attack selected!")
 	for key in attack.keys():
 		if key == "damage":
-			db.change_player_stat("health",db.Player.health - attack["damage"])
+			db.damage_player(attack["damage"])
+		if key == "staminaCost":
+			enemies[attacking_enemy_id].change_stamina(-attack["staminaCost"])
 	enemies[attacking_enemy_id].start_attack_end_animation()
 
 func _enemy_attack_end_done(enemy_id):

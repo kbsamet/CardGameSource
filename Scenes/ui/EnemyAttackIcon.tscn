@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://ckqcd524en7cb"]
+
+[ext_resource type="Script" path="res://Scenes/ui/EnemyAttackIcon.gd" id="1_h63hl"]
+[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_ujt7e"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8h5h7"]
+load_path = "res://.godot/imported/damage.png-aa9d8406b78a799e0d6830c7106f7a8d.ctex"
+
+[node name="EnemyAttackIcon" type="Control"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 3
+anchor_right = 0.067
+anchor_bottom = 0.118
+offset_left = 1.0
+offset_top = -1.0
+offset_right = -63.64
+offset_bottom = -64.44
+scale = Vector2(2, 2)
+script = ExtResource("1_h63hl")
+
+[node name="Node2D" type="Node2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="Sprite" type="Sprite2D" parent="Node2D"]
+position = Vector2(18, 18.25)
+scale = Vector2(1.15, 1.15)
+texture = SubResource("CompressedTexture2D_8h5h7")
+
+[node name="AmountLabel" type="Label" parent="Node2D"]
+offset_left = 26.25
+offset_top = 22.5
+offset_right = 36.25
+offset_bottom = 38.5
+text = "3"
+label_settings = ExtResource("2_ujt7e")
