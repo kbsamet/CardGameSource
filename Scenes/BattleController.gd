@@ -1,12 +1,9 @@
 extends Control
 
-enum Turn {
-	PlayerAction,PlayerReaction, EnemyAction,EnemyReaction
-}
+
 
 
 var rng = RandomNumberGenerator.new()
-var current_turn = Turn.PlayerAction
 @onready var playerUI = $Control/FightPlayerUI
 @onready var hand = $Control/Hand
 @onready var enemyController = $Control/EnemyController
@@ -18,8 +15,10 @@ var card_selected = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
+	hand.play_card.connect(use_card)
 	enemyController._on_card_used.connect(use_card)
 	enemyController.enemy_turn_done.connect(enemy_turn_done)
+	enemyController.enemy_action_done.connect(enemy_action_done)
 	fightUI.end_turn_clicked.connect(end_turn_clicked)
 	spawn_random_card()
 	spawn_random_card()
@@ -54,23 +53,35 @@ func spawn_zombie():
 
 func use_card(enemy_id):
 	var card_id = hand.selected_card
-	if card_id == -1 || current_turn == Turn.EnemyAction || current_turn == Turn.EnemyReaction:
+	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
-	var card_effects =  hand.cards[card_id].card_data.effects
-	if db.Player.ap < hand.cards[card_id].card_data.cost:
+	var selected_card = hand.cards[card_id]
+	var card_effects =  selected_card.card_data.effects
+	if (selected_card.card_data.type == db.CardType.Action && db.Player.ap < selected_card.card_data.cost) || (selected_card.card_data.type == db.CardType.Reaction && db.Player.rp < selected_card.card_data.cost) :
+		return
+	if (selected_card.card_data.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.card_data.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
 	for effect in card_effects.keys():
 		if effect == db.CardEffect.Damage:
 			enemyController.enemies[enemy_id].damage(card_effects[effect])
-	db.change_player_stat("ap",db.Player.ap - hand.cards[card_id].card_data.cost)
+	if selected_card.card_data.type == db.CardType.Action:
+		db.change_player_stat("ap",db.Player.ap - selected_card.card_data.cost)
+	else:
+		db.change_player_stat("rp",db.Player.rp - selected_card.card_data.cost)
 	hand.discard(card_id)
 
 
 func end_turn_clicked():
-	if current_turn == Turn.EnemyAction ||current_turn == Turn.EnemyReaction:
+	if db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
-	current_turn = Turn.EnemyAction
-	enemyController.play_turn(0)
-
+	if db.current_turn == db.Turn.PlayerAction:
+		db.set_turn(db.Turn.EnemyAction)
+		enemyController.play_turn(0)
+	else:
+		db.set_turn(db.Turn.EnemyAction)
+		enemyController.end_enemy_attack()
 func enemy_turn_done():
-	current_turn = Turn.PlayerAction
+	db.set_turn(db.Turn.PlayerAction)
+
+func enemy_action_done(enemy_id):
+	db.set_turn(db.Turn.PlayerReaction)

@@ -4,9 +4,10 @@ var cards : Dictionary = {}
 var id_count = 0
 var selected_card = -1
 signal selected_card_state_changed(new_state)
+signal play_card(nil)
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	db.turn_changed.connect(turn_changed)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -32,15 +33,25 @@ func center_cards():
 		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
 		cards[card_keys[i]].position.x = (i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) + 10)
 
+func turn_changed(new_turn):
+	if selected_card != -1:
+		cards[selected_card].set_selected(false)
+		selected_card = -1
 func _on_card_clicked(id):
+	if cards[id].disabled:
+		return
 	if selected_card == -1:
 		cards[id].set_selected(true)
 		selected_card = id
 		selected_card_state_changed.emit(true)
 	elif selected_card == id:
+		if !cards[selected_card].card_data.targeted:
+			play_card.emit(null)
+			return
+		
 		cards[selected_card].set_selected(false)
-		selected_card = -1
 		selected_card_state_changed.emit(false)
+		selected_card = -1
 	else:
 		cards[selected_card].set_selected(false)
 		cards[id].set_selected(true)

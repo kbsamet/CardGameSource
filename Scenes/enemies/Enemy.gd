@@ -16,6 +16,7 @@ signal attack_end_done(id)
 
 var stamina_bar_full_width
 var health_bar_full_width
+var selected_attack = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	sprite.texture = load("res://Sprites/enemies/"+enemy_data._name+".png")
@@ -44,7 +45,8 @@ func _on_hover_end():
 	sprite.material = null
 
 func get_attack():
-	return enemy_data.attacks.pick_random()
+	selected_attack = enemy_data.attacks.pick_random()
+	return selected_attack
 
 func _on_input(event):
 	if event is InputEventMouseButton:

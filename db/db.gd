@@ -1,6 +1,7 @@
 extends Node
 
 signal player_state_changed
+signal turn_changed(new_turn)
 
 var Player = {
 	"maxHealth" : 20,
@@ -9,8 +10,15 @@ var Player = {
 	"ap" : 3,
 	"maxRp" : 3,
 	"rp" : 3,
+	"status_effects": {
+		"block" : 0
+	}
 }
 
+enum Turn {
+	PlayerAction,PlayerReaction, EnemyAction,EnemyReaction
+}
+var current_turn = Turn.PlayerAction
 
 enum CardType {
 	Action,Reaction
@@ -25,6 +33,7 @@ const cards = {
 		"type" : CardType.Action,
 		"description": "Deal 5 damage",
 		"cost": 1,
+		"targeted" : true,
 		"effects": {
 			 CardEffect.Damage : 5
 		}
@@ -33,6 +42,7 @@ const cards = {
 		"type" : CardType.Reaction,
 		"description": "Block 5 damage",
 		"cost": 1,
+		"targeted" : false,
 		"effects": {
 			CardEffect.Block : 3
 		}
@@ -56,6 +66,7 @@ class Card:
 	var type : CardType
 	var description: String
 	var cost : int
+	var targeted : bool
 	var effects
 	
 	func _init(key:String):
@@ -66,7 +77,7 @@ class Card:
 		description = card_data["description"]
 		cost = card_data["cost"]
 		effects = card_data["effects"]
-		
+		targeted = card_data["targeted"]
 
 class Enemy:
 	var _name : String
@@ -88,3 +99,7 @@ class Enemy:
 func change_player_stat(stat,new_stat):
 	Player[stat] = new_stat
 	player_state_changed.emit()
+
+func set_turn(newTurn : Turn):
+	current_turn = newTurn
+	turn_changed.emit(newTurn)

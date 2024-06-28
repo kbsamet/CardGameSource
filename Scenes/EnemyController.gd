@@ -2,6 +2,8 @@ extends Container
 
 signal _on_card_used(enemy_id)
 signal enemy_turn_done
+signal enemy_action_done(enemy_id)
+var attacking_enemy_id = -1
 var enemies : Array[Node] = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -20,6 +22,8 @@ func _on_enemy_clicked(enemy_id):
 	_on_card_used.emit(enemy_id)
 
 func center_enemies():
+	if enemies.is_empty():
+		return
 	var enemy_sprite : Sprite2D = enemies[0].find_child("Sprite")
 	var enemy_width = enemy_sprite.texture.get_size().x
 	var enemy_count = enemies.size()
@@ -40,15 +44,22 @@ func play_turn(enemy_id):
 		enemy_turn_done.emit()
 		return
 	enemies[enemy_id].start_attack_animation()
+	attacking_enemy_id = enemy_id
 	
 
 func _enemy_attack_rise_done(enemy_id):
 	var enemy = enemies[enemy_id]
 	var attack = enemy.get_attack()
+	enemy_action_done.emit(enemy_id)
+
+func end_enemy_attack():
+	assert(attacking_enemy_id != -1,"No enemies are attacking!")
+	var attack = enemies[attacking_enemy_id].selected_attack
+	assert(attack != null,"Enemy does not have an attack selected!")
 	for key in attack.keys():
 		if key == "damage":
 			db.change_player_stat("health",db.Player.health - attack["damage"])
-	enemies[enemy_id].start_attack_end_animation()
+	enemies[attacking_enemy_id].start_attack_end_animation()
 
 func _enemy_attack_end_done(enemy_id):
 	center_enemies()

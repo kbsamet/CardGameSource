@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wyfcmcsfevsr"
-path="res://.godot/imported/end_turn.png-3175da250f67d26d4c90a144e38e2861.ctex"
+uid="uid://dnuaeetyyjit8"
+path="res://.godot/imported/block.png-4579814e21915a4e101a7208ab4fb556.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/ui/end_turn.png"
-dest_files=["res://.godot/imported/end_turn.png-3175da250f67d26d4c90a144e38e2861.ctex"]
+source_file="res://Sprites/ui/statusEffects/block.png"
+dest_files=["res://.godot/imported/block.png-4579814e21915a4e101a7208ab4fb556.ctex"]
 
 [params]
 
