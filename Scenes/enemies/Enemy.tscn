@@ -156,8 +156,8 @@ vertical_alignment = 1
 layout_mode = 0
 offset_left = -87.0
 offset_top = 104.0
-offset_right = 8.0
-offset_bottom = 364.0
+offset_right = 17.0
+offset_bottom = 442.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

@@ -22,14 +22,14 @@ script = ExtResource("1_h63hl")
 scale = Vector2(2, 2)
 
 [node name="Sprite" type="Sprite2D" parent="Node2D"]
-position = Vector2(18, 18.25)
-scale = Vector2(1.15, 1.15)
+position = Vector2(16.05, 16.05)
+scale = Vector2(1.02813, 1.0125)
 texture = SubResource("CompressedTexture2D_8h5h7")
 
 [node name="AmountLabel" type="Label" parent="Node2D"]
-offset_left = 26.25
-offset_top = 22.5
-offset_right = 36.25
-offset_bottom = 38.5
+offset_left = 24.0
+offset_top = 18.5
+offset_right = 34.0
+offset_bottom = 34.5
 text = "3"
 label_settings = ExtResource("2_ujt7e")

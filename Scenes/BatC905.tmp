@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://cn44o3l7krv"]
+
+[ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
+[ext_resource type="PackedScene" uid="uid://cip36jni5jcjx" path="res://Scenes/EnemyController.tscn" id="2_63inp"]
+[ext_resource type="PackedScene" uid="uid://cxj0poh31buc8" path="res://Scenes/Hand.tscn" id="3_lhgsg"]
+[ext_resource type="PackedScene" uid="uid://ddtkpa3ifuhnj" path="res://Scenes/ui/FightPlayerUI.tscn" id="4_b61bc"]
+
+[node name="BattleController" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_iqj2w")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1917.0
+offset_bottom = 1073.0
+color = Color(0, 0, 0, 1)
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 3.0
+offset_right = 1922.0
+offset_bottom = 1080.0
+
+[node name="EnemyController" parent="Control" instance=ExtResource("2_63inp")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 341.0
+offset_bottom = 341.0
+grow_horizontal = 2
+
+[node name="Hand" parent="Control" instance=ExtResource("3_lhgsg")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = 297.5
+offset_bottom = 297.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FightPlayerUI" parent="Control" instance=ExtResource("4_b61bc")]
+layout_mode = 1

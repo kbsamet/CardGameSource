@@ -1,7 +1,7 @@
 extends Node2D
 
 
-var card_data : db.Card
+var card_data : CardData
 signal on_clicked_signal(id)
 var id: int
 var selected = false
@@ -28,8 +28,8 @@ func _ready():
 	sprite.texture = load("res://Sprites/cards/"+card_data._name+".png")
 
 func _player_state_changed():
-	if (card_data.type == db.CardType.Action && db.Player.ap < card_data.cost) ||\
-		(card_data.type == db.CardType.Reaction && db.Player.rp < card_data.cost):
+	if (card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
+		(card_data.type == db.CardType.Reaction && db.player.rp < card_data.cost):
 		sprite.material = disabledShader
 		disabled = true
 func _turn_changed(new_turn):
@@ -38,8 +38,8 @@ func _turn_changed(new_turn):
 	if (new_turn == db.Turn.PlayerAction && card_data.type == db.CardType.Reaction) || \
 	 (new_turn == db.Turn.PlayerReaction && card_data.type == db.CardType.Action) || \
 	 new_turn == db.Turn.EnemyAction || new_turn == db.Turn.EnemyReaction || \
-		(card_data.type == db.CardType.Action && db.Player.ap < card_data.cost) ||\
-		(card_data.type == db.CardType.Reaction && db.Player.rp < card_data.cost):
+		(card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
+		(card_data.type == db.CardType.Reaction && db.player.rp < card_data.cost):
 		sprite.material = disabledShader
 		disabled = true
 		return

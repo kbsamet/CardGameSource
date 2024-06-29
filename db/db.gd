@@ -1,23 +1,12 @@
 extends Node
 
+const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
+
 signal player_state_changed
 signal player_status_effect_changed
 signal turn_changed(new_turn)
 
-var Player = {
-	"maxHealth" : 20,
-	"health" : 20,
-	"maxAp" : 2,
-	"ap" : 2,
-	"maxRp" : 2,
-	"rp" : 2,
-	"handSize" : 5,
-	"deckSize": 10,
-	"statusEffects": {
-	},
-	"deck": [],
-	"discardPile":[]
-}
+var player : Player = Player.new()
 
 enum Turn {
 	PlayerAction,PlayerReaction, EnemyAction,EnemyReaction
@@ -29,11 +18,12 @@ enum CardType {
 } 
 
 enum CardEffect{
-	Damage,Block
+	Damage,Block,Dodge,Daze,Bleed
 }
 
-const cards = {
-	"Strike":{
+var cards : Dictionary = {
+	"Strike" :{
+		"name" : "Strike",
 		"type" : CardType.Action,
 		"description": "Deal 5 damage",
 		"cost": 1,
@@ -42,22 +32,51 @@ const cards = {
 			 CardEffect.Damage : 5
 		}
 	},
-	"Block":{
+	"Shield Bash" : {
+		"name": "Shield Bash",
 		"type" : CardType.Reaction,
-		"description": "Block 5 damage",
+		"description": "Deal 3 damage. Stun the enemy.",
+		"cost": 2,
+		"targeted" : true,
+		"effects": {
+			CardEffect.Damage : 3,
+			CardEffect.Daze : 1
+		}
+	},
+	"Block" :{
+		"name" : "Block",
+		"type" : CardType.Reaction,
+		"description": "Block 3 damage",
 		"cost": 1,
 		"targeted" : false,
 		"effects": {
 			CardEffect.Block : 3
 		}
+	},
+	"Daze" : {
+		"name" : "Daze",
+		"type" : CardType.Action,
+		"description": "Deal 5 damage. Stun the enemy.",
+		"cost": 2,
+		"targeted" : true,
+		"effects": {
+			CardEffect.Damage : 5,
+			CardEffect.Daze : 1,
+		}
 	}
 }
 
-const enemies = {
-	"Zombie" : {
+var enemies : Dictionary = {
+	"Zombie": {
+		"name" : "Zombie",
 		"health" : 15,
 		"stamina" : 3,
 		"attacks": [
+			{
+				"damage" : 5,
+				"bleed" : 1,
+				"staminaCost" : 3
+			},
 			{
 				"damage" : 3,
 				"staminaCost" : 2
@@ -72,71 +91,23 @@ const enemies = {
 	}
 }
 
-class Card:
-	var _name : String
-	var type : CardType
-	var description: String
-	var cost : int
-	var targeted : bool
-	var effects
-	
-	func _init(key:String):
-		assert(db.cards.has(key),"The card " + key + " does not exist.")
-		_name = key
-		var card_data = db.cards[key]
-		type = card_data["type"]
-		description = card_data["description"]
-		cost = card_data["cost"]
-		effects = card_data["effects"]
-		targeted = card_data["targeted"]
-
-class Enemy:
-	var _name : String
-	var health : int
-	var stamina : int
-	var max_health : int
-	var max_stamina : int
-	var attacks : Array
-	var status_effects : Dictionary
-	func _init(key:String):
-		assert(db.enemies.has(key),"The Enemy " + key + " does not exist.")
-		_name = key
-		var enemy_data = db.enemies[key]
-		health = enemy_data["health"]
-		stamina = enemy_data["stamina"]
-		max_health = health
-		max_stamina = stamina
-		attacks = enemy_data["attacks"]
-		status_effects = enemy_data["statusEffects"].duplicate()
-
-func damage_player(amount):
-	if "block" in Player.statusEffects:
-		if Player.statusEffects.block > amount:
-			change_player_status_effect("block", Player.statusEffects.block - amount)
-			return
-		change_player_stat("health", Player.health - (amount - Player.statusEffects.block))
-		if Player.statusEffects.block != 0:
-			change_player_status_effect("block", 0)
-	else:
-		change_player_stat("health", Player.health - amount)
-		
-func change_player_stat(stat,new_stat):
-	Player[stat] = new_stat
-	player_state_changed.emit()
-	
 func remove_from_deck(card_index):
-	Player.deck.remove_at(card_index)
+	player.deck.remove_at(card_index)
 	player_state_changed.emit()
 
 func shuffle_discard_to_deck():
-	Player.deck = Player.discardPile.duplicate(true)
-	Player.discardPile = []
+	player.deck = player.discardPile.duplicate(true)
+	player.discardPile = []
 	player_state_changed.emit()
 	
-func change_player_status_effect(effect,new_stat):
-	Player.statusEffects[effect] = new_stat
-	player_status_effect_changed.emit()
 	
 func set_turn(newTurn : Turn):
 	current_turn = newTurn
 	turn_changed.emit(newTurn)
+
+func  reset_player():
+	player.reset()
+	
+func check_game_over():
+	if player.health <= 0:
+		get_tree().change_scene_to_packed(gameOverScreen)

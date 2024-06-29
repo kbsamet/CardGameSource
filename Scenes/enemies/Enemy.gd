@@ -1,6 +1,6 @@
 extends Node2D
 
-var enemy_data : db.Enemy
+var enemy_data : EnemyData
 var is_card_selected = false
 var id : int
 signal on_clicked_signal(id)
@@ -71,8 +71,19 @@ func get_attack():
 	if available_attacks.is_empty():
 		selected_attack = {}
 		return {}
-	available_attacks.sort_custom(func(a,b): return a.staminaCost > b.staminaCost )
-	selected_attack = available_attacks[0]
+	#get best attack
+	#available_attacks.sort_custom(func(a,b): return a.staminaCost > b.staminaCost )
+	#selected_attack = available_attacks[0]
+	
+	#get random attack
+	#selected_attack = available_attacks.pick_random()
+	
+	#get weighted random attack based on cost
+	var weighted_list = []
+	for attack in available_attacks:
+		for i in range(attack.staminaCost):
+			weighted_list.append(attack)
+	selected_attack = weighted_list.pick_random()
 	return selected_attack
 
 func _on_input(event):
@@ -86,7 +97,7 @@ func _on_animation_finished(anim_name):
 		attack_rise_done.emit(id)
 		set_attack_info()
 	elif anim_name == "attack_end":
-		attack_end_done.emit(id)
+		attack_end_done.emit()
 		remove_attack_info()
 		z_index = 0
 
@@ -131,11 +142,20 @@ func add_status_effect(effect,amount):
 		if enemy_data.status_effects[effect] <= -amount:
 			enemy_data.status_effects.erase(effect)
 		else:
+			if effect == "dazed":
+				selected_attack = {}
+				remove_attack_info()
+				set_attack_info()
 			enemy_data.status_effects[effect] += amount
 	else:
+		if effect == "dazed":
+			selected_attack = {}
+			remove_attack_info()
+			set_attack_info()
 		enemy_data.status_effects[effect] = amount
 	remove_status_effect_info()
 	set_status_effect_info()
+	
 	
 func get_status_effect(effect):
 	if effect in enemy_data.status_effects:

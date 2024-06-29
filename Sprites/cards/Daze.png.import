@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcyjkrtrroft0"
-path="res://.godot/imported/Strike.png-9daa2bfc3fa5e8b5ce64610f6244b747.ctex"
+uid="uid://op8gvv7aj10p"
+path="res://.godot/imported/Daze.png-8207e49df9935aa467b196b4556df96c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/cards/Strike.png"
-dest_files=["res://.godot/imported/Strike.png-9daa2bfc3fa5e8b5ce64610f6244b747.ctex"]
+source_file="res://Sprites/cards/Daze.png"
+dest_files=["res://.godot/imported/Daze.png-8207e49df9935aa467b196b4556df96c.ctex"]
 
 [params]
 

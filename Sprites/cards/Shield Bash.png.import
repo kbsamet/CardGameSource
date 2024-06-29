@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bcyjkrtrroft0"
-path="res://.godot/imported/Strike.png-9daa2bfc3fa5e8b5ce64610f6244b747.ctex"
+uid="uid://dgi4wfmka45el"
+path="res://.godot/imported/Shield Bash.png-1686ee893a08bd2fdd6c3860192949eb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/cards/Strike.png"
-dest_files=["res://.godot/imported/Strike.png-9daa2bfc3fa5e8b5ce64610f6244b747.ctex"]
+source_file="res://Sprites/cards/Shield Bash.png"
+dest_files=["res://.godot/imported/Shield Bash.png-1686ee893a08bd2fdd6c3860192949eb.ctex"]
 
 [params]
 

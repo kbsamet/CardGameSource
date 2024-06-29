@@ -1,16 +1,14 @@
 extends Control
 
-
-@onready var playerUI = $Control/FightPlayerUI
-@onready var hand = $Control/Hand
-@onready var enemyController = $Control/EnemyController
-@onready var fightUI = $Control/FightPlayerUI
+@onready var hand : Hand  = $Control/Hand
+@onready var enemyController : EnemyController = $Control/EnemyController
+@onready var fightUI : PlayerUI= $Control/FightPlayerUI
 @export var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
 
 var card_selected = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if db.Player.deck.is_empty():
+	if db.player.deck.is_empty():
 		create_deck()
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
 	hand.play_card.connect(_use_card)
@@ -33,7 +31,7 @@ func _process(delta):
 	
 func spawn_zombie():
 	var new_zombie = enemyScene.instantiate() 
-	new_zombie.enemy_data = db.Enemy.new("Zombie")
+	new_zombie.enemy_data = EnemyData.fromDict(db.enemies["Zombie"]) 
 	enemyController.add_enemy(new_zombie)
 
 
@@ -42,8 +40,9 @@ func _use_card(enemy_id):
 	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
 	var selected_card = hand.cards[card_id]
+	
 	var card_effects =  selected_card.card_data.effects
-	if (selected_card.card_data.type == db.CardType.Action && db.Player.ap < selected_card.card_data.cost) || (selected_card.card_data.type == db.CardType.Reaction && db.Player.rp < selected_card.card_data.cost) :
+	if (selected_card.card_data.type == db.CardType.Action && db.player.ap < selected_card.card_data.cost) || (selected_card.card_data.type == db.CardType.Reaction && db.player.rp < selected_card.card_data.cost) :
 		return
 	if (selected_card.card_data.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.card_data.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
@@ -51,15 +50,19 @@ func _use_card(enemy_id):
 		if effect == db.CardEffect.Damage:
 			enemyController.enemies[enemy_id].damage(card_effects[effect])
 		elif effect == db.CardEffect.Block:
-			if "block" in db.Player.statusEffects:
-				db.change_player_status_effect("block", db.Player.statusEffects.block + card_effects[effect])
+			if "block" in db.player.status_effects:
+				db.player.change_player_status_effect("block", db.player.status_effects.block + card_effects[effect])
 			else:
-				db.change_player_status_effect("block", card_effects[effect])
-				
+				db.player.change_player_status_effect("block", card_effects[effect])
+		elif effect == db.CardEffect.Daze:
+			if enemy_id in enemyController.enemies:
+				enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
 	if selected_card.card_data.type == db.CardType.Action:
-		db.change_player_stat("ap",db.Player.ap - selected_card.card_data.cost)
+		db.player.ap = db.player.ap - selected_card.card_data.cost
+		db.player_state_changed.emit()
 	else:
-		db.change_player_stat("rp",db.Player.rp - selected_card.card_data.cost)
+		db.player.rp = db.player.rp - selected_card.card_data.cost
+		db.player_state_changed.emit()
 	hand.discard(card_id)
 
 
@@ -72,19 +75,29 @@ func _end_turn_clicked():
 	else:
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
+	if enemyController.enemies.is_empty():
+		spawn_zombie()
+		spawn_zombie()
+		spawn_zombie()
 		
 func _enemy_turn_done():
-	db.change_player_stat("ap", db.Player.maxAp)
-	db.change_player_stat("rp", db.Player.maxRp)
+	db.player.ap = db.player.max_ap
+	db.player.rp = db.player.max_rp
+	db.player_state_changed.emit()
+	db.player.end_turn_process_player_status_effects()
+	db.check_game_over()
 	db.set_turn(db.Turn.PlayerAction)
+	hand.discard_all()
 	hand.deal_hand()
 
 func _enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)
 
 func create_deck():
-	for i in range(5):
-		db.Player.deck.push_back(db.Card.new("Strike"))
-		db.Player.deck.push_back(db.Card.new("Block"))
+	for i in range(4):
+		db.player.deck.push_back(CardData.from_dict(db.cards["Strike"]))
+		db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
+	db.player.deck.push_back(CardData.from_dict(db.cards["Shield Bash"]))
+	db.player.deck.push_back(CardData.from_dict(db.cards["Daze"]))
 	fightUI.update_ui_values()
 

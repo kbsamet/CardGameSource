@@ -1,5 +1,5 @@
 extends Control
-
+class_name PlayerUI
 @onready var healthBarRect = $HealthBar/HealthBarRect
 @onready var healthBarLabel = $HealthBar/HealthLabel
 @onready var apLabel = $ApBar/ApBarOutline/ApLabel
@@ -33,14 +33,14 @@ func _process(delta):
 
 func update_ui_values():
 	var tween = create_tween()
-	tween.tween_property(healthBarRect,"size:x",(float(db.Player.health) / float(db.Player.maxHealth)) * health_bar_full_width,0.1)
+	tween.tween_property(healthBarRect,"size:x",(float(db.player.health) / float(db.player.max_health)) * health_bar_full_width,0.1)
 	
-	apLabel.text = str(db.Player.ap) + " / " + str(db.Player.maxAp)
-	rpLabel.text = str(db.Player.rp) + " / " + str(db.Player.maxRp)
-	healthBarLabel.text =  str(db.Player.health) + " / " + str(db.Player.maxHealth)
-	tween.tween_method(func(value): apBar.material.set_shader_parameter("cutoff", value),apBar.material.get_shader_parameter("cutoff"),float(db.Player.ap) / float(db.Player.maxAp),0.2)
-	tween.tween_method(func(value): rpBar.material.set_shader_parameter("cutoff", value),rpBar.material.get_shader_parameter("cutoff"),float(db.Player.rp) / float(db.Player.maxRp),0.2)
-	deckCountLabel.text = str(db.Player.deck.size()) + " / " + str(db.Player.deckSize )
+	apLabel.text = str(db.player.ap) + " / " + str(db.player.max_ap)
+	rpLabel.text = str(db.player.rp) + " / " + str(db.player.max_rp)
+	healthBarLabel.text =  str(db.player.health) + " / " + str(db.player.max_health)
+	tween.tween_method(func(value): apBar.material.set_shader_parameter("cutoff", value),apBar.material.get_shader_parameter("cutoff"),float(db.player.ap) / float(db.player.max_ap),0.2)
+	tween.tween_method(func(value): rpBar.material.set_shader_parameter("cutoff", value),rpBar.material.get_shader_parameter("cutoff"),float(db.player.rp) / float(db.player.max_rp),0.2)
+	deckCountLabel.text = str(db.player.deck.size()) + " / " + str(db.player.deck_size )
 	
 func turn_changed(new_turn):
 	match new_turn:
@@ -65,7 +65,7 @@ func status_effect_changed():
 		statusEffects.remove_child(n)
 		n.queue_free()
 		
-	var effects = db.Player.statusEffects
+	var effects = db.player.status_effects
 	for effect in effects.keys():
 		if effects[effect] != 0:
 			var icon = statusEffectIcon.instantiate()

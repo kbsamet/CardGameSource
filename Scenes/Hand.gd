@@ -1,5 +1,5 @@
 extends Container
-
+class_name Hand
 var cards : Dictionary = {}
 var id_count = 0
 var selected_card = -1
@@ -62,19 +62,23 @@ func _on_card_clicked(id):
 
 func discard(id):
 	
-	db.Player.discardPile.push_back(cards[id].card_data)
+	db.player.discardPile.push_back(cards[id].card_data)
 	remove_child(cards[id])
 	cards[id].queue_free()
 	cards.erase(id)
 	center_cards()
 	selected_card = -1
 
+func discard_all():
+	for card_id in cards.keys():
+		discard(card_id)
+
 func deal_hand():
-	while cards.size() < db.Player.handSize:
-		if db.Player.deck.size() == 0:
+	while cards.size() < db.player.hand_size:
+		if db.player.deck.size() == 0:
 			db.shuffle_discard_to_deck()
-		var index = random.randi_range(0,db.Player.deck.size() -1)
-		var card = db.Player.deck[index]
+		var index = random.randi_range(0,db.player.deck.size() -1)
+		var card = db.player.deck[index]
 		var new_card = cardScene.instantiate()
 		new_card.card_data = card
 		add_card(new_card)

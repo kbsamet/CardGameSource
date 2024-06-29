@@ -1,4 +1,5 @@
 extends Container
+class_name EnemyController
 
 signal _on_card_used(enemy_id)
 signal enemy_turn_done
@@ -70,17 +71,27 @@ func _enemy_attack_rise_done(enemy_id):
 	enemy_action_done.emit(enemy_id)
 
 func end_enemy_attack():
+	if !(attacking_enemy_id in enemies):
+		_enemy_attack_end_done()
+		return 
 	assert(attacking_enemy_id != -1,"No enemies are attacking!")
 	var attack = enemies[attacking_enemy_id].selected_attack
 	assert(attack != null,"Enemy does not have an attack selected!")
+	if enemies[attacking_enemy_id].get_status_effect("dazed") != null:
+		enemies[attacking_enemy_id].add_status_effect("dazed",-1)
+		enemies[attacking_enemy_id].start_attack_end_animation()
+		return
 	for key in attack.keys():
 		if key == "damage":
-			db.damage_player(attack["damage"])
+			db.player.damage_player(attack["damage"])
 		if key == "staminaCost":
 			enemies[attacking_enemy_id].change_stamina(-attack["staminaCost"])
+		if key == "bleed":
+			if !("block" in db.player.status_effects):
+				db.player.add_player_status_effect("bleed",attack["bleed"])
 	enemies[attacking_enemy_id].start_attack_end_animation()
 
-func _enemy_attack_end_done(enemy_id):
+func _enemy_attack_end_done():
 	center_enemies()
 	await get_tree().create_timer(0.2).timeout
 	play_turn(enemy_generator)
