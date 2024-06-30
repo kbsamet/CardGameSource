@@ -88,8 +88,37 @@ var enemies : Dictionary = {
 		],
 		"statusEffects": {
 		}
+	},
+	"Bat": {
+		"name" : "Bat",
+		"health" : 10,
+		"stamina" : 2,
+		"attacks": [
+			{
+				"damage" : 3,
+				"daze" : 1,
+				"staminaCost" : 2
+			},
+			{
+				"damage" : 3,
+				"bleed" : 3,
+				"staminaCost" : 2
+			}
+		],
+		"statusEffects": {
+		}
 	}
 }
+
+const tooltips : Dictionary = {
+	"damage" : "Damage: Deal _ damage.",
+	"bleed" :  "Bleed: 1 damage per turn for _ turns.",
+	"staminaCost": "Cost: This attack will cost _ stamina.",
+	"daze" : "Daze: You will be unable to attack for _ turns.",
+	"dazed" : "Dazed: This unit will be unable to attack for _ turns.",
+	"block" : "Block: Block _ damage. Block is removed at the end of the round"
+}
+
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)

@@ -17,8 +17,8 @@ func _ready():
 	enemyController.enemy_action_done.connect(_enemy_action_done)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
 	hand.deal_hand()
-	spawn_zombie()
-	spawn_zombie()
+	spawn_enemy("Zombie")
+	spawn_enemy("Bat")
 	pass # Replace with function body.
 
 func _on_card_select_state_changed(newstate):
@@ -29,22 +29,23 @@ func _on_card_select_state_changed(newstate):
 func _process(delta):
 	pass
 	
-func spawn_zombie():
-	var new_zombie = enemyScene.instantiate() 
-	new_zombie.enemy_data = EnemyData.fromDict(db.enemies["Zombie"]) 
-	enemyController.add_enemy(new_zombie)
+func spawn_enemy(enemy_name : String):
+	var new_enemy = enemyScene.instantiate() 
+	new_enemy.enemy_data = EnemyData.fromDict(db.enemies[enemy_name]) 
+	enemyController.add_enemy(new_enemy)
 
 
 func _use_card(enemy_id):
 	var card_id = hand.selected_card
 	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
-	var selected_card = hand.cards[card_id]
-	
-	var card_effects =  selected_card.card_data.effects
-	if (selected_card.card_data.type == db.CardType.Action && db.player.ap < selected_card.card_data.cost) || (selected_card.card_data.type == db.CardType.Reaction && db.player.rp < selected_card.card_data.cost) :
+	var selected_card = hand.cards[card_id].card_data as CardData
+	if selected_card.targeted && enemyController.attacking_enemy_id != -1 && enemyController.attacking_enemy_id != enemy_id:
 		return
-	if (selected_card.card_data.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.card_data.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
+	var card_effects =  selected_card.effects
+	if (selected_card.type == db.CardType.Action && db.player.ap < selected_card.cost) || (selected_card.type == db.CardType.Reaction && db.player.rp < selected_card.cost) :
+		return
+	if (selected_card.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
 	for effect in card_effects.keys():
 		if effect == db.CardEffect.Damage:
@@ -57,11 +58,11 @@ func _use_card(enemy_id):
 		elif effect == db.CardEffect.Daze:
 			if enemy_id in enemyController.enemies:
 				enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
-	if selected_card.card_data.type == db.CardType.Action:
-		db.player.ap = db.player.ap - selected_card.card_data.cost
+	if selected_card.type == db.CardType.Action:
+		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
 	else:
-		db.player.rp = db.player.rp - selected_card.card_data.cost
+		db.player.rp = db.player.rp - selected_card.cost
 		db.player_state_changed.emit()
 	hand.discard(card_id)
 
@@ -76,9 +77,10 @@ func _end_turn_clicked():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
 	if enemyController.enemies.is_empty():
-		spawn_zombie()
-		spawn_zombie()
-		spawn_zombie()
+		spawn_enemy("Zombie")
+		spawn_enemy("Bat")
+		spawn_enemy("Zombie")
+		
 		
 func _enemy_turn_done():
 	db.player.ap = db.player.max_ap
@@ -87,8 +89,14 @@ func _enemy_turn_done():
 	db.player.end_turn_process_player_status_effects()
 	db.check_game_over()
 	db.set_turn(db.Turn.PlayerAction)
+	enemyController.attacking_enemy_id = -1
 	hand.discard_all()
 	hand.deal_hand()
+	if "dazed" in db.player.status_effects:
+		db.player.add_player_status_effect("dazed", -1)
+		db.set_turn(db.Turn.EnemyAction)
+		enemyController.start_turn()
+		
 
 func _enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)

@@ -17,5 +17,5 @@ static func fromDict(enemy_data : Dictionary):
 	new_enemy.stamina = enemy_data["stamina"]
 	new_enemy.max_stamina = enemy_data["stamina"]
 	new_enemy.attacks = enemy_data["attacks"]
-	new_enemy.status_effects = enemy_data["statusEffects"]
+	new_enemy.status_effects = enemy_data["statusEffects"].duplicate(true)
 	return new_enemy

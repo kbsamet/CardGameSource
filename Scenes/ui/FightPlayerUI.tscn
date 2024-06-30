@@ -31,8 +31,8 @@ mouse_filter = 2
 script = ExtResource("1_cpms0")
 
 [node name="HealthBar" type="Sprite2D" parent="."]
-position = Vector2(278, 236)
-scale = Vector2(2, 2)
+position = Vector2(224, 236)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("1_n0tng")
 
 [node name="HealthBarRect" type="ColorRect" parent="HealthBar"]
@@ -91,9 +91,9 @@ vertical_alignment = 1
 [node name="RpBar" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_oyqhu")
 layout_mode = 0
-offset_left = 411.0
+offset_left = 296.0
 offset_top = 51.0
-offset_right = 530.0
+offset_right = 415.0
 offset_bottom = 170.0
 
 [node name="RpBarOutline" type="Sprite2D" parent="RpBar"]

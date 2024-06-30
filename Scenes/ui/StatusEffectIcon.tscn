@@ -1,13 +1,22 @@
-[gd_scene load_steps=5 format=3 uid="uid://2bemes0bu4wf"]
+[gd_scene load_steps=7 format=3 uid="uid://2bemes0bu4wf"]
 
 [ext_resource type="Script" path="res://Scenes/ui/StatusEffectIcon.gd" id="1_iq4hh"]
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="2_ol16x"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="3_y4prf"]
+[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="4_q4m7e"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6ipjv"]
 font = ExtResource("3_y4prf")
 font_size = 32
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xrldv"]
+bg_color = Color(0.388235, 0.380392, 0.403922, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="StatusEffectIcon" type="Control"]
 custom_minimum_size = Vector2(70, 70)
@@ -29,3 +38,24 @@ offset_right = 71.0
 offset_bottom = 75.5
 text = "3"
 label_settings = SubResource("LabelSettings_6ipjv")
+
+[node name="InfoBox" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 125.0
+offset_top = 1.0
+offset_right = 307.0
+offset_bottom = 88.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_xrldv")
+
+[node name="InfoLabel" type="Label" parent="InfoBox"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 177.0
+offset_bottom = 81.0
+label_settings = ExtResource("4_q4m7e")
+autowrap_mode = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

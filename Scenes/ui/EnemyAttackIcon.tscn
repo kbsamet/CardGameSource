@@ -1,10 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://ckqcd524en7cb"]
+[gd_scene load_steps=5 format=3 uid="uid://ckqcd524en7cb"]
 
 [ext_resource type="Script" path="res://Scenes/ui/EnemyAttackIcon.gd" id="1_h63hl"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_ujt7e"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_8h5h7"]
 load_path = "res://.godot/imported/damage.png-aa9d8406b78a799e0d6830c7106f7a8d.ctex"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4gl3"]
+bg_color = Color(0.388235, 0.380392, 0.403922, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="EnemyAttackIcon" type="Control"]
 custom_minimum_size = Vector2(64, 64)
@@ -33,3 +41,24 @@ offset_right = 34.0
 offset_bottom = 34.5
 text = "3"
 label_settings = ExtResource("2_ujt7e")
+
+[node name="InfoBox" type="Panel" parent="."]
+visible = false
+layout_mode = 0
+offset_left = -218.0
+offset_top = 1.0
+offset_right = -36.0
+offset_bottom = 69.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_o4gl3")
+
+[node name="InfoLabel" type="Label" parent="InfoBox"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 176.0
+offset_bottom = 62.0
+label_settings = ExtResource("2_ujt7e")
+autowrap_mode = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

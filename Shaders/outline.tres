@@ -5,6 +5,7 @@
 [resource]
 shader = ExtResource("1_rkfsp")
 shader_parameter/color = Color(1, 1, 1, 1)
+shader_parameter/color_in = Color(1, 1, 1, 1)
 shader_parameter/width = 1.0
 shader_parameter/pattern = 0
 shader_parameter/inside = false

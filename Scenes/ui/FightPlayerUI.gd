@@ -33,6 +33,8 @@ func _process(delta):
 
 func update_ui_values():
 	var tween = create_tween()
+	if tween == null:
+		return
 	tween.tween_property(healthBarRect,"size:x",(float(db.player.health) / float(db.player.max_health)) * health_bar_full_width,0.1)
 	
 	apLabel.text = str(db.player.ap) + " / " + str(db.player.max_ap)

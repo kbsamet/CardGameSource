@@ -67,7 +67,7 @@ func _on_hover_over():
 		animationPlayer.play("restore")
 		sprite.material = null
 		hovered = false
-		z_index = 5
+		z_index = 8
 
 func set_selected(new_selected):
 	if new_selected:
@@ -83,3 +83,4 @@ func _on_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.is_released():
 			on_clicked_signal.emit(id)
+

@@ -17,6 +17,7 @@ signal enemy_dead(id)
 @onready var attackIcon = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
 @onready var statusEffectIcon = preload("res://Scenes/ui/StatusEffectIcon.tscn")
 @onready var infoPopup = $Control/InfoPopup
+@onready var infoBox = $Control/InfoBox
 
 var stamina_bar_full_width
 var health_bar_full_width
@@ -69,6 +70,7 @@ func get_attack():
 		return {}
 	var available_attacks = enemy_data.attacks.filter(func(attack): return attack.staminaCost <= enemy_data.stamina)
 	if available_attacks.is_empty():
+		print("no available attacks on enemy "+ str(id))
 		selected_attack = {}
 		return {}
 	#get best attack
@@ -99,10 +101,10 @@ func _on_animation_finished(anim_name):
 	elif anim_name == "attack_end":
 		attack_end_done.emit()
 		remove_attack_info()
-		z_index = 0
+		z_index = 5
 
 func start_attack_animation():
-	z_index = 1
+	z_index = 6
 	var tween = create_tween()
 	tween.tween_property(self,"position",Vector2(0,position.y),0.2)
 	await get_tree().create_timer(0.2).timeout
@@ -117,6 +119,8 @@ func set_attack_info():
 		icon.add_to_group("attack_icon")
 		infoPopup.add_child(icon)
 		icon.set_data(attack,selected_attack[attack])
+		infoBox.size.y = (enemy_data.status_effects.keys().size() + selected_attack.keys().size()) * 80
+		infoBox.visible = true
 
 func set_status_effect_info():
 	for effect in enemy_data.status_effects.keys():
@@ -136,6 +140,7 @@ func remove_attack_info():
 		if n.is_in_group("attack_icon"):
 			infoPopup.remove_child(n)
 			n.queue_free()
+	infoBox.visible = false
 
 func add_status_effect(effect,amount):
 	if effect in enemy_data.status_effects:

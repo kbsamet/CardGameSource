@@ -1,9 +1,17 @@
-[gd_scene load_steps=8 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=9 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
 [ext_resource type="Texture2D" uid="uid://d2y6kkvtrttwx" path="res://Sprites/enemies/Zombie.png" id="2_mm60a"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
+bg_color = Color(0.388235, 0.380392, 0.403922, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="Animation" id="Animation_1yf6e"]
 resource_name = "attack_end"
@@ -78,6 +86,7 @@ _data = {
 }
 
 [node name="Enemy" type="Node2D"]
+z_index = 5
 script = ExtResource("1_iuwds")
 
 [node name="Sprite" type="Sprite2D" parent="."]
@@ -152,12 +161,21 @@ label_settings = ExtResource("3_22tp7")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="InfoBox" type="Panel" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = -106.0
+offset_top = 104.0
+offset_right = -11.0
+offset_bottom = 234.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ac47")
+
 [node name="InfoPopup" type="VBoxContainer" parent="Control"]
 layout_mode = 0
-offset_left = -87.0
-offset_top = 104.0
-offset_right = 17.0
-offset_bottom = 442.0
+offset_left = -94.0
+offset_top = 106.0
+offset_right = 10.0
+offset_bottom = 444.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

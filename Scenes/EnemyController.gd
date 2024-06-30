@@ -89,6 +89,9 @@ func end_enemy_attack():
 		if key == "bleed":
 			if !("block" in db.player.status_effects):
 				db.player.add_player_status_effect("bleed",attack["bleed"])
+		if key == "daze":
+			if !("block" in db.player.status_effects):
+				db.player.add_player_status_effect("dazed",attack["daze"])
 	enemies[attacking_enemy_id].start_attack_end_animation()
 
 func _enemy_attack_end_done():
