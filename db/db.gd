@@ -1,7 +1,6 @@
 extends Node
 
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
-const chooseRewardScreen = preload("res://Scenes/screens/RewardSelectScreen.tscn")
 
 signal player_state_changed
 signal player_status_effect_changed
@@ -178,5 +177,3 @@ func check_game_over():
 	if player.health <= 0:
 		get_tree().change_scene_to_packed(gameOverScreen)
 
-func go_to_reward_screen():
-	get_tree().change_scene_to_packed(chooseRewardScreen)

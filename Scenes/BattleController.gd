@@ -4,7 +4,7 @@ class_name BattleController
 @onready var enemyController : EnemyController = $Control/EnemyController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
 @export var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
-
+var rewardScene = preload("res://Scenes/screens/RewardScreen.tscn")
 var reward : RewardData
 var card_selected = false
 # Called when the node enters the scene tree for the first time.
@@ -82,9 +82,12 @@ func _end_turn_clicked():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
 	if enemyController.enemies.is_empty():
-		db.go_to_reward_screen()
-		
-		
+		var reward_scene = rewardScene.instantiate() as RewardScreen
+		reward_scene.reward_data = reward
+		get_tree().root.add_child(reward_scene)
+		get_tree().current_scene = reward_scene
+		queue_free()
+
 func _enemy_turn_done():
 	db.player.ap = db.player.max_ap
 	db.player.rp = db.player.max_rp

@@ -12,6 +12,15 @@ var deck_size : int = 10
 var status_effects : Dictionary = {}
 var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
+var gold : int = 0
+var keys : int = 0
+
+func add_player_items(item,amount):
+	if item == "gold":
+		gold += amount
+	elif item == "key":
+		keys += amount
+	db.player_state_changed.emit()
 
 func damage_player(amount):
 	if "block" in status_effects:
@@ -55,3 +64,5 @@ func reset():
 	status_effects = {}
 	deck = []
 	discardPile = []
+	gold = 0
+	keys = 0

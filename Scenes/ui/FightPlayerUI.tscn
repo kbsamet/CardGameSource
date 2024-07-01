@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=14 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="Texture2D" uid="uid://cosogl3d7bq7w" path="res://Sprites/ui/player_health_bar.png" id="1_n0tng"]
@@ -7,6 +7,9 @@
 [ext_resource type="Shader" path="res://Shaders/circularbarshader.gdshader" id="5_bravp"]
 [ext_resource type="Texture2D" uid="uid://bi387adpaice3" path="res://Sprites/ui/end_action.png" id="6_apsm4"]
 [ext_resource type="Texture2D" uid="uid://dyqwdmwipxqar" path="res://Sprites/ui/deck.png" id="7_gocp1"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="8_7lnja"]
+[ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="8_kx4i3"]
+[ext_resource type="Texture2D" uid="uid://bn81552rvli0r" path="res://Sprites/ui/rewardIcons/key.png" id="10_252vg"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqvuj"]
 shader = ExtResource("5_bravp")
@@ -17,6 +20,11 @@ shader_parameter/color = Color(0.792157, 0.34902, 0.329412, 1)
 shader = ExtResource("5_bravp")
 shader_parameter/cutoff = 1.0
 shader_parameter/color = Color(0.462745, 0.623529, 0.65098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_f61hr"]
+font = ExtResource("8_7lnja")
+font_size = 32
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="FightPlayerUi" type="Control"]
 layout_mode = 3
@@ -142,10 +150,10 @@ vertical_alignment = 1
 
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 46.0
-offset_top = 316.0
-offset_right = 919.0
-offset_bottom = 407.0
+offset_left = 41.0
+offset_top = 337.0
+offset_right = 415.0
+offset_bottom = 428.0
 mouse_filter = 2
 
 [node name="Deck" type="Sprite2D" parent="."]
@@ -162,5 +170,33 @@ text = "32/32"
 label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="GoldLabel" type="Label" parent="."]
+offset_left = 80.0
+offset_top = 281.0
+offset_right = 134.0
+offset_bottom = 337.0
+text = ":10"
+label_settings = SubResource("LabelSettings_f61hr")
+vertical_alignment = 1
+
+[node name="GoldIcon" type="Sprite2D" parent="GoldLabel"]
+position = Vector2(-24, 24)
+scale = Vector2(0.47, 0.47)
+texture = ExtResource("8_kx4i3")
+
+[node name="KeyLabel" type="Label" parent="."]
+offset_left = 192.0
+offset_top = 281.0
+offset_right = 246.0
+offset_bottom = 337.0
+text = ":10"
+label_settings = SubResource("LabelSettings_f61hr")
+vertical_alignment = 1
+
+[node name="KeyIcon" type="Sprite2D" parent="KeyLabel"]
+position = Vector2(-24, 24)
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("10_252vg")
 
 [connection signal="gui_input" from="Container" to="." method="_on_button_input"]

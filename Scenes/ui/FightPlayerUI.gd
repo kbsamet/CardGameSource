@@ -10,6 +10,8 @@ class_name PlayerUI
 @onready var endTurnButtonLabel = $Container/EndTurnButton/EndTurnlabel
 @onready var statusEffects = $StatusEffectsContainer
 @onready var deckCountLabel = $Deck/DeckCountLabel
+@onready var goldLabel = $GoldLabel
+@onready var keyLabel = $KeyLabel
 
 signal end_turn_clicked
 
@@ -37,6 +39,8 @@ func update_ui_values():
 		return
 	tween.tween_property(healthBarRect,"size:x",(float(db.player.health) / float(db.player.max_health)) * health_bar_full_width,0.1)
 	
+	goldLabel.text = ":"+str(db.player.gold)
+	keyLabel.text = ":"+str(db.player.keys)
 	apLabel.text = str(db.player.ap) + " / " + str(db.player.max_ap)
 	rpLabel.text = str(db.player.rp) + " / " + str(db.player.max_rp)
 	healthBarLabel.text =  str(db.player.health) + " / " + str(db.player.max_health)
