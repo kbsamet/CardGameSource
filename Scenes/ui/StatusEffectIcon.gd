@@ -13,7 +13,7 @@ func set_data(effect_name: String ,effect_amount : int):
 	sprite.texture = load("res://Sprites/ui/statusEffects/"+effect_name+".png")
 	amountLabel.text = str(effect_amount)
 	var tooltip = db.tooltips[effect_name]
-	tooltip.replace("_", str(effect_amount))
+	tooltip = tooltip.replace("_", str(effect_amount))
 	descriptionLabel.text = tooltip
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -1,0 +1,91 @@
+[gd_scene load_steps=8 format=3 uid="uid://jsbqwsmv1i02"]
+
+[ext_resource type="Script" path="res://Scenes/screens/RewardSelectScreen.gd" id="1_2k8yd"]
+[ext_resource type="Texture2D" uid="uid://g7i20tpwqi20" path="res://Sprites/ui/screens/two_doors.png" id="1_ej426"]
+[ext_resource type="Texture2D" uid="uid://crtq5w4jd1srq" path="res://Sprites/ui/screens/door.png" id="2_a7nek"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="4_i5v1p"]
+[ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="4_wvuvt"]
+[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="5_ecyo6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4nkid"]
+font = ExtResource("4_i5v1p")
+font_size = 15
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[node name="RewardSelectScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_2k8yd")
+
+[node name="bg" type="Sprite2D" parent="."]
+position = Vector2(936, 16)
+scale = Vector2(2.2, 2.2)
+texture = ExtResource("1_ej426")
+
+[node name="DoorControl" type="Control" parent="bg"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -247.0
+offset_top = 105.0
+offset_right = -96.0
+offset_bottom = 300.0
+
+[node name="Door1" type="Sprite2D" parent="bg/DoorControl"]
+position = Vector2(76.0909, 98.6364)
+texture = ExtResource("2_a7nek")
+
+[node name="Door2Control" type="Control" parent="bg"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 104.0
+offset_top = 105.0
+offset_right = 253.0
+offset_bottom = 301.0
+
+[node name="Door2" type="Sprite2D" parent="bg/Door2Control"]
+position = Vector2(74.1818, 98.6364)
+texture = ExtResource("2_a7nek")
+
+[node name="Reward1Icon" type="Sprite2D" parent="bg"]
+position = Vector2(-170.909, 25.4545)
+scale = Vector2(1.055, 1.055)
+texture = ExtResource("4_wvuvt")
+
+[node name="Reward2Icon" type="Sprite2D" parent="bg"]
+position = Vector2(178.182, 25.4545)
+scale = Vector2(1.055, 1.055)
+
+[node name="Reward1Label" type="Label" parent="bg"]
+offset_left = -295.0
+offset_top = 52.0
+offset_right = -47.0
+offset_bottom = 106.0
+text = "There is a locked chest after the next fight."
+label_settings = SubResource("LabelSettings_4nkid")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Reward2Label" type="Label" parent="bg"]
+offset_left = 58.0
+offset_top = 51.0
+offset_right = 302.0
+offset_bottom = 105.0
+label_settings = ExtResource("5_ecyo6")
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 680.0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0.141176, 0.133333, 0.14902, 1)
+
+[connection signal="gui_input" from="bg/DoorControl" to="." method="_on_doo1_input"]
+[connection signal="mouse_entered" from="bg/DoorControl" to="." method="_on_door1_mouse_entered"]
+[connection signal="mouse_exited" from="bg/DoorControl" to="." method="_on_door1_mouse_exited"]
+[connection signal="gui_input" from="bg/Door2Control" to="." method="_on_door2_input"]
+[connection signal="mouse_entered" from="bg/Door2Control" to="." method="_on_door2_mouse_entered"]
+[connection signal="mouse_exited" from="bg/Door2Control" to="." method="_on_door2l_mouse_exited"]

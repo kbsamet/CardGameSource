@@ -1,6 +1,7 @@
 extends Node
 
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
+const chooseRewardScreen = preload("res://Scenes/screens/RewardSelectScreen.tscn")
 
 signal player_state_changed
 signal player_status_effect_changed
@@ -119,6 +120,42 @@ const tooltips : Dictionary = {
 	"block" : "Block: Block _ damage. Block is removed at the end of the round"
 }
 
+const fight_rooms : Array[Dictionary] = [
+	{
+		"Zombie" : 1,
+		"Bat"  : 1
+	},
+	{
+		"Zombie" : 2,
+		"Bat"  : 1
+	},
+	{
+		"Zombie" : 2,
+	},
+	{
+		"Bat" : 2,
+	},
+]
+
+const rewards : Array[Dictionary] = [
+	{
+		"reward" : "gold",
+		"amount" : "10-15",
+		"tooltip" : "Gain gold after the next fight."
+	},
+	{
+		"reward" : "key",
+		"amount" : 1,
+		"tooltip" : "Gain a key after the next fight."
+	},
+	{
+		"reward" : "locked_chest",
+		"amount" : 1,
+		"tooltip" : "There is a locked chest after the next fight."
+		
+	},
+	
+]
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)
@@ -140,3 +177,6 @@ func  reset_player():
 func check_game_over():
 	if player.health <= 0:
 		get_tree().change_scene_to_packed(gameOverScreen)
+
+func go_to_reward_screen():
+	get_tree().change_scene_to_packed(chooseRewardScreen)

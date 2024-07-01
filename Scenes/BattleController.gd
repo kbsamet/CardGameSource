@@ -1,10 +1,11 @@
 extends Control
-
+class_name BattleController
 @onready var hand : Hand  = $Control/Hand
 @onready var enemyController : EnemyController = $Control/EnemyController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
 @export var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
 
+var reward : RewardData
 var card_selected = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -17,8 +18,7 @@ func _ready():
 	enemyController.enemy_action_done.connect(_enemy_action_done)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
 	hand.deal_hand()
-	spawn_enemy("Zombie")
-	spawn_enemy("Bat")
+	spawn_enemies()
 	pass # Replace with function body.
 
 func _on_card_select_state_changed(newstate):
@@ -34,6 +34,11 @@ func spawn_enemy(enemy_name : String):
 	new_enemy.enemy_data = EnemyData.fromDict(db.enemies[enemy_name]) 
 	enemyController.add_enemy(new_enemy)
 
+func spawn_enemies():
+	var room = db.fight_rooms.pick_random() as Dictionary
+	for key in room.keys():
+		for value in room[key]:
+			spawn_enemy(key)
 
 func _use_card(enemy_id):
 	var card_id = hand.selected_card
@@ -77,9 +82,7 @@ func _end_turn_clicked():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
 	if enemyController.enemies.is_empty():
-		spawn_enemy("Zombie")
-		spawn_enemy("Bat")
-		spawn_enemy("Zombie")
+		db.go_to_reward_screen()
 		
 		
 func _enemy_turn_done():
