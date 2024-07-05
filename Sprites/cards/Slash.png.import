@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfka8cqkbvpgv"
-path="res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"
+uid="uid://buwn8m3hel4kq"
+path="res://.godot/imported/Slash.png-d5dff6cf1133c3de25ccbf1febd98ccb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/enemies/Bat.png"
-dest_files=["res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"]
+source_file="res://Sprites/cards/Slash.png"
+dest_files=["res://.godot/imported/Slash.png-d5dff6cf1133c3de25ccbf1febd98ccb.ctex"]
 
 [params]
 

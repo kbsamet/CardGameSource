@@ -3,13 +3,13 @@ class_name BattleController
 @onready var hand : Hand  = $Control/Hand
 @onready var enemyController : EnemyController = $Control/EnemyController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
-@export var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
+var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
 var rewardScene = preload("res://Scenes/screens/RewardScreen.tscn")
 var reward : RewardData
 var card_selected = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if db.player.deck.is_empty():
+	if db.player.deck.is_empty() && db.player.discardPile.is_empty():
 		create_deck()
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
 	hand.play_card.connect(_use_card)
@@ -53,16 +53,27 @@ func _use_card(enemy_id):
 	if (selected_card.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
 	for effect in card_effects.keys():
-		if effect == db.CardEffect.Damage:
-			enemyController.enemies[enemy_id].damage(card_effects[effect])
-		elif effect == db.CardEffect.Block:
-			if "block" in db.player.status_effects:
-				db.player.change_player_status_effect("block", db.player.status_effects.block + card_effects[effect])
-			else:
-				db.player.change_player_status_effect("block", card_effects[effect])
-		elif effect == db.CardEffect.Daze:
-			if enemy_id in enemyController.enemies:
-				enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
+		match effect:
+			db.CardEffect.Damage:
+				enemyController.enemies[enemy_id].damage(card_effects[effect])
+			db.CardEffect.Block:
+				if "block" in db.player.status_effects:
+					db.player.change_player_status_effect("block", db.player.status_effects.block + card_effects[effect])
+				else:
+					db.player.change_player_status_effect("block", card_effects[effect])
+			db.CardEffect.Daze:
+				if enemy_id in enemyController.enemies:
+					enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
+			db.CardEffect.Bleed:
+				if enemy_id in enemyController.enemies:
+					enemyController.enemies[enemy_id].add_status_effect("bleed", card_effects[effect])
+			db.CardEffect.Heal:
+				db.player.heal_player(card_effects[effect])
+			db.CardEffect.Dodge:
+				db.player.add_player_status_effect("dodge",1)
+			db.CardEffect.DamageAll:
+				for enemy in enemyController.enemies.values():
+					enemy.damage(card_effects[effect])
 	if selected_card.type == db.CardType.Action:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -82,6 +93,7 @@ func _end_turn_clicked():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
 	if enemyController.enemies.is_empty():
+		hand.discard_all()
 		var reward_scene = rewardScene.instantiate() as RewardScreen
 		reward_scene.reward_data = reward
 		get_tree().root.add_child(reward_scene)
@@ -111,7 +123,7 @@ func create_deck():
 	for i in range(4):
 		db.player.deck.push_back(CardData.from_dict(db.cards["Strike"]))
 		db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
-	db.player.deck.push_back(CardData.from_dict(db.cards["Shield Bash"]))
 	db.player.deck.push_back(CardData.from_dict(db.cards["Daze"]))
+	db.player.deck.push_back(CardData.from_dict(db.cards["Pray"]))
 	fightUI.update_ui_values()
 

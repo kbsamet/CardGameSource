@@ -77,7 +77,7 @@ func set_selected(new_selected):
 		animationPlayer.stop()
 		animationPlayer.play("restore")
 		sprite.material = null
-		z_index = 5
+		z_index = 8
 		
 func _on_input(event : InputEvent):
 	if event is InputEventMouseButton:

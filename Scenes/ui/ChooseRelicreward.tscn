@@ -1,0 +1,91 @@
+[gd_scene load_steps=5 format=3 uid="uid://32ury28kpi4e"]
+
+[ext_resource type="Script" path="res://Scenes/ui/ChooseRelicReward.gd" id="1_1d03x"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="1_xbwpc"]
+[ext_resource type="PackedScene" uid="uid://dkidrfnurh1je" path="res://Scenes/ui/RelicIcon.tscn" id="2_fa1p2"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_p26un"]
+font = ExtResource("1_xbwpc")
+font_size = 128
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[node name="ChooseRelicReward" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1d03x")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -468.0
+offset_top = -420.0
+offset_right = 468.0
+offset_bottom = -292.0
+grow_horizontal = 2
+text = "Choose a relic"
+label_settings = SubResource("LabelSettings_p26un")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RelicIcon" parent="Control" instance=ExtResource("2_fa1p2")]
+layout_mode = 2
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -625.0
+offset_top = -125.0
+offset_right = -561.0
+offset_bottom = -63.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(4, 4)
+
+[node name="Relic2Icon" parent="Control" instance=ExtResource("2_fa1p2")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -125.0
+offset_top = -125.0
+offset_right = -59.0
+offset_bottom = -61.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(4, 4)
+
+[node name="Relic3Icon" parent="Control" instance=ExtResource("2_fa1p2")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 425.0
+offset_top = -125.0
+offset_right = 492.0
+offset_bottom = -61.0
+grow_horizontal = 1
+grow_vertical = 1
+scale = Vector2(4, 4)
+
+[connection signal="gui_input" from="Control/RelicIcon" to="." method="_on_relic_input"]
+[connection signal="gui_input" from="Control/Relic2Icon" to="." method="_on_relic2_input"]
+[connection signal="gui_input" from="Control/Relic3Icon" to="." method="_on_relic3_input"]

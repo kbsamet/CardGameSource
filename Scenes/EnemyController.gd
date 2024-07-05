@@ -67,7 +67,7 @@ func play_turn(gen:ArrayIterator.Iterator):
 
 func _enemy_attack_rise_done(enemy_id):
 	var enemy = enemies[enemy_id]
-	var attack = enemy.get_attack()
+	enemy.get_attack()
 	enemy_action_done.emit(enemy_id)
 
 func end_enemy_attack():
@@ -79,6 +79,10 @@ func end_enemy_attack():
 	assert(attack != null,"Enemy does not have an attack selected!")
 	if enemies[attacking_enemy_id].get_status_effect("dazed") != null:
 		enemies[attacking_enemy_id].add_status_effect("dazed",-1)
+		enemies[attacking_enemy_id].start_attack_end_animation()
+		return
+	if "dodge" in db.player.status_effects.keys():
+		db.player.add_player_status_effect("dodge",-1)
 		enemies[attacking_enemy_id].start_attack_end_animation()
 		return
 	for key in attack.keys():

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfka8cqkbvpgv"
-path="res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"
+uid="uid://cbh7ampa8xp03"
+path="res://.godot/imported/temperance.png-7a6a2e508269aa51e6cbe1c26f7ea188.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/enemies/Bat.png"
-dest_files=["res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"]
+source_file="res://Sprites/cards/temperance.png"
+dest_files=["res://.godot/imported/temperance.png-7a6a2e508269aa51e6cbe1c26f7ea188.ctex"]
 
 [params]
 

@@ -18,7 +18,7 @@ enum CardType {
 } 
 
 enum CardEffect{
-	Damage,Block,Dodge,Daze,Bleed
+	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll
 }
 
 var cards : Dictionary = {
@@ -62,6 +62,36 @@ var cards : Dictionary = {
 		"effects": {
 			CardEffect.Damage : 5,
 			CardEffect.Daze : 1,
+		}
+	},
+	"Pray" : {
+		"name" : "Pray",
+		"type" : CardType.Reaction,
+		"description": "Heal 2 damage.",
+		"cost": 2,
+		"targeted" : false,
+		"effects": {
+			CardEffect.Heal : 2,
+		}
+	},
+	"Dodge" : {
+		"name" : "Dodge",
+		"type" : CardType.Reaction,
+		"description": "Dodge the incoming attack.",
+		"cost": 2,
+		"targeted" : false,
+		"effects": {
+			CardEffect.Dodge : 1,
+		}
+	},
+	"Slash" : {
+		"name" : "Slash",
+		"type" : CardType.Action,
+		"description": "Deal 5 damage to all enemies.",
+		"cost": 2,
+		"targeted" : false,
+		"effects": {
+			CardEffect.DamageAll : 5,
 		}
 	}
 }
@@ -110,13 +140,38 @@ var enemies : Dictionary = {
 	}
 }
 
+var relics : Dictionary = {
+	"red_orb" : {
+		"name" : "red_orb",
+		"description" : "Red Orb:\nGain 1 action point",
+		"on_add" : func(player: Player): player.add_max_ap(1),
+		"on_remove": func(player: Player): player.add_max_ap(-1)
+
+	},
+	"blue_orb" : {
+		"name" : "blue_orb",
+		"description" : "Blue Orb:\nGain 1 reaction point",
+		"on_add" : func(player: Player): player.add_max_rp(1),
+		"on_remove": func(player: Player): player.add_max_rp(-1)
+		
+	},
+	"true_faith" : {
+		"name" : "true_faith",
+		"description" : "True Faith:\nRevive with half health when you would die. Breaks upon use.",
+		"on_add" : func(player: Player): player.add_player_status_effect("revive_half",1),
+		"on_remove": func(player: Player): player.add_player_status_effect("revive_half",-1)
+		
+	},
+}
+
 const tooltips : Dictionary = {
 	"damage" : "Damage: Deal _ damage.",
 	"bleed" :  "Bleed: 1 damage per turn for _ turns.",
 	"staminaCost": "Cost: This attack will cost _ stamina.",
 	"daze" : "Daze: You will be unable to attack for _ turns.",
 	"dazed" : "Dazed: This unit will be unable to attack for _ turns.",
-	"block" : "Block: Block _ damage. Block is removed at the end of the round"
+	"block" : "Block: Block _ damage. Block is removed at the end of the round",
+	"dodge" : "Dodge: Dodge the next attack."
 }
 
 const fight_rooms : Array[Dictionary] = [
@@ -147,14 +202,32 @@ const rewards : Array[Dictionary] = [
 		"amount" : 1,
 		"tooltip" : "Gain a key after the next fight."
 	},
+	#{
+		#"reward" : "locked_chest",
+		#"amount" : 1,
+		#"tooltip" : "There is a locked chest after the next fight."
+		#
+	#},
 	{
-		"reward" : "locked_chest",
-		"amount" : 1,
-		"tooltip" : "There is a locked chest after the next fight."
+		"reward" : "choose_card",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 cards after the next fight."
 		
 	},
-	
+	{
+		"reward" : "choose_relic",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 relics after the next fight."
+		
+	},
+	#{
+		#"reward" : "shop",
+		#"amount" : 1,
+		#"tooltip" : "There is a shop after the next fight."
+		#
+	#},
 ]
+
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)

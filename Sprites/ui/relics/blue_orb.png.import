@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cfka8cqkbvpgv"
-path="res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"
+uid="uid://54bbmmbrcy0"
+path="res://.godot/imported/blue_orb.png-22963f267782f27a399e3669fcee5eb8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/enemies/Bat.png"
-dest_files=["res://.godot/imported/Bat.png-4bed546730526d63848d3c7b3704401a.ctex"]
+source_file="res://Sprites/ui/relics/blue_orb.png"
+dest_files=["res://.godot/imported/blue_orb.png-22963f267782f27a399e3669fcee5eb8.ctex"]
 
 [params]
 

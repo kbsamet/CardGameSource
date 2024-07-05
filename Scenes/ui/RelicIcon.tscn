@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkidrfnurh1je"]
+
+[ext_resource type="Script" path="res://Scenes/ui/RelicIcon.gd" id="1_iglts"]
+[ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/blue_orb.png" id="2_cc4ev"]
+[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_is785"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2vye"]
+bg_color = Color(0.388235, 0.380392, 0.403922, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[node name="RelicIcon" type="Control"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = -1888.0
+offset_bottom = -1048.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_iglts")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+scale = Vector2(2, 2)
+texture = ExtResource("2_cc4ev")
+
+[node name="InfoBox" type="Panel" parent="."]
+visible = false
+z_index = 5
+offset_left = 80.0
+offset_right = 304.0
+offset_bottom = 112.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_r2vye")
+
+[node name="InfoLabel" type="Label" parent="InfoBox"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 216.0
+offset_bottom = 104.0
+label_settings = ExtResource("3_is785")
+autowrap_mode = 2
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
