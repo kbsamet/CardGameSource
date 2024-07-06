@@ -9,11 +9,11 @@ extends Control
 func _ready():
 	pass # Replace with function body.
 
-func set_data(effect_name: String ,effect_amount : int):
-	sprite.texture = load("res://Sprites/ui/statusEffects/"+effect_name+".png")
-	amountLabel.text = str(effect_amount)
-	var tooltip = db.tooltips[effect_name]
-	tooltip = tooltip.replace("_", str(effect_amount))
+func set_data(effect : StatusEffectData):
+	sprite.texture = load("res://Sprites/ui/statusEffects/"+effect._name+".png")
+	amountLabel.text = str(effect.amount)
+	var tooltip = effect.tooltip
+	tooltip = tooltip.replace("_", str(effect.amount))
 	descriptionLabel.text = tooltip
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

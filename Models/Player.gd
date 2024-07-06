@@ -38,11 +38,11 @@ func heal_player(amount):
 
 func damage_player(amount):
 	if "block" in status_effects:
-		if status_effects.block > amount:
-			change_player_status_effect("block", status_effects.block - amount)
+		if status_effects.block.amount > amount:
+			change_player_status_effect("block", status_effects.block.amount - amount)
 			return
-		health = health - (amount - status_effects.block)
-		if status_effects.block != 0:
+		health = health - (amount - status_effects.block.amount)
+		if status_effects.block.amount != 0:
 			change_player_status_effect("block", 0)
 	else:
 		health = health - amount
@@ -50,25 +50,28 @@ func damage_player(amount):
 
 func add_player_status_effect(effect,amount):
 	if effect in status_effects:
-		if status_effects[effect] == -amount:
+		if status_effects[effect].amount == -amount:
 			status_effects.erase(effect)
 		else:
-			status_effects[effect] += amount
+			status_effects[effect].amount += amount
 	else:
-		status_effects[effect] = amount
+		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
 	db.player_status_effect_changed.emit()
 	
 func change_player_status_effect(effect,new_stat):
-	if new_stat == 0:
-		status_effects.erase(effect)
+	if effect in status_effects:
+		if new_stat == 0:
+			status_effects.erase(effect)
+		else:
+			status_effects[effect].amount = new_stat
 	else:
-		status_effects[effect] = new_stat
+		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],new_stat)
 	db.player_status_effect_changed.emit()
 	
 func end_turn_process_player_status_effects():
 	change_player_status_effect("block",0)
 	if "bleed" in status_effects:
-		damage_player(1)
+		damage_player(status_effects["bleed"].amount)
 		add_player_status_effect("bleed",-1)
 
 func add_to_deck(card : CardData):

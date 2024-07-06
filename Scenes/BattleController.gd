@@ -58,7 +58,7 @@ func _use_card(enemy_id):
 				enemyController.enemies[enemy_id].damage(card_effects[effect])
 			db.CardEffect.Block:
 				if "block" in db.player.status_effects:
-					db.player.change_player_status_effect("block", db.player.status_effects.block + card_effects[effect])
+					db.player.change_player_status_effect("block", db.player.status_effects.block.amount + card_effects[effect])
 				else:
 					db.player.change_player_status_effect("block", card_effects[effect])
 			db.CardEffect.Daze:

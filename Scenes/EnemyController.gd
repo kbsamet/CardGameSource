@@ -83,6 +83,7 @@ func end_enemy_attack():
 		return
 	if "dodge" in db.player.status_effects.keys():
 		db.player.add_player_status_effect("dodge",-1)
+		enemies[attacking_enemy_id].change_stamina(-attack["staminaCost"])
 		enemies[attacking_enemy_id].start_attack_end_animation()
 		return
 	for key in attack.keys():

@@ -20,7 +20,34 @@ enum CardType {
 enum CardEffect{
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll
 }
-
+var status_effects : Dictionary = {
+	"dazed" : {
+		"name" : "dazed",
+		"hidden" : false,
+		"tooltip" : "Dazed: This unit will be unable to attack for _ turns.",
+	},
+	"block" : {
+		"name" : "block",
+		"hidden" : false,
+		"tooltip" : "Block: Block _ damage. Block is removed at the end of the round.",
+	},
+	"bleed" : {
+		"name" : "bleed",
+		"hidden" : false,
+		"tooltip" : "Bleed: _ damage per turn. Reduces by 1 each turn.",
+	},
+	"dodge" : {
+		"name" : "dodge",
+		"hidden" : false,
+		"tooltip" : "Dodge: Dodge the next attack.",
+	},
+	"revive_half": {
+		"name" : "revive_half",
+		"hidden" : true,
+		"tooltip" : "",
+	}
+	
+}
 var cards : Dictionary = {
 	"Strike" :{
 		"name" : "Strike",
@@ -169,9 +196,6 @@ const tooltips : Dictionary = {
 	"bleed" :  "Bleed: 1 damage per turn for _ turns.",
 	"staminaCost": "Cost: This attack will cost _ stamina.",
 	"daze" : "Daze: You will be unable to attack for _ turns.",
-	"dazed" : "Dazed: This unit will be unable to attack for _ turns.",
-	"block" : "Block: Block _ damage. Block is removed at the end of the round",
-	"dodge" : "Dodge: Dodge the next attack."
 }
 
 const fight_rooms : Array[Dictionary] = [

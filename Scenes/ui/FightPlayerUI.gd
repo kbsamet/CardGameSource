@@ -74,13 +74,12 @@ func status_effect_changed():
 	for n in statusEffects.get_children():
 		statusEffects.remove_child(n)
 		n.queue_free()
-		
-	var effects = db.player.status_effects
-	for effect in effects.keys():
-		if effects[effect] != 0:
+	
+	for effect in db.player.status_effects.values():
+		if effect.amount != 0 && !effect.hidden:
 			var icon = statusEffectIcon.instantiate()
 			statusEffects.add_child(icon)
-			icon.set_data(effect,effects[effect])
+			icon.set_data(effect)
 
 func relics_changed():
 	for n in relicContainer.get_children():

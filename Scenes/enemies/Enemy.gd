@@ -37,7 +37,7 @@ func _ready():
 func _process(delta):
 	pass
 
-func change_stamina(amount):
+func change_stamina(amount:int) -> void:
 	var tween =  create_tween()
 	enemy_data.stamina += amount
 	tween.tween_property(staminaBarRect,"size:x", (float(enemy_data.stamina) / float(enemy_data.max_stamina)) * float(stamina_bar_full_width),0.2)
@@ -56,11 +56,12 @@ func _on_hover():
 		sprite.material = outlineShader
 
 
-func _on_hover_end():
+func _on_hover_end() -> void:
 	sprite.material = null
 
-func get_attack():
-	var dazed_amount = get_status_effect("dazed")
+func get_attack() -> Dictionary:
+	var dazed = get_status_effect("dazed")
+	var dazed_amount = null if dazed == null else dazed.amount
 	if dazed_amount != null:
 		if dazed_amount == 1:
 			add_status_effect("dazed",-1)
@@ -94,7 +95,7 @@ func _on_input(event):
 			on_clicked_signal.emit(id)
 
 
-func _on_animation_finished(anim_name):
+func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
 		set_attack_info()
@@ -103,17 +104,17 @@ func _on_animation_finished(anim_name):
 		remove_attack_info()
 		z_index = 5
 
-func start_attack_animation():
+func start_attack_animation() -> void:
 	z_index = 6
 	var tween = create_tween()
 	tween.tween_property(self,"position",Vector2(0,position.y),0.2)
 	await get_tree().create_timer(0.2).timeout
 	animationPlayer.play("attack_rise")
 	
-func start_attack_end_animation():
+func start_attack_end_animation() -> void:
 	animationPlayer.play("attack_end")
 	
-func set_attack_info():
+func set_attack_info() -> void:
 	for attack in selected_attack.keys():
 		var icon = attackIcon.instantiate()
 		icon.add_to_group("attack_icon")
@@ -122,47 +123,47 @@ func set_attack_info():
 		infoBox.size.y = (enemy_data.status_effects.keys().size() + selected_attack.keys().size()) * 80
 		infoBox.visible = true
 
-func set_status_effect_info():
-	for effect in enemy_data.status_effects.keys():
+func set_status_effect_info() -> void:
+	for effect in enemy_data.status_effects.values():
 		var icon = statusEffectIcon.instantiate()
 		icon.add_to_group("status_effect")
 		infoPopup.add_child(icon)
-		icon.set_data(effect,enemy_data.status_effects[effect])
+		icon.set_data(effect)
 
-func remove_status_effect_info():
+func remove_status_effect_info() -> void:
 	for n in infoPopup.get_children():
 		if n.is_in_group("status_effect"):
 			infoPopup.remove_child(n)
 			n.queue_free()
 
-func remove_attack_info():
+func remove_attack_info() -> void:
 	for n in infoPopup.get_children():
 		if n.is_in_group("attack_icon"):
 			infoPopup.remove_child(n)
 			n.queue_free()
 	infoBox.visible = false
 
-func add_status_effect(effect,amount):
+func add_status_effect(effect : String,amount: int) -> void:
 	if effect in enemy_data.status_effects:
-		if enemy_data.status_effects[effect] <= -amount:
+		if enemy_data.status_effects[effect].amount <= -amount:
 			enemy_data.status_effects.erase(effect)
 		else:
 			if effect == "dazed":
 				selected_attack = {}
 				remove_attack_info()
 				set_attack_info()
-			enemy_data.status_effects[effect] += amount
+			enemy_data.status_effects[effect].amount += amount
 	else:
 		if effect == "dazed":
 			selected_attack = {}
 			remove_attack_info()
 			set_attack_info()
-		enemy_data.status_effects[effect] = amount
+		enemy_data.status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
 	remove_status_effect_info()
 	set_status_effect_info()
 	
 	
-func get_status_effect(effect):
+func get_status_effect(effect : String) -> StatusEffectData:
 	if effect in enemy_data.status_effects:
 		return enemy_data.status_effects[effect]
 	return null
