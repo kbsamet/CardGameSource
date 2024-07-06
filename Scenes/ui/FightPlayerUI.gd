@@ -13,6 +13,9 @@ class_name PlayerUI
 @onready var goldLabel = $GoldLabel
 @onready var keyLabel = $KeyLabel
 @onready var relicContainer = $RelicsContainer
+@onready var discardPile = $DiscardPile
+@onready var discardPileLabel = $DiscardPile/DiscardPileCountLabel
+
 signal end_turn_clicked
 
 var health_bar_full_width
@@ -51,6 +54,8 @@ func update_ui_values():
 	tween.tween_method(func(value): apBar.material.set_shader_parameter("cutoff", value),apBar.material.get_shader_parameter("cutoff"),float(db.player.ap) / float(db.player.max_ap),0.2)
 	tween.tween_method(func(value): rpBar.material.set_shader_parameter("cutoff", value),rpBar.material.get_shader_parameter("cutoff"),float(db.player.rp) / float(db.player.max_rp),0.2)
 	deckCountLabel.text = str(db.player.deck.size()) + " / " + str(db.player.deck_size )
+	discardPileLabel.text = str(db.player.discardPile.size()) + " / " + str(db.player.deck_size )
+	
 	relics_changed()
 func turn_changed(new_turn):
 	match new_turn:

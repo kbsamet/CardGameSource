@@ -17,6 +17,7 @@ func _ready():
 	enemyController.enemy_turn_done.connect(_enemy_turn_done)
 	enemyController.enemy_action_done.connect(_enemy_action_done)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
+	hand.discardPosition = fightUI.discardPile.global_position
 	hand.deal_hand()
 	spawn_enemies()
 	pass # Replace with function body.

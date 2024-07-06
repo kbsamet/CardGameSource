@@ -106,9 +106,9 @@ func _on_animation_finished(anim_name : String)-> void:
 
 func start_attack_animation() -> void:
 	z_index = 6
-	var tween = create_tween()
-	tween.tween_property(self,"position",Vector2(0,position.y),0.2)
-	await get_tree().create_timer(0.2).timeout
+	#var tween = create_tween()
+	#tween.tween_property(self,"position",Vector2(0,position.y),0.2)
+	#await get_tree().create_timer(0.2).timeout
 	animationPlayer.play("attack_rise")
 	
 func start_attack_end_animation() -> void:

@@ -1,9 +1,11 @@
 extends Container
 class_name Hand
+
 var cards : Dictionary = {}
 var id_count = 0
 var selected_card = -1
 var random = RandomNumberGenerator.new()
+@export var discardPosition : Vector2
 @export var cardScene = preload("res://Scenes/Card.tscn")
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
@@ -61,14 +63,26 @@ func _on_card_clicked(id):
 		selected_card_state_changed.emit(true)
 
 func discard(id):
-	
 	db.player.discardPile.push_back(cards[id].card_data)
-	remove_child(cards[id])
-	cards[id].queue_free()
+	if is_inside_tree():
+		var tween = create_tween()
+		var card = cards[id]
+		tween.tween_property(card,"position:y", card.position.y-200, 0.1)
+		tween.tween_property(card,"global_position",discardPosition,0.2).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
+		tween.set_parallel(true)
+		tween.tween_property(card,"scale", Vector2(0.1,0.1),0.3 ).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_QUAD)
+		tween.set_parallel(false)
+		tween.tween_callback(func() : card_freed(card))
+	else:
+		card_freed(cards[id])
 	cards.erase(id)
 	center_cards()
 	selected_card = -1
 
+func card_freed(card : Node):
+	remove_child(card)
+	card.queue_free()
+	
 func discard_all():
 	for card_id in cards.keys():
 		discard(card_id)

@@ -35,7 +35,6 @@ func center_enemies():
 	var enemy_count = enemies.keys().size()
 	var tween = create_tween()
 	for i in range(enemy_count):
-		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
 		tween.tween_property(enemies[enemies.keys()[i]],"position",Vector2((i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),enemies[enemies.keys()[i]].position.y),0.2)
 
 func set_card_selected(new_state):

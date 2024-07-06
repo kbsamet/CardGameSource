@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=15 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="Texture2D" uid="uid://cosogl3d7bq7w" path="res://Sprites/ui/player_health_bar.png" id="1_n0tng"]
@@ -10,6 +10,7 @@
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="8_7lnja"]
 [ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="8_kx4i3"]
 [ext_resource type="Texture2D" uid="uid://bn81552rvli0r" path="res://Sprites/ui/rewardIcons/key.png" id="10_252vg"]
+[ext_resource type="Texture2D" uid="uid://c205fbxp1o6vy" path="res://Sprites/ui/discard_pile.png" id="11_2b7bs"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_rqvuj"]
 shader = ExtResource("5_bravp")
@@ -158,7 +159,7 @@ mouse_filter = 2
 
 [node name="Deck" type="Sprite2D" parent="."]
 position = Vector2(1776, 849)
-scale = Vector2(2.5, 2.5)
+scale = Vector2(1.5, 1.5)
 texture = ExtResource("7_gocp1")
 
 [node name="DeckCountLabel" type="Label" parent="Deck"]
@@ -208,5 +209,20 @@ offset_top = 46.0
 offset_right = 1064.0
 offset_bottom = 137.0
 mouse_filter = 2
+
+[node name="DiscardPile" type="Sprite2D" parent="."]
+position = Vector2(134, 849)
+scale = Vector2(1.5, 1.5)
+texture = ExtResource("11_2b7bs")
+
+[node name="DiscardPileCountLabel" type="Label" parent="DiscardPile"]
+offset_left = -29.2
+offset_top = -89.2
+offset_right = 29.8
+offset_bottom = -66.2
+text = "32/32"
+label_settings = ExtResource("2_2gp3d")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="gui_input" from="Container" to="." method="_on_button_input"]
