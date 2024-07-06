@@ -16,6 +16,7 @@ func _ready():
 	enemyController._on_card_used.connect(_use_card)
 	enemyController.enemy_turn_done.connect(_enemy_turn_done)
 	enemyController.enemy_action_done.connect(_enemy_action_done)
+	enemyController.hovered_enemy_changed.connect(_hovered_enemy_changed)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
 	hand.discardPosition = fightUI.discardPile.global_position
 	hand.deal_hand()
@@ -120,6 +121,12 @@ func _enemy_turn_done():
 func _enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)
 
+func _hovered_enemy_changed(enemy_id):
+	if enemy_id == -1:
+		hand.enemy_hovered(enemy_id,null)
+	else:
+		hand.enemy_hovered(enemy_id,enemyController.enemies[enemy_id].global_position)
+	 
 func create_deck():
 	for i in range(4):
 		db.player.deck.push_back(CardData.from_dict(db.cards["Strike"]))

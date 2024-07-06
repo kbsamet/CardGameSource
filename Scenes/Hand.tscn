@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxj0poh31buc8"]
+[gd_scene load_steps=3 format=3 uid="uid://cxj0poh31buc8"]
 
 [ext_resource type="Script" path="res://Scenes/Hand.gd" id="1_usoam"]
+[ext_resource type="PackedScene" uid="uid://btuxupg24xjn" path="res://Scenes/ui/CardDragArrow.tscn" id="2_78v2s"]
 
 [node name="Hand" type="Container"]
 script = ExtResource("1_usoam")
+
+[node name="CardDragArrow" parent="." instance=ExtResource("2_78v2s")]
+visible = false
+layout_mode = 2

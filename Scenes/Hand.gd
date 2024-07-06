@@ -4,9 +4,13 @@ class_name Hand
 var cards : Dictionary = {}
 var id_count = 0
 var selected_card = -1
+var dragged_card_id = -1
+var selected_enemy_id = -1
 var random = RandomNumberGenerator.new()
 @export var discardPosition : Vector2
 @export var cardScene = preload("res://Scenes/Card.tscn")
+@onready var arrow = $CardDragArrow
+
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
 # Called when the node enters the scene tree for the first time.
@@ -18,8 +22,9 @@ func _ready():
 func _process(delta):
 	pass
 
-func add_card(card : Node):
+func add_card(card : CardNode):
 	card.on_clicked_signal.connect(_on_card_clicked)
+	card.on_hold_signal.connect(_on_card_hold)
 	cards[id_count] = card
 	card.id = id_count
 	id_count += 1
@@ -41,6 +46,7 @@ func turn_changed(new_turn):
 	if selected_card != -1:
 		cards[selected_card].set_selected(false)
 		selected_card = -1
+		
 func _on_card_clicked(id):
 	if cards[id].disabled:
 		return
@@ -61,6 +67,24 @@ func _on_card_clicked(id):
 		cards[id].set_selected(true)
 		selected_card = id
 		selected_card_state_changed.emit(true)
+
+func _on_card_hold(id):
+	if dragged_card_id != -1 && selected_enemy_id != -1:
+		play_card.emit(selected_enemy_id)
+		selected_card_state_changed.emit(false)
+		selected_card = -1
+		arrow.visible = false
+	dragged_card_id = id
+
+func enemy_hovered(enemy_id : int,enemy_position: Variant):
+	if enemy_id != -1 && dragged_card_id != -1 && cards[dragged_card_id].card_data.targeted:
+		var animate = arrow.visible
+		selected_enemy_id = enemy_id
+		arrow.visible = true
+		arrow.set_data(cards[dragged_card_id].global_position,enemy_position,animate)
+	else:
+		selected_enemy_id = -1
+		arrow.visible = false
 
 func discard(id):
 	db.player.discardPile.push_back(cards[id].card_data)

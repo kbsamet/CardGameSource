@@ -1,8 +1,9 @@
 extends Node2D
-
+class_name CardNode
 
 var card_data : CardData
 signal on_clicked_signal(id)
+signal on_hold_signal(id)
 var id: int
 var selected = false
 var disabled = false
@@ -81,6 +82,9 @@ func set_selected(new_selected):
 		
 func _on_input(event : InputEvent):
 	if event is InputEventMouseButton:
-		if event.is_released():
+		if event.is_pressed():
+			on_hold_signal.emit(id)
 			on_clicked_signal.emit(id)
+		if event.is_released():
+			on_hold_signal.emit(-1)
 

@@ -4,6 +4,7 @@ class_name EnemyController
 signal _on_card_used(enemy_id)
 signal enemy_turn_done
 signal enemy_action_done(enemy_id)
+signal hovered_enemy_changed(id)
 var attacking_enemy_id = -1
 var enemies : Dictionary = {}
 var id_count = 0
@@ -12,7 +13,7 @@ var enemy_generator
 func _ready():
 	pass # Replace with function body.
 
-func add_enemy(enemy : Node):
+func add_enemy(enemy : EnemyNode):
 	enemies[id_count] = enemy
 	enemy.id = id_count
 	id_count += 1
@@ -20,6 +21,9 @@ func add_enemy(enemy : Node):
 	enemy.attack_rise_done.connect(_enemy_attack_rise_done)
 	enemy.attack_end_done.connect(_enemy_attack_end_done)
 	enemy.enemy_dead.connect(_enemy_dead)
+	enemy.enemy_hovered.connect(_on_enemy_hovered)
+	enemy.enemy_hovered_end.connect(_on_enemy_hovered_end)
+	
 	
 	add_child(enemy)
 	center_enemies()
@@ -27,6 +31,12 @@ func add_enemy(enemy : Node):
 func _on_enemy_clicked(enemy_id):
 	_on_card_used.emit(enemy_id)
 
+func _on_enemy_hovered(enemy_id):
+	hovered_enemy_changed.emit(enemy_id)
+	
+func _on_enemy_hovered_end(enemy_id):
+	hovered_enemy_changed.emit(-1)
+	
 func center_enemies():
 	if enemies.is_empty():
 		return

@@ -1,5 +1,5 @@
 extends Node2D
-
+class_name EnemyNode
 var enemy_data : EnemyData
 var is_card_selected = false
 var id : int
@@ -7,6 +7,8 @@ signal on_clicked_signal(id)
 signal attack_rise_done(id)
 signal attack_end_done(id)
 signal enemy_dead(id)
+signal enemy_hovered(id)
+signal enemy_hovered_end(id)
 @onready var sprite = $Sprite
 @onready var healthBarRect = $Control/HealthBar/HealthBarRect
 @onready var healthLabel = $Control/HealthBar/HealthLabel
@@ -51,13 +53,16 @@ func damage(amount):
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 	if enemy_data.health <= 0:
 		enemy_dead.emit(id)
+
 func _on_hover():
+	enemy_hovered.emit(id)
 	if is_card_selected:
 		sprite.material = outlineShader
 
 
 func _on_hover_end() -> void:
 	sprite.material = null
+	enemy_hovered_end.emit(id)
 
 func get_attack() -> Dictionary:
 	var dazed = get_status_effect("dazed")
