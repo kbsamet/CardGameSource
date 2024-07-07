@@ -8,14 +8,18 @@ var id: int
 var selected = false
 var disabled = false
 var hovered = false
+var dragged = false
 @onready var manaLabel = $Control/ManaLabel
 @onready var typeLabel = $Control/TypeLabel
 @onready var nameLabel = $Control/NameLabel
 @onready var descriptionLabel = $Control/DescriptionLabel
 @onready var sprite = $Sprite
 @onready var animationPlayer = $AnimationPlayer
+@onready var control = $Control
 
 @onready var outlineShader = preload("res://Shaders/outline.tres")
+@onready var outlineBlueShader = preload("res://Shaders/outline_blue.tres")
+@onready var outlineRedShader = preload("res://Shaders/outline_red.tres")
 @onready var disabledShader = preload("res://Shaders/gray_tint.tres")
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -49,10 +53,19 @@ func _turn_changed(new_turn):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	if dragged and !card_data.targeted:
+		global_position = get_global_mouse_position() - (control.size / 2)
+		if position.y < -300:
+			if card_data.type == db.CardType.Action:
+				sprite.material = outlineRedShader
+			else:
+				sprite.material = outlineBlueShader
+		else:
+			sprite.material = outlineShader
+	
 
 func _on_hover():
-	if disabled:
+	if disabled or selected or dragged:
 		return
 	animationPlayer.stop()
 	animationPlayer.play("hover")
@@ -61,7 +74,7 @@ func _on_hover():
 	z_index = 10
 
 func _on_hover_over():
-	if disabled:
+	if disabled or selected or dragged:
 		return
 	if !selected:
 		animationPlayer.stop()
@@ -84,7 +97,10 @@ func _on_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			on_hold_signal.emit(id)
-			on_clicked_signal.emit(id)
+			dragged = true
 		if event.is_released():
 			on_hold_signal.emit(-1)
+			dragged = false
+			if Rect2(control.global_position,control.size).has_point(get_global_mouse_position()):
+				on_clicked_signal.emit(id)
 

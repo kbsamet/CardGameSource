@@ -20,11 +20,16 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if dragged_card_id != -1:
+		Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+		arrow.set_data(cards[dragged_card_id].global_position,get_global_mouse_position(),false)
+	else:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	pass
 
 func add_card(card : CardNode):
-	card.on_clicked_signal.connect(_on_card_clicked)
 	card.on_hold_signal.connect(_on_card_hold)
+	card.on_clicked_signal.connect(_on_card_clicked)
 	cards[id_count] = card
 	card.id = id_count
 	id_count += 1
@@ -48,43 +53,63 @@ func turn_changed(new_turn):
 		selected_card = -1
 		
 func _on_card_clicked(id):
-	if cards[id].disabled:
-		return
-	if selected_card == -1:
-		cards[id].set_selected(true)
-		selected_card = id
-		selected_card_state_changed.emit(true)
-	elif selected_card == id:
-		if !cards[selected_card].card_data.targeted:
-			play_card.emit(null)
-			return
-		
-		cards[selected_card].set_selected(false)
-		selected_card_state_changed.emit(false)
-		selected_card = -1
-	else:
-		cards[selected_card].set_selected(false)
-		cards[id].set_selected(true)
-		selected_card = id
-		selected_card_state_changed.emit(true)
+	pass
+	#if cards[id].disabled:
+		#return
+	#if selected_card == -1:
+		#cards[id].set_selected(true)
+		#selected_card = id
+		#selected_card_state_changed.emit(true)
+	#elif selected_card == id:
+		#if !cards[selected_card].card_data.targeted:
+			#play_card.emit(null)
+			#return
+		#
+		#cards[selected_card].set_selected(false)
+		#selected_card_state_changed.emit(false)
+		#selected_card = -1
+	#else:
+		#cards[selected_card].set_selected(false)
+		#cards[id].set_selected(true)
+		#selected_card = id
+		#selected_card_state_changed.emit(true)
 
 func _on_card_hold(id):
-	if dragged_card_id != -1 && selected_enemy_id != -1:
-		play_card.emit(selected_enemy_id)
+	if id == -1:
+		if dragged_card_id != -1:
+			if !cards[dragged_card_id].card_data.targeted:
+				if cards[dragged_card_id].position.y < -300:
+					play_card.emit(null)
+				else:
+					center_cards()
+					create_tween().tween_property(cards[dragged_card_id],"position:y",0,0.3)
+
+			elif selected_enemy_id != -1:
+				play_card.emit(selected_enemy_id)
+		if selected_card != -1:
+			cards[selected_card].set_selected(false)
 		selected_card_state_changed.emit(false)
 		selected_card = -1
 		arrow.visible = false
+	else:
+		if !(id in cards) or cards[id].disabled or dragged_card_id != -1:
+			return
+		cards[id].set_selected(true)
+		selected_card_state_changed.emit(true)
+		selected_card = id
+		if cards[id].card_data.targeted:
+			arrow.visible = true
 	dragged_card_id = id
 
 func enemy_hovered(enemy_id : int,enemy_position: Variant):
 	if enemy_id != -1 && dragged_card_id != -1 && cards[dragged_card_id].card_data.targeted:
 		var animate = arrow.visible
 		selected_enemy_id = enemy_id
-		arrow.visible = true
-		arrow.set_data(cards[dragged_card_id].global_position,enemy_position,animate)
+		#arrow.visible = true
+		#arrow.set_data(cards[dragged_card_id].global_position,get_global_mouse_position(),animate)
 	else:
 		selected_enemy_id = -1
-		arrow.visible = false
+		#arrow.visible = true
 
 func discard(id):
 	db.player.discardPile.push_back(cards[id].card_data)

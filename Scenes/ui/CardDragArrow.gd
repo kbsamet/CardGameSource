@@ -8,7 +8,7 @@ func _ready():
 	pass # Replace with function body.
 
 func set_data(from : Vector2, to: Vector2,animate: bool = false):
-	var new_from = from - Vector2(0,300)
+	var new_from = from - Vector2(0,200)
 	var new_to = to 
 	var direction = new_to - new_from
 	var distance = direction.length()
