@@ -18,7 +18,7 @@ enum CardType {
 } 
 
 enum CardEffect{
-	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll
+	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp
 }
 var status_effects : Dictionary = {
 	"dazed" : {
@@ -45,7 +45,17 @@ var status_effects : Dictionary = {
 		"name" : "revive_half",
 		"hidden" : true,
 		"tooltip" : "",
-	}
+	},
+	"blind": {
+		"name" : "blind",
+		"hidden" : false,
+		"tooltip" : "Blind: You will be unable to target enemies for _ turns.",
+	},
+	"burn": {
+		"name" : "burn",
+		"hidden" : false,
+		"tooltip" : "Burn: You will discard a random card for _ turns.",
+	},
 	
 }
 var cards : Dictionary = {
@@ -62,7 +72,7 @@ var cards : Dictionary = {
 	"Shield Bash" : {
 		"name": "Shield Bash",
 		"type" : CardType.Reaction,
-		"description": "Deal 3 damage. Stun the enemy.",
+		"description": "Deal 3 damage. Daze the enemy.",
 		"cost": 2,
 		"targeted" : true,
 		"effects": {
@@ -83,7 +93,7 @@ var cards : Dictionary = {
 	"Daze" : {
 		"name" : "Daze",
 		"type" : CardType.Action,
-		"description": "Deal 5 damage. Stun the enemy.",
+		"description": "Deal 5 damage. Daze the enemy.",
 		"cost": 2,
 		"targeted" : true,
 		"effects": {
@@ -104,7 +114,7 @@ var cards : Dictionary = {
 	"Dodge" : {
 		"name" : "Dodge",
 		"type" : CardType.Reaction,
-		"description": "Dodge the incoming attack.",
+		"description": "Gain 1 dodge.",
 		"cost": 2,
 		"targeted" : false,
 		"effects": {
@@ -120,18 +130,48 @@ var cards : Dictionary = {
 		"effects": {
 			CardEffect.DamageAll : 5,
 		}
+	},
+	"Offensive Surge": {
+		"name" : "Offensive Surge",
+		"type" : CardType.Action,
+		"description": "Convert all reaction points into action points.",
+		"cost": 0,
+		"targeted" : false,
+		"effects": {
+			CardEffect.ConvertAllRp : 1,
+		}
+	},
+	"Defensive Surge": {
+		"name" : "Defensive Surge",
+		"type" : CardType.Reaction,
+		"description": "Convert all action points into reaction points.",
+		"cost": 0,
+		"targeted" : false,
+		"effects": {
+			CardEffect.ConvertAllAp : 1,
+		}
+	},
+	"Sharp Blade": {
+		"name" : "Sharp Blade",
+		"type" : CardType.Action,
+		"description": "Inflict 3 bleed to an enemy.",
+		"cost": 2,
+		"targeted" : true,
+		"effects": {
+			CardEffect.Bleed : 3,
+		}
 	}
 }
 
 var enemies : Dictionary = {
 	"Zombie": {
 		"name" : "Zombie",
-		"health" : 15,
+		"health" : 20,
 		"stamina" : 3,
 		"attacks": [
 			{
-				"damage" : 5,
 				"bleed" : 1,
+				"damage" : 5,
 				"staminaCost" : 3
 			},
 			{
@@ -148,7 +188,7 @@ var enemies : Dictionary = {
 	},
 	"Bat": {
 		"name" : "Bat",
-		"health" : 10,
+		"health" : 15,
 		"stamina" : 2,
 		"attacks": [
 			{
@@ -164,6 +204,53 @@ var enemies : Dictionary = {
 		],
 		"statusEffects": {
 		}
+	},
+	"Fallen Priest": {
+		"name" : "Fallen Priest",
+		"health" : 25,
+		"stamina" : 5,
+		"attacks": [
+			{
+				"armorUp" : 5,
+				"healAll" : 3,
+				"unstoppable" : 1,
+				"staminaCost" : 3
+			},
+			{
+				"damage" : 2,
+				"blind" : 2,
+				"staminaCost" : 2
+			},
+			{
+				"damage" : 2,
+				"staminaCost" : 1
+			}
+		],
+		"statusEffects": {
+			"block" : StatusEffectData.fromDict(status_effects["block"],5)
+		}
+	},
+	"Fire Seeker": {
+		"name" : "Fire Seeker",
+		"health" : 20,
+		"stamina" : 5,
+		"attacks": [
+			{
+				"damage" : 5,
+				"burn" : 2,
+				"staminaCost" : 3
+			},
+			{
+				"damage" : 5,
+				"staminaCost" : 2
+			},
+			{
+				"damage" : 2,
+				"staminaCost" : 1
+			}
+		],
+		"statusEffects": {
+		}
 	}
 }
 
@@ -171,48 +258,64 @@ var relics : Dictionary = {
 	"red_orb" : {
 		"name" : "red_orb",
 		"description" : "Red Orb:\nGain 1 action point",
-		"on_add" : func(player: Player): player.add_max_ap(1),
-		"on_remove": func(player: Player): player.add_max_ap(-1)
+		"on_add" : func(p: Player): p.add_max_ap(1),
+		"on_remove": func(p: Player): p.add_max_ap(-1)
 
 	},
 	"blue_orb" : {
 		"name" : "blue_orb",
 		"description" : "Blue Orb:\nGain 1 reaction point",
-		"on_add" : func(player: Player): player.add_max_rp(1),
-		"on_remove": func(player: Player): player.add_max_rp(-1)
+		"on_add" : func(p: Player): p.add_max_rp(1),
+		"on_remove": func(p: Player): p.add_max_rp(-1)
 		
 	},
 	"true_faith" : {
 		"name" : "true_faith",
 		"description" : "True Faith:\nRevive with half health when you would die. Breaks upon use.",
-		"on_add" : func(player: Player): player.add_player_status_effect("revive_half",1),
-		"on_remove": func(player: Player): player.add_player_status_effect("revive_half",-1)
+		"on_add" : func(p: Player): p.add_player_status_effect("revive_half",1),
+		"on_remove": func(p: Player): p.add_player_status_effect("revive_half",-1)
 		
 	},
 }
 
-const tooltips : Dictionary = {
+const enemy_tooltips : Dictionary = {
 	"damage" : "Damage: Deal _ damage.",
 	"bleed" :  "Bleed: 1 damage per turn for _ turns.",
 	"staminaCost": "Cost: This attack will cost _ stamina.",
 	"daze" : "Daze: You will be unable to attack for _ turns.",
+	"armorUp": "Armor Up: This enemy will gain _ block.",
+	"healAll": "Heal All: This enemy will heal all enemies by _.",
+	"blind": "Blind: You will be unable to target enemies for _ turns.",
+	"burn": "Burn: You will discard a random card for _ turns.",
+	"unstoppable": "Unstoppable: This enemy cannot be stunned."
+}
+
+const card_tooltips : Dictionary = {
+	CardEffect.Block : "Block:\nBlock _ damage for this turn.",
+	CardEffect.Dodge : "Dodge:\nDodge the incoming attack.",
+	CardEffect.Daze : "Daze:\nThe enemy will be unable to attack for _ turns.",
+	CardEffect.Bleed : "Bleed:\nThe enemy will receive _ damage per turn.",
 }
 
 const fight_rooms : Array[Dictionary] = [
 	{
 		"Zombie" : 1,
-		"Bat"  : 1
+		"Bat"  : 2
 	},
 	{
-		"Zombie" : 2,
-		"Bat"  : 1
+		"Zombie" : 1,
+		"Fallen Priest": 1,
+		"Fire Seeker": 1
 	},
 	{
-		"Zombie" : 2,
+		"Fallen Priest" : 1,
+		"Fire Seeker": 1
 	},
 	{
 		"Bat" : 2,
-	},
+		"Fallen Priest": 1
+	}
+	
 ]
 
 const rewards : Array[Dictionary] = [
@@ -226,24 +329,24 @@ const rewards : Array[Dictionary] = [
 		"amount" : 1,
 		"tooltip" : "Gain a key after the next fight."
 	},
-	#{
-		#"reward" : "locked_chest",
-		#"amount" : 1,
-		#"tooltip" : "There is a locked chest after the next fight."
-		#
-	#},
+	{
+		"reward" : "locked_chest",
+		"amount" : 1,
+		"tooltip" : "There is a locked chest after the next fight."
+		
+	},
 	{
 		"reward" : "choose_card",
 		"amount" : 3,
 		"tooltip" : "Choose one of 3 cards after the next fight."
 		
 	},
-	{
-		"reward" : "choose_relic",
-		"amount" : 3,
-		"tooltip" : "Choose one of 3 relics after the next fight."
-		
-	},
+	#{
+		#"reward" : "choose_relic",
+		#"amount" : 3,
+		#"tooltip" : "Choose one of 3 relics after the next fight."
+		#
+	#},
 	#{
 		#"reward" : "shop",
 		#"amount" : 1,
@@ -252,6 +355,21 @@ const rewards : Array[Dictionary] = [
 	#},
 ]
 
+const locked_chest_rewards : Array[Dictionary] = [
+	{
+		"reward": "gold",
+		"amount": "15-20"
+	},
+	{
+		"reward": "choose_card",
+		"amount": 3
+	},
+	{
+		"reward": "choose_relic",
+		"amount": 3
+	},
+	
+]
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)

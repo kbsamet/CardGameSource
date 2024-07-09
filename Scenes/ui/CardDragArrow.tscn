@@ -11,24 +11,20 @@ border_width_top = 1
 border_width_right = 1
 border_color = Color(1, 1, 1, 1)
 
-[node name="CardDragArrow" type="Control"]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="CardDragArrow" type="Node2D"]
+z_index = 7
 script = ExtResource("1_7ie0x")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 z_index = 7
 material = ExtResource("2_qvi1i")
-position = Vector2(0, -16)
+position = Vector2(0, -24)
 scale = Vector2(2, 2)
 texture = ExtResource("1_cmcbf")
 offset = Vector2(0, -4)
 
 [node name="ColorRect" type="Panel" parent="Sprite2D"]
+visible = false
 offset_left = -8.0
 offset_top = 12.0
 offset_right = 8.0
@@ -36,3 +32,10 @@ offset_bottom = 22.0
 rotation = 3.14159
 pivot_offset = Vector2(8, 5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_3x6e2")
+
+[node name="bottom" type="ColorRect" parent="Sprite2D"]
+offset_left = -7.0
+offset_top = 12.0
+offset_right = 7.0
+offset_bottom = 16.0
+color = Color(0.662745, 0.286275, 0.286275, 1)

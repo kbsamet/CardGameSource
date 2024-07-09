@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://c070thkfkca35"]
+
+[ext_resource type="Shader" path="res://Shaders/hit_shader.gdshader" id="1_5qhlb"]
+
+[resource]
+shader = ExtResource("1_5qhlb")
+shader_parameter/time = null
+shader_parameter/hit_color = Color(1, 1, 1, 1)

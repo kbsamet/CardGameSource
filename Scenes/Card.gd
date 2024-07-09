@@ -16,11 +16,14 @@ var dragged = false
 @onready var sprite = $Sprite
 @onready var animationPlayer = $AnimationPlayer
 @onready var control = $Control
+@onready var tooltipContainer = $Control/VBoxContainer
 
 @onready var outlineShader = preload("res://Shaders/outline.tres")
 @onready var outlineBlueShader = preload("res://Shaders/outline_blue.tres")
 @onready var outlineRedShader = preload("res://Shaders/outline_red.tres")
 @onready var disabledShader = preload("res://Shaders/gray_tint.tres")
+@onready var tooltipNode = preload("res://Scenes/ui/Tooltip.tscn")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	db.turn_changed.connect(_turn_changed)
@@ -31,6 +34,7 @@ func _ready():
 	nameLabel.text = card_data._name
 	descriptionLabel.text = card_data.description
 	sprite.texture = load("res://Sprites/cards/"+card_data._name+".png")
+	init_info()
 
 func _player_state_changed():
 	if (card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
@@ -53,8 +57,8 @@ func _turn_changed(new_turn):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if dragged and !card_data.targeted:
-		global_position = get_global_mouse_position() - (control.size / 2)
+	if dragged and (!card_data.targeted or "blind" in db.player.status_effects):
+		global_position = get_global_mouse_position() #+ (control.size / 2)
 		if position.y < -300:
 			if card_data.type == db.CardType.Action:
 				sprite.material = outlineRedShader
@@ -66,14 +70,17 @@ func _process(delta):
 
 func _on_hover():
 	if disabled or selected or dragged:
+		remove_info()
 		return
 	animationPlayer.stop()
 	animationPlayer.play("hover")
 	sprite.material = outlineShader
+	show_info()
 	hovered = true
 	z_index = 10
 
 func _on_hover_over():
+	remove_info()
 	if disabled or selected or dragged:
 		return
 	if !selected:
@@ -81,9 +88,11 @@ func _on_hover_over():
 		animationPlayer.play("restore")
 		sprite.material = null
 		hovered = false
+		
 		z_index = 8
 
 func set_selected(new_selected):
+	remove_info()
 	if new_selected:
 		selected = new_selected
 	else:
@@ -97,10 +106,26 @@ func _on_input(event : InputEvent):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			on_hold_signal.emit(id)
-			dragged = true
+			if !disabled:
+				dragged = true
 		if event.is_released():
 			on_hold_signal.emit(-1)
 			dragged = false
 			if Rect2(control.global_position,control.size).has_point(get_global_mouse_position()):
 				on_clicked_signal.emit(id)
 
+func remove_info():
+	for n in tooltipContainer.get_children():
+		n.visible = false
+
+func show_info():
+	for n in tooltipContainer.get_children():
+		n.visible = true
+func init_info():
+	for effect in card_data.effects.keys():
+		if effect in db.card_tooltips:
+			var tooltip = db.card_tooltips[effect] as String
+			tooltip = tooltip.replace("_",str(card_data.effects[effect]))
+			var new_tooltip = tooltipNode.instantiate()
+			tooltipContainer.add_child(new_tooltip)
+			new_tooltip.set_data(tooltip)

@@ -3,6 +3,7 @@ class_name EnemyNode
 var enemy_data : EnemyData
 var is_card_selected = false
 var id : int
+var hit_animation_playing = false
 signal on_clicked_signal(id)
 signal attack_rise_done(id)
 signal attack_end_done(id)
@@ -15,6 +16,7 @@ signal enemy_hovered_end(id)
 @onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
 @onready var staminaLabel = $Control/StaminaBar/StaminaLabel
 @onready var animationPlayer = $AnimationPlayer
+@onready var hitShader = preload("res://Shaders/hit_shader.tres").duplicate()
 @onready var outlineShader = preload("res://Shaders/outline_red.tres")
 @onready var attackIcon = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
 @onready var statusEffectIcon = preload("res://Scenes/ui/StatusEffectIcon.tscn")
@@ -31,7 +33,7 @@ func _ready():
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
 	health_bar_full_width = healthBarRect.size.x
 	stamina_bar_full_width = staminaBarRect.size.x
-	
+	set_status_effect_info()
 	pass # Replace with function body.
 
 
@@ -47,9 +49,22 @@ func change_stamina(amount:int) -> void:
 	if enemy_data.stamina == 0:
 		add_status_effect("dazed",1)
 func damage(amount):
+	if "block" in enemy_data.status_effects:
+		var block_amount = enemy_data.status_effects["block"].amount
+		if block_amount > amount:
+			add_status_effect("block", -amount)
+			return
+		else:
+			add_status_effect("block", -block_amount)
+			amount -= block_amount
 	var tween =  create_tween()
+	hit_animation_playing = true
+	sprite.material = hitShader
+	tween.tween_method(func(value): sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_callback(func(): hit_animation_playing = false)
 	enemy_data.health -= amount
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
+	
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 	if enemy_data.health <= 0:
 		enemy_dead.emit(id)
@@ -61,7 +76,8 @@ func _on_hover():
 
 
 func _on_hover_end() -> void:
-	sprite.material = null
+	if !hit_animation_playing:
+		sprite.material = null
 	enemy_hovered_end.emit(id)
 
 func get_attack() -> Dictionary:
@@ -78,6 +94,7 @@ func get_attack() -> Dictionary:
 	if available_attacks.is_empty():
 		print("no available attacks on enemy "+ str(id))
 		selected_attack = {}
+		change_stamina(0)
 		return {}
 	#get best attack
 	#available_attacks.sort_custom(func(a,b): return a.staminaCost > b.staminaCost )
@@ -100,14 +117,31 @@ func _on_input(event):
 			on_clicked_signal.emit(id)
 
 
+func heal(amount:int) -> void:
+	enemy_data.health = min(enemy_data.health+amount, enemy_data.max_health)
+	var tween = create_tween()
+	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
+	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+	
 func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
 		set_attack_info()
+		remove_status_effect_info()
 	elif anim_name == "attack_end":
 		attack_end_done.emit()
 		remove_attack_info()
+		remove_status_effect_info()
+		set_status_effect_info()
 		z_index = 5
+
+func process_status_effects():
+	for effect in enemy_data.status_effects.values():
+		effect = effect as StatusEffectData
+		if effect._name == "bleed":
+			damage(effect.amount)
+			add_status_effect("bleed",-1)
+			
 
 func start_attack_animation() -> void:
 	z_index = 6
@@ -131,9 +165,9 @@ func set_attack_info() -> void:
 func set_status_effect_info() -> void:
 	for effect in enemy_data.status_effects.values():
 		var icon = statusEffectIcon.instantiate()
+		icon.set_data(effect)
 		icon.add_to_group("status_effect")
 		infoPopup.add_child(icon)
-		icon.set_data(effect)
 
 func remove_status_effect_info() -> void:
 	for n in infoPopup.get_children():
@@ -153,13 +187,13 @@ func add_status_effect(effect : String,amount: int) -> void:
 		if enemy_data.status_effects[effect].amount <= -amount:
 			enemy_data.status_effects.erase(effect)
 		else:
-			if effect == "dazed":
+			if effect == "dazed" and (selected_attack == null or selected_attack == {} or !("unstoppable" in selected_attack)):
 				selected_attack = {}
 				remove_attack_info()
 				set_attack_info()
 			enemy_data.status_effects[effect].amount += amount
 	else:
-		if effect == "dazed":
+		if effect == "dazed" and (selected_attack == null or selected_attack == {} or !("unstoppable" in selected_attack)):
 			selected_attack = {}
 			remove_attack_info()
 			set_attack_info()

@@ -1,6 +1,6 @@
 extends Control
 class_name RewardScreen
-var reward_data : RewardData = RewardData.fromDict(db.rewards[3])
+var reward_data : RewardData = RewardData.fromDict(db.rewards[2])
 var rng  = RandomNumberGenerator.new()
 @onready var reward = $Reward/RewardSprite
 @onready var rewardText = $Reward/RewardText
@@ -40,19 +40,47 @@ func _on_reward_mouse_entered():
 func _on_reward_mouse_exited():
 	reward.material = null
 
+func get_regular_reward(reward_name,reward_amount):
+	var amount = 0
+	if TYPE_STRING == typeof(reward_amount):
+		var boundries = reward_amount.split("-")
+		assert(boundries.size() == 2, "Boundry not set properly on reward " + reward_name)
+		amount = rng.randi_range(int(boundries[0]),int(boundries[1]))
+	else:
+		amount = reward_amount
+	db.player.add_player_items(reward_name,amount)
+	rewardText.text = "Gained " + str(amount) + " " + reward_name
+	reward.visible = false
+	await get_tree().create_timer(1.0).timeout 
+	get_tree().change_scene_to_packed(select_reward_screen)
 
+func get_chest_reward():
+	if db.player.keys == 0:
+		rewardText.text = "You couldn't open the chest"
+		reward.visible = false
+		await get_tree().create_timer(1.0).timeout
+		get_tree().change_scene_to_packed(select_reward_screen)
+		return
+	db.player.keys -= 1
+	var random_reward = db.locked_chest_rewards.pick_random()
+	if random_reward.reward == "choose_card":
+		reward.visible = false
+		reward.queue_free()
+		var card_scene = choose_card_scene.instantiate()
+		card_scene.card_chosen.connect(_go_to_select_reward)
+		add_child(card_scene)
+	elif random_reward.reward == "choose_relic":
+		reward.visible = false
+		reward.queue_free()
+		var relic_scene = choose_relic_scene.instantiate() as ChooseRelicRewardScene
+		relic_scene.relic_chosen.connect(_go_to_select_reward)
+		add_child(relic_scene)
+	else:
+		get_regular_reward(random_reward.reward, random_reward.amount)
 func _on_reward_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
-			var amount = 0
-			if TYPE_STRING == typeof(reward_data.amount):
-				var boundries = reward_data.amount.split("-")
-				assert(boundries.size() == 2, "Boundry not set properly on reward " + reward_data.reward)
-				amount = rng.randi_range(int(boundries[0]),int(boundries[1]))
-			else:
-				amount = reward_data.amount
-			db.player.add_player_items(reward_data.reward,amount)
-			rewardText.text = "Gained " + str(amount) + " " + reward_data.reward
-			reward.visible = false
-			await get_tree().create_timer(1.0).timeout 
-			get_tree().change_scene_to_packed(select_reward_screen)
+			if reward_data.reward == "locked_chest":
+				get_chest_reward()
+				return
+			get_regular_reward(reward_data.reward,reward_data.amount)

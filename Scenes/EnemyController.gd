@@ -84,29 +84,40 @@ func end_enemy_attack():
 		_enemy_attack_end_done()
 		return 
 	assert(attacking_enemy_id != -1,"No enemies are attacking!")
-	var attack = enemies[attacking_enemy_id].selected_attack
+	var attacking_enemy = enemies[attacking_enemy_id] as EnemyNode
+	var attack = attacking_enemy.selected_attack
 	assert(attack != null,"Enemy does not have an attack selected!")
-	if enemies[attacking_enemy_id].get_status_effect("dazed") != null:
-		enemies[attacking_enemy_id].add_status_effect("dazed",-1)
-		enemies[attacking_enemy_id].start_attack_end_animation()
-		return
-	if "dodge" in db.player.status_effects.keys():
-		db.player.add_player_status_effect("dodge",-1)
-		enemies[attacking_enemy_id].change_stamina(-attack["staminaCost"])
-		enemies[attacking_enemy_id].start_attack_end_animation()
+	if attacking_enemy.get_status_effect("dazed") != null:
+		attacking_enemy.add_status_effect("dazed",-1)
+		attacking_enemy.start_attack_end_animation()
 		return
 	for key in attack.keys():
-		if key == "damage":
-			db.player.damage_player(attack["damage"])
-		if key == "staminaCost":
-			enemies[attacking_enemy_id].change_stamina(-attack["staminaCost"])
-		if key == "bleed":
-			if !("block" in db.player.status_effects):
-				db.player.add_player_status_effect("bleed",attack["bleed"])
-		if key == "daze":
-			if !("block" in db.player.status_effects):
-				db.player.add_player_status_effect("dazed",attack["daze"])
-	enemies[attacking_enemy_id].start_attack_end_animation()
+		match key:
+			"damage":
+				if !("dodge" in db.player.status_effects.keys()):
+					db.player.damage_player(attack["damage"])
+			"staminaCost":
+				attacking_enemy.change_stamina(-attack["staminaCost"])
+			"bleed":
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+					db.player.add_player_status_effect("bleed",attack["bleed"])
+			"daze":
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+					db.player.add_player_status_effect("dazed",attack["daze"])
+			"blind":
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+					db.player.add_player_status_effect("blind",attack["blind"])
+			"armorUp":
+				attacking_enemy.add_status_effect("block",attack["armorUp"])
+			"healAll":
+				for enemy in enemies.values():
+					enemy.heal(attack["healAll"])
+			"burn":
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+					db.player.add_player_status_effect("burn",attack["burn"])
+	if "dodge" in db.player.status_effects.keys():
+		db.player.add_player_status_effect("dodge",-1)
+	attacking_enemy.start_attack_end_animation()
 
 func _enemy_attack_end_done():
 	center_enemies()

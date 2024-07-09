@@ -8,4 +8,3 @@ script = ExtResource("1_usoam")
 
 [node name="CardDragArrow" parent="." instance=ExtResource("2_78v2s")]
 visible = false
-layout_mode = 2

@@ -43,6 +43,8 @@ func spawn_enemies():
 			spawn_enemy(key)
 
 func _use_card(enemy_id):
+	if "blind" in db.player.status_effects:
+		enemy_id = enemyController.enemies.keys().pick_random()
 	var card_id = hand.selected_card
 	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
@@ -76,6 +78,16 @@ func _use_card(enemy_id):
 			db.CardEffect.DamageAll:
 				for enemy in enemyController.enemies.values():
 					enemy.damage(card_effects[effect])
+			db.CardEffect.ConvertAllAp:
+				db.player.rp += db.player.ap
+				db.player.rp = min(db.player.rp, db.player.max_rp)
+				db.player.ap = 0
+				db.player_state_changed.emit()
+			db.CardEffect.ConvertAllRp:
+				db.player.ap += db.player.rp
+				db.player.ap = min(db.player.ap, db.player.max_ap)
+				db.player.rp = 0
+				db.player_state_changed.emit()
 	if selected_card.type == db.CardType.Action:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -112,6 +124,13 @@ func _enemy_turn_done():
 	enemyController.attacking_enemy_id = -1
 	hand.discard_all()
 	hand.deal_hand()
+	for enemy in enemyController.enemies.values():
+		enemy.process_status_effects()
+	if "blind" in db.player.status_effects:
+		db.player.add_player_status_effect("blind",-1)
+	if "burn" in db.player.status_effects:
+		hand.discard(hand.cards.keys().pick_random())
+		db.player.add_player_status_effect("burn",-1)
 	if "dazed" in db.player.status_effects:
 		db.player.add_player_status_effect("dazed", -1)
 		db.set_turn(db.Turn.EnemyAction)
@@ -132,6 +151,6 @@ func create_deck():
 		db.player.deck.push_back(CardData.from_dict(db.cards["Strike"]))
 		db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
 	db.player.deck.push_back(CardData.from_dict(db.cards["Daze"]))
-	db.player.deck.push_back(CardData.from_dict(db.cards["Pray"]))
+	db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
 	fightUI.update_ui_values()
 

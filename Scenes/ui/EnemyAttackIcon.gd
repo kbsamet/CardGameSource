@@ -12,7 +12,7 @@ func _ready():
 func set_data(attack_name:String, attack_amount : int):
 	sprite.texture = load("res://Sprites/ui/enemyAttacks/"+attack_name+".png")
 	amountLabel.text = str(attack_amount)
-	var tooltip = db.tooltips[attack_name]
+	var tooltip = db.enemy_tooltips[attack_name]
 	tooltip = tooltip.replace("_", str(attack_amount))
 	descriptionLabel.text = tooltip
 # Called every frame. 'delta' is the elapsed time since the previous frame.

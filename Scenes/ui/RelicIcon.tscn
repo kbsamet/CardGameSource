@@ -34,6 +34,7 @@ texture = ExtResource("2_cc4ev")
 [node name="InfoBox" type="Panel" parent="."]
 visible = false
 z_index = 5
+layout_mode = 0
 offset_left = 80.0
 offset_right = 304.0
 offset_bottom = 112.0

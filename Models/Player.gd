@@ -14,7 +14,7 @@ var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
 var gold : int = 0
-var keys : int = 0
+var keys : int = 1
 
 signal relics_changed
 
