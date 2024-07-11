@@ -11,8 +11,12 @@ signal enemy_dead(id)
 signal enemy_hovered(id)
 signal enemy_hovered_end(id)
 @onready var sprite = $Sprite
+@onready var blockSprite = $Control/HealthBar/BlockIcon
+@onready var blockAmountLabel = $Control/HealthBar/BlockIcon/Label
+@onready var healthBarSprite = $Control/HealthBar
 @onready var healthBarRect = $Control/HealthBar/HealthBarRect
 @onready var healthLabel = $Control/HealthBar/HealthLabel
+@onready var blockBarRect = $Control/HealthBar/BlockBarRect
 @onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
 @onready var staminaLabel = $Control/StaminaBar/StaminaLabel
 @onready var animationPlayer = $AnimationPlayer
@@ -34,6 +38,7 @@ func _ready():
 	health_bar_full_width = healthBarRect.size.x
 	stamina_bar_full_width = staminaBarRect.size.x
 	set_status_effect_info()
+	update_health_bar_ui()
 	pass # Replace with function body.
 
 
@@ -48,24 +53,44 @@ func change_stamina(amount:int) -> void:
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
 	if enemy_data.stamina == 0:
 		add_status_effect("dazed",1)
+
+
+func update_health_bar_ui():
+	var tween =  create_tween()
+	var max_health_bar_amount = float(enemy_data.max_health)
+	if "block" in enemy_data.status_effects and enemy_data.status_effects["block"].amount != 0:
+		var block_amount = enemy_data.status_effects["block"].amount
+		blockSprite.visible = true
+		blockAmountLabel.text = str(block_amount)
+		var block_bar_width = (float(block_amount) / (max_health_bar_amount + float(block_amount))) * health_bar_full_width
+		var missing_health_width = (float(max_health_bar_amount - enemy_data.health) /max_health_bar_amount) * health_bar_full_width
+		tween.tween_property(blockBarRect,"position:x",healthBarRect.position.x + health_bar_full_width - max(block_bar_width,missing_health_width),0.1)
+		tween.tween_property(blockBarRect,"size:x",block_bar_width,0.1)
+		#max_health_bar_amount += block_bar_width
+		blockBarRect.visible= true
+	else:
+		blockSprite.visible = false
+		blockBarRect.size.x = 0
+		blockBarRect.visible = false
+	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
+	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 func damage(amount):
 	if "block" in enemy_data.status_effects:
 		var block_amount = enemy_data.status_effects["block"].amount
 		if block_amount > amount:
 			add_status_effect("block", -amount)
+			update_health_bar_ui()
 			return
 		else:
 			add_status_effect("block", -block_amount)
 			amount -= block_amount
-	var tween =  create_tween()
+	enemy_data.health -= amount
+	var tween = create_tween()
 	hit_animation_playing = true
 	sprite.material = hitShader
 	tween.tween_method(func(value): sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_callback(func(): hit_animation_playing = false)
-	enemy_data.health -= amount
-	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
-	
-	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+	update_health_bar_ui()
 	if enemy_data.health <= 0:
 		enemy_dead.emit(id)
 
@@ -119,10 +144,8 @@ func _on_input(event):
 
 func heal(amount:int) -> void:
 	enemy_data.health = min(enemy_data.health+amount, enemy_data.max_health)
-	var tween = create_tween()
-	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
-	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
-	
+	update_health_bar_ui()
+
 func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
@@ -164,10 +187,11 @@ func set_attack_info() -> void:
 
 func set_status_effect_info() -> void:
 	for effect in enemy_data.status_effects.values():
-		var icon = statusEffectIcon.instantiate()
-		icon.set_data(effect)
-		icon.add_to_group("status_effect")
-		infoPopup.add_child(icon)
+		if effect.amount > 0 and !effect.hidden:
+			var icon = statusEffectIcon.instantiate()
+			icon.set_data(effect)
+			icon.add_to_group("status_effect")
+			infoPopup.add_child(icon)
 
 func remove_status_effect_info() -> void:
 	for n in infoPopup.get_children():
@@ -198,6 +222,8 @@ func add_status_effect(effect : String,amount: int) -> void:
 			remove_attack_info()
 			set_attack_info()
 		enemy_data.status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
+	if effect == "block":
+		update_health_bar_ui()
 	remove_status_effect_info()
 	set_status_effect_info()
 	

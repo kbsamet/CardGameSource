@@ -14,7 +14,7 @@ var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
 var gold : int = 0
-var keys : int = 1
+var keys : int = 0
 
 signal relics_changed
 
@@ -56,6 +56,8 @@ func add_player_status_effect(effect,amount):
 			status_effects[effect].amount += amount
 	else:
 		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
+	if effect == "block":
+		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
 	
 func change_player_status_effect(effect,new_stat):
@@ -66,6 +68,8 @@ func change_player_status_effect(effect,new_stat):
 			status_effects[effect].amount = new_stat
 	else:
 		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],new_stat)
+	if effect == "block":
+		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
 	
 func end_turn_process_player_status_effects():

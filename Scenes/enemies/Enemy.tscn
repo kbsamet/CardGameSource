@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=11 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
 [ext_resource type="Texture2D" uid="uid://d2y6kkvtrttwx" path="res://Sprites/enemies/Zombie.png" id="2_mm60a"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
+[ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="5_pxudm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
 bg_color = Color(0.388235, 0.380392, 0.403922, 1)
@@ -133,14 +134,45 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.662745, 0.286275, 0.286275, 1)
 
+[node name="BlockBarRect" type="ColorRect" parent="Control/HealthBar"]
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.062
+anchor_right = 0.977
+anchor_bottom = 0.906
+offset_left = 39.16
+offset_top = -15.984
+offset_right = -64.056
+offset_bottom = -15.992
+color = Color(0.309804, 0.392157, 0.721569, 1)
+
+[node name="BlockIcon" type="Sprite2D" parent="Control/HealthBar"]
+visible = false
+position = Vector2(-88, 0.99999)
+scale = Vector2(1.08854, 1.08854)
+texture = ExtResource("5_pxudm")
+
+[node name="Label" type="Label" parent="Control/HealthBar/BlockIcon"]
+anchors_preset = -1
+anchor_right = 1.031
+anchor_bottom = 1.094
+offset_left = -16.0
+offset_top = -15.0
+offset_right = -15.992
+offset_bottom = -16.008
+text = "3"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="HealthLabel" type="Label" parent="Control/HealthBar"]
 anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.969
+anchor_right = 0.977
+anchor_bottom = 0.906
 offset_left = -61.0
 offset_top = -14.0
-offset_right = -67.0
-offset_bottom = -18.008
+offset_right = -64.056
+offset_bottom = -15.992
 text = "10/10
 "
 label_settings = ExtResource("3_22tp7")

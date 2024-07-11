@@ -28,7 +28,7 @@ var status_effects : Dictionary = {
 	},
 	"block" : {
 		"name" : "block",
-		"hidden" : false,
+		"hidden" : true,
 		"tooltip" : "Block: Block _ damage. Block is removed at the end of the round.",
 	},
 	"bleed" : {
