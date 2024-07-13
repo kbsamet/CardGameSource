@@ -77,6 +77,7 @@ func update_health_bar_ui():
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 
+
 func damage(amount):
 	var tween = create_tween()
 	if "block" in enemy_data.status_effects:
@@ -101,8 +102,7 @@ func damage(amount):
 	hit_animation_playing = true
 	sprite.material = hitShader
 	tween.tween_method(func(value): sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-	tween.tween_callback(func(): hit_animation_playing = false)
-	
+	tween.tween_callback(func(): hit_animation_playing = false)	
 	update_health_bar_ui()
 	if enemy_data.health <= 0:
 		enemy_dead.emit(id)
