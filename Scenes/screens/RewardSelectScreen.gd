@@ -15,12 +15,15 @@ var selected_reward1 : RewardData
 var selected_reward2 : RewardData
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var selected_reward1_data = db.rewards.pick_random() as Dictionary
-	var selected_reward2_data = db.rewards.pick_random() as Dictionary
-	while selected_reward2_data == selected_reward1_data:
-		selected_reward2_data = db.rewards.pick_random() as Dictionary
-	selected_reward1 = RewardData.fromDict(selected_reward1_data)
-	selected_reward2 = RewardData.fromDict(selected_reward2_data)
+	var reward_pool = []
+	for reward_data in db.rewards:
+		var reward = RewardData.fromDict(reward_data)
+		for i in range(reward.multiplier):
+			reward_pool.append(reward)
+	selected_reward1 = reward_pool.pick_random() 
+	selected_reward2 = reward_pool.pick_random() 
+	while selected_reward2 == selected_reward1:
+		selected_reward2 = reward_pool.pick_random()
 	
 	reward1Icon.texture = load("res://Sprites/ui/rewardIcons/"+selected_reward1.reward+".png")
 	reward2Icon.texture = load("res://Sprites/ui/rewardIcons/"+selected_reward2.reward+".png")

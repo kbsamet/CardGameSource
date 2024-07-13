@@ -48,7 +48,7 @@ func damage_player(amount):
 		health = health - amount
 	db.player_state_changed.emit()
 
-func add_player_status_effect(effect,amount):
+func add_player_status_effect(effect : String,amount: int):
 	if effect in status_effects:
 		if status_effects[effect].amount == -amount:
 			status_effects.erase(effect)
@@ -60,7 +60,7 @@ func add_player_status_effect(effect,amount):
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
 	
-func change_player_status_effect(effect,new_stat):
+func change_player_status_effect(effect:String,new_stat:int):
 	if effect in status_effects:
 		if new_stat == 0:
 			status_effects.erase(effect)
