@@ -121,7 +121,6 @@ func end_enemy_attack():
 
 func _enemy_attack_end_done():
 	center_enemies()
-	await get_tree().create_timer(0.2).timeout
 	play_turn(enemy_generator)
 	
 func _enemy_dead(enemy_id):

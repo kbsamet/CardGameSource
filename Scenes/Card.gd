@@ -41,6 +41,10 @@ func _player_state_changed():
 		(card_data.type == db.CardType.Reaction && db.player.rp < card_data.cost):
 		sprite.material = disabledShader
 		disabled = true
+	elif (card_data.type == db.CardType.Action && db.current_turn == db.Turn.PlayerAction) ||\
+			(card_data.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerReaction):
+		sprite.material = null
+		disabled = false
 func _turn_changed(new_turn):
 	if hovered:
 		_on_hover_over()

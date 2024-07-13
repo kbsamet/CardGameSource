@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=16 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
 [ext_resource type="Texture2D" uid="uid://d2y6kkvtrttwx" path="res://Sprites/enemies/Zombie.png" id="2_mm60a"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="5_pxudm"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="6_bvov2"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
 bg_color = Color(0.388235, 0.380392, 0.403922, 1)
@@ -13,6 +14,20 @@ border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
 border_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qtu0t"]
+font = ExtResource("6_bvov2")
+font_size = 64
+font_color = Color(0.662745, 0.286275, 0.286275, 1)
+outline_size = 8
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5s5wb"]
+font = ExtResource("6_bvov2")
+font_size = 64
+font_color = Color(0.309804, 0.392157, 0.721569, 1)
+outline_size = 8
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="Animation" id="Animation_qnc5y"]
 length = 0.001
@@ -28,9 +43,58 @@ tracks/0/keys = {
 "update": 0,
 "values": [null]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/HitAmount:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/HitAmount:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Control/BlockAmount:visible")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Control/BlockAmount:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_1yf6e"]
 resource_name = "attack_end"
+length = 0.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -38,7 +102,7 @@ tracks/0/path = NodePath(".:position:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [100.0, 0.0]
@@ -50,7 +114,7 @@ tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
+"times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1.4, 1.4), Vector2(1, 1)]
@@ -58,6 +122,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_53017"]
 resource_name = "attack_rise"
+length = 0.4
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -65,7 +130,7 @@ tracks/0/path = NodePath(".:position:y")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, 100.0]
@@ -77,7 +142,7 @@ tracks/1/path = NodePath(".:scale")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.4),
+"times": PackedFloat32Array(0, 0.3),
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(1.4, 1.4)]
@@ -89,17 +154,99 @@ tracks/2/path = NodePath(".:rotation")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.4),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0.0, -0.129154, 0.129154, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_fvjqp"]
+resource_name = "hit"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/HitAmount:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [135.0, -100.0, 135.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/HitAmount:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/HitAmount:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_xhvdt"]
+resource_name = "hit_block"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Control/BlockAmount:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [137.0, -100.0, 137.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Control/BlockAmount:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Control/BlockAmount:modulate:a")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [1.0, 0.0, 1.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_oafv5"]
 _data = {
 "RESET": SubResource("Animation_qnc5y"),
 "attack_end": SubResource("Animation_1yf6e"),
-"attack_rise": SubResource("Animation_53017")
+"attack_rise": SubResource("Animation_53017"),
+"hit": SubResource("Animation_fvjqp"),
+"hit_block": SubResource("Animation_xhvdt")
 }
 
 [node name="Enemy" type="Node2D"]
@@ -224,6 +371,26 @@ offset_left = -94.0
 offset_top = 106.0
 offset_right = 10.0
 offset_bottom = 444.0
+
+[node name="HitAmount" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 34.0
+offset_top = 135.0
+offset_right = 74.0
+offset_bottom = 199.0
+text = "8"
+label_settings = SubResource("LabelSettings_qtu0t")
+
+[node name="BlockAmount" type="Label" parent="Control"]
+visible = false
+layout_mode = 0
+offset_left = 83.0
+offset_top = 137.0
+offset_right = 123.0
+offset_bottom = 201.0
+text = "8"
+label_settings = SubResource("LabelSettings_5s5wb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

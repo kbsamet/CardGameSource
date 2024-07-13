@@ -26,6 +26,8 @@ signal enemy_hovered_end(id)
 @onready var statusEffectIcon = preload("res://Scenes/ui/StatusEffectIcon.tscn")
 @onready var infoPopup = $Control/InfoPopup
 @onready var infoBox = $Control/InfoBox
+@onready var hitAmountLabel = $Control/HitAmount
+@onready var blockHitAmountLabel = $Control/BlockAmount
 
 var stamina_bar_full_width
 var health_bar_full_width
@@ -74,26 +76,38 @@ func update_health_bar_ui():
 		blockBarRect.visible = false
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
+
 func damage(amount):
+	var tween = create_tween()
 	if "block" in enemy_data.status_effects:
 		var block_amount = enemy_data.status_effects["block"].amount
 		if block_amount > amount:
+			blockHitAmountLabel.text = str(amount)
+			animationPlayer.play("hit_block")
 			add_status_effect("block", -amount)
 			update_health_bar_ui()
 			return
 		else:
+			blockHitAmountLabel.text = str(block_amount)
+			animationPlayer.play("hit_block")
 			add_status_effect("block", -block_amount)
 			amount -= block_amount
+		blockHitAmountLabel.visible = true
+		
+	hitAmountLabel.text = str(amount)
+	animationPlayer.queue("hit")
+
 	enemy_data.health -= amount
-	var tween = create_tween()
 	hit_animation_playing = true
 	sprite.material = hitShader
 	tween.tween_method(func(value): sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 	tween.tween_callback(func(): hit_animation_playing = false)
+	
 	update_health_bar_ui()
 	if enemy_data.health <= 0:
 		enemy_dead.emit(id)
 
+	
 func _on_hover():
 	enemy_hovered.emit(id)
 	if is_card_selected:

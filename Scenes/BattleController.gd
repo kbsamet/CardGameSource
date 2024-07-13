@@ -49,7 +49,7 @@ func _use_card(enemy_id):
 	if card_id == -1 || db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
 	var selected_card = hand.cards[card_id].card_data as CardData
-	if selected_card.targeted && enemyController.attacking_enemy_id != -1 && enemyController.attacking_enemy_id != enemy_id:
+	if "blind" not in db.player.status_effects && selected_card.targeted && enemyController.attacking_enemy_id != -1 && enemyController.attacking_enemy_id != enemy_id:
 		return
 	var card_effects =  selected_card.effects
 	if (selected_card.type == db.CardType.Action && db.player.ap < selected_card.cost) || (selected_card.type == db.CardType.Reaction && db.player.rp < selected_card.cost) :
@@ -59,7 +59,20 @@ func _use_card(enemy_id):
 	for effect in card_effects.keys():
 		match effect:
 			db.CardEffect.Damage:
-				enemyController.enemies[enemy_id].damage(card_effects[effect])
+				var damage_amount = card_effects[effect]
+				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
+					damage_amount *= 2
+				enemyController.enemies[enemy_id].damage(damage_amount)
+			db.CardEffect.ShieldSlam:
+				var damage_amount = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
+				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
+					damage_amount *= 2
+				enemyController.enemies[enemy_id].damage(damage_amount)
+			db.CardEffect.Riposte:
+				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null && enemyController.enemies[enemy_id].selected_attack != {} else card_effects[effect]
+				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
+					damage_amount *= 2
+				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Block:
 				if "block" in db.player.status_effects:
 					db.player.change_player_status_effect("block", db.player.status_effects.block.amount + card_effects[effect])
@@ -88,6 +101,8 @@ func _use_card(enemy_id):
 				db.player.ap = min(db.player.ap, db.player.max_ap)
 				db.player.rp = 0
 				db.player_state_changed.emit()
+			db.CardEffect.Crushing:
+				db.player.add_player_status_effect("crushing",card_effects[effect])
 	if selected_card.type == db.CardType.Action:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -131,6 +146,8 @@ func _enemy_turn_done():
 	if "burn" in db.player.status_effects:
 		hand.discard(hand.cards.keys().pick_random())
 		db.player.add_player_status_effect("burn",-1)
+	if "crushing" in db.player.status_effects:
+		db.player.add_player_status_effect("crushing",-1)
 	if "dazed" in db.player.status_effects:
 		db.player.add_player_status_effect("dazed", -1)
 		db.set_turn(db.Turn.EnemyAction)

@@ -17,8 +17,8 @@ enum CardType {
 	Action,Reaction
 } 
 
-enum CardEffect{
-	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp
+enum CardEffect {
+	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte
 }
 var status_effects : Dictionary = {
 	"dazed" : {
@@ -56,6 +56,11 @@ var status_effects : Dictionary = {
 		"hidden" : false,
 		"tooltip" : "Burn: You will discard a random card for _ turns.",
 	},
+	"crushing": {
+		"name" : "crushing",
+		"hidden" : false,
+		"tooltip" : "Crushing:\nDeal double damage to dazed enemies for _ turns"
+	}
 	
 }
 var cards : Dictionary = {
@@ -154,13 +159,53 @@ var cards : Dictionary = {
 	"Sharp Blade": {
 		"name" : "Sharp Blade",
 		"type" : CardType.Action,
-		"description": "Inflict 3 bleed to an enemy.",
+		"description": "Inflict 4 bleed to an enemy.",
 		"cost": 2,
 		"targeted" : true,
 		"effects": {
-			CardEffect.Bleed : 3,
+			CardEffect.Bleed : 4,
 		}
-	}
+	},
+	"Overpower": {
+		"name": "Overpower",
+		"type": CardType.Action,
+		"description": "Gain 3 crushing.",
+		"cost": 2,
+		"targeted" : false,
+		"effects": {
+			CardEffect.Crushing : 3,
+		}
+	},
+	"Shield Slam": {
+		"name": "Shield Slam",
+		"type": CardType.Reaction,
+		"description": "Deal damage equal to your block amount.",
+		"cost": 1,
+		"targeted" : true,
+		"effects": {
+			CardEffect.ShieldSlam : 1,
+		}
+	},
+	"Parry": {
+		"name": "Parry",
+		"type": CardType.Reaction,
+		"description": "Stop the enemy attack.",
+		"cost": 1,
+		"targeted" : true,
+		"effects": {
+			CardEffect.Daze : 1,
+		}
+	},
+	"Riposte": {
+		"name": "Riposte",
+		"type": CardType.Reaction,
+		"description": "Deal 8 damage if the enemy is not attacking.",
+		"cost": 1,
+		"targeted" : true,
+		"effects": {
+			CardEffect.Riposte : 8,
+		}
+	},
 }
 
 var enemies : Dictionary = {
@@ -295,6 +340,7 @@ const card_tooltips : Dictionary = {
 	CardEffect.Dodge : "Dodge:\nDodge the incoming attack.",
 	CardEffect.Daze : "Daze:\nThe enemy will be unable to attack for _ turns.",
 	CardEffect.Bleed : "Bleed:\nThe enemy will receive _ damage per turn.",
+	CardEffect.Crushing : "Crushing:\nDeal double damage to dazed enemies for _ turns"
 }
 
 const fight_rooms : Array[Dictionary] = [
@@ -338,7 +384,8 @@ const rewards : Array[Dictionary] = [
 	{
 		"reward" : "choose_card",
 		"amount" : 3,
-		"tooltip" : "Choose one of 3 cards after the next fight."
+		"tooltip" : "Choose one of 3 cards after the next fight.",
+		"multiplier": 5
 		
 	},
 	#{

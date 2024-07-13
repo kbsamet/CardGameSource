@@ -10,6 +10,8 @@ var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var relics_copy = db.relics.duplicate(true)
+	relics_copy.erase("Strike")
+	relics_copy.erase("Block")
 	for i in range(3):
 		var chosen_key = relics_copy.keys().pick_random()
 		var relic_data = RelicData.from_dict(relics_copy[chosen_key])
