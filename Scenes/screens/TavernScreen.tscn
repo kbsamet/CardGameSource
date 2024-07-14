@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://c8bhaqe15kinc"]
+
+[ext_resource type="Script" path="res://Scenes/screens/TavernScreen.gd" id="1_3fnbj"]
+[ext_resource type="Texture2D" uid="uid://dq50ys80v3a84" path="res://Sprites/ui/screens/tavern.png" id="1_jfnrw"]
+[ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="3_u0myo"]
+
+[node name="TavernScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_3fnbj")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(957.5, 640)
+scale = Vector2(2.13, 2.13)
+texture = ExtResource("1_jfnrw")
+
+[node name="PlayerInfoUi" parent="." instance=ExtResource("3_u0myo")]
+layout_mode = 1
+offset_top = -34.0
+offset_bottom = -34.0
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

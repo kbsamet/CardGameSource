@@ -48,3 +48,4 @@ grow_vertical = 2
 
 [node name="FightPlayerUI" parent="Control" instance=ExtResource("4_b61bc")]
 layout_mode = 1
+mouse_filter = 2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=17 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
@@ -6,6 +6,7 @@
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="5_pxudm"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="6_bvov2"]
+[ext_resource type="Texture2D" uid="uid://dyt0c8aywl7in" path="res://Sprites/ui/hit_particle.png" id="7_n7t8x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
 bg_color = Color(0.388235, 0.380392, 0.403922, 1)
@@ -396,6 +397,25 @@ label_settings = SubResource("LabelSettings_5s5wb")
 libraries = {
 "": SubResource("AnimationLibrary_oafv5")
 }
+
+[node name="HitParticles" type="CPUParticles2D" parent="."]
+scale = Vector2(0.5, 0.5)
+emitting = false
+amount = 32
+lifetime = 0.5
+one_shot = true
+speed_scale = 2.52
+explosiveness = 0.55
+texture = ExtResource("7_n7t8x")
+emission_shape = 3
+emission_rect_extents = Vector2(3, 3)
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 166.67
+initial_velocity_max = 516.57
+scale_amount_min = 0.0
+scale_amount_max = 0.5
+color = Color(0.792157, 0.34902, 0.329412, 1)
 
 [connection signal="gui_input" from="Control" to="." method="_on_input"]
 [connection signal="mouse_entered" from="Control" to="." method="_on_hover"]

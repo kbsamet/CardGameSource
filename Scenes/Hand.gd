@@ -103,7 +103,7 @@ func _on_card_hold(id):
 
 func enemy_hovered(enemy_id : int,enemy_position: Variant):
 	if enemy_id != -1 && dragged_card_id != -1 && cards[dragged_card_id].card_data.targeted && !("blind" in db.player.status_effects):
-		var animate = arrow.visible
+		#var animate = arrow.visible
 		selected_enemy_id = enemy_id
 		#arrow.visible = true
 		#arrow.set_data(cards[dragged_card_id].global_position,get_global_mouse_position(),animate)

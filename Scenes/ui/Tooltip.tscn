@@ -1,15 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://byt5jsdywffm7"]
 
 [ext_resource type="Script" path="res://Scenes/ui/Tooltip.gd" id="1_8w6d2"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="2_gddn3"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_w1yhy"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_04ufq"]
-bg_color = Color(0.388235, 0.380392, 0.403922, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="Tooltip" type="Control"]
 visible = false
@@ -25,7 +18,7 @@ script = ExtResource("1_8w6d2")
 layout_mode = 0
 offset_right = 224.0
 offset_bottom = 112.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_04ufq")
+theme_override_styles/panel = ExtResource("2_gddn3")
 
 [node name="InfoLabel" type="Label" parent="InfoBox"]
 layout_mode = 0

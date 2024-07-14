@@ -1,5 +1,8 @@
 extends Node
 
+func _ready():
+	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
+
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
 
 signal player_state_changed
@@ -343,6 +346,12 @@ const card_tooltips : Dictionary = {
 	CardEffect.Crushing : "Crushing:\nDeal double damage to dazed enemies for _ turns"
 }
 
+const dialogue_tooltips : Dictionary = {
+	"beer" : "Beer : fksdf",
+	"wine" : "Wine : fksdf",
+	"whiskey" : "Whiskey : fksdf"
+}
+
 const fight_rooms : Array[Dictionary] = [
 	{
 		"Zombie" : 1,
@@ -417,6 +426,25 @@ const locked_chest_rewards : Array[Dictionary] = [
 	},
 	
 ]
+
+const npcs : Dictionary = {
+	"Bartender" : {
+		"name" : "Bartender",
+		"position" : Vector2(74,309),
+		"dialogue_offset" : Vector2(220,0)
+
+	},
+	"Wizard" : {
+		"name" : "Wizard",
+		"position" : Vector2(1149,192),
+		"dialogue_offset" : Vector2(-100,-130)
+	},
+	"Plague Doctor" : {
+		"name" : "Plague Doctor",
+		"position" : Vector2(1369,368),
+		"dialogue_offset" : Vector2(-50,-180)
+	}
+}
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)

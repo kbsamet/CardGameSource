@@ -1,0 +1,15 @@
+[remap]
+
+importer="dialogue_manager_compiler_12"
+type="Resource"
+uid="uid://b5mvgitf34esr"
+path="res://.godot/imported/Bartender.dialogue-b95ae5d51436e2ac1548fe3f04151b65.tres"
+
+[deps]
+
+source_file="res://Dialogues/Bartender.dialogue"
+dest_files=["res://.godot/imported/Bartender.dialogue-b95ae5d51436e2ac1548fe3f04151b65.tres"]
+
+[params]
+
+defaults=true

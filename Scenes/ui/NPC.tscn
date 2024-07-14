@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqu6grwd56gda"]
+
+[ext_resource type="Script" path="res://Scenes/ui/NPC.gd" id="1_o40py"]
+[ext_resource type="Texture2D" uid="uid://ctso3cvyvy64m" path="res://Sprites/ui/screens/npcs/plague_doctor.png" id="2_1dd4a"]
+
+[node name="Npc" type="Control"]
+layout_mode = 3
+anchor_right = 0.103
+anchor_bottom = 0.291
+offset_right = 0.23999
+offset_bottom = -0.279999
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o40py")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(94, 156)
+scale = Vector2(2.13, 2.13)
+texture = ExtResource("2_1dd4a")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -28,6 +28,10 @@ signal enemy_hovered_end(id)
 @onready var infoBox = $Control/InfoBox
 @onready var hitAmountLabel = $Control/HitAmount
 @onready var blockHitAmountLabel = $Control/BlockAmount
+@onready var hitParticles = $HitParticles
+
+var particle_color_red = Color("ca5954")
+var particle_color_blue = Color("5c699f")
 
 var stamina_bar_full_width
 var health_bar_full_width
@@ -94,9 +98,15 @@ func damage(amount):
 			add_status_effect("block", -block_amount)
 			amount -= block_amount
 		blockHitAmountLabel.visible = true
+		hitParticles.color = particle_color_blue
+		hitParticles.emitting = true
 		
 	hitAmountLabel.text = str(amount)
-	animationPlayer.queue("hit")
+	if amount > 0:
+		animationPlayer.queue("hit")
+		hitParticles.color = particle_color_red
+		hitParticles.emitting = true
+
 
 	enemy_data.health -= amount
 	hit_animation_playing = true

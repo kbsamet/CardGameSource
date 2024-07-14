@@ -1,0 +1,38 @@
+~ start
+
+if db.player.health < db.player.max_health * 0.3:
+	You look like shit, want something to drink?
+else:
+	You look tired, want something to drink?
+- [#beer]Buy Beer 10[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
+	do db.player.purchase_item("beer")
+	=> bought
+- [#wine]Buy Wine 20[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img] 
+	do db.player.purchase_item("wine")
+	=> bought
+- [#whiskey]Buy Whiskey 30[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
+	do db.player.purchase_item("whiskey")
+	=> bought
+- Don't buy anything => no_buy
+=> END
+
+~ bought
+Appreciate it.
+- [#beer]Buy Beer 10[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
+	do db.player.purchase_item("beer")
+	=> bought
+- [#wine]Buy Wine 20[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img] 
+	do db.player.purchase_item("wine")
+	=> bought
+- [#whiskey]Buy Whiskey 30[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
+	do db.player.purchase_item("whiskey")
+	=> bought
+- Don't buy anything => bought_leave
+
+~ bought_leave
+Good luck out there.
+=> END
+
+~ no_buy
+Suit yourself.
+=> END

@@ -83,6 +83,9 @@ func add_to_deck(card : CardData):
 	deck_size += 1
 	db.player_state_changed.emit()
 
+func purchase_item(item: String):
+	print("purchased " + item)
+
 func reset():
 	health = max_health
 	ap = max_ap
