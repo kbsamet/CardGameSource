@@ -122,6 +122,11 @@ func _end_turn_clicked():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
 	if enemyController.enemies.is_empty():
+		if "drunk" in db.player.status_effects:
+			db.player.add_player_status_effect("drunk",-1)
+		if "tipsy" in db.player.status_effects:
+			db.player.add_player_status_effect("tipsy",-1)
+		
 		hand.discard_all()
 		var reward_scene = rewardScene.instantiate() as RewardScreen
 		reward_scene.reward_data = reward

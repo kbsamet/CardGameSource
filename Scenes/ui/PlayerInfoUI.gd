@@ -25,6 +25,7 @@ func _ready():
 	db.player_state_changed.connect(update_ui_values)
 	db.player.relics_changed.connect(relics_changed)
 	update_ui_values()
+	status_effect_changed()
 
 func relics_changed():
 	for n in relicContainer.get_children():

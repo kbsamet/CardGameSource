@@ -23,6 +23,11 @@ enum CardType {
 enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte
 }
+
+enum ItemEffect {
+	Heal,Drunk,Tipsy,Cost
+}
+
 var status_effects : Dictionary = {
 	"dazed" : {
 		"name" : "dazed",
@@ -63,8 +68,17 @@ var status_effects : Dictionary = {
 		"name" : "crushing",
 		"hidden" : false,
 		"tooltip" : "Crushing:\nDeal double damage to dazed enemies for _ turns"
-	}
-	
+	},
+	"tipsy": {
+		"name" : "tipsy",
+		"hidden" : false,
+		"tooltip" : "Tipsy:\nYou have -1 reaction point for _ fights"
+	},
+	"drunk": {
+		"name" : "drunk",
+		"hidden" : false,
+		"tooltip" : "Drunk:\nYou have +1 action point and -1 reaction point for _ fights"
+	},
 }
 var cards : Dictionary = {
 	"Strike" :{
@@ -122,11 +136,11 @@ var cards : Dictionary = {
 	"Dodge" : {
 		"name" : "Dodge",
 		"type" : CardType.Reaction,
-		"description": "Gain 1 dodge.",
+		"description": "Gain 2 dodge.",
 		"cost": 2,
 		"targeted" : false,
 		"effects": {
-			CardEffect.Dodge : 1,
+			CardEffect.Dodge : 2,
 		}
 	},
 	"Slash" : {
@@ -246,7 +260,7 @@ var enemies : Dictionary = {
 			},
 			{
 				"damage" : 3,
-				"bleed" : 3,
+				"bleed" : 2,
 				"staminaCost" : 2
 			}
 		],
@@ -307,21 +321,24 @@ var relics : Dictionary = {
 		"name" : "red_orb",
 		"description" : "Red Orb:\nGain 1 action point",
 		"on_add" : func(p: Player): p.add_max_ap(1),
-		"on_remove": func(p: Player): p.add_max_ap(-1)
+		"on_remove": func(p: Player): p.add_max_ap(-1),
+		"cost": 40
 
 	},
 	"blue_orb" : {
 		"name" : "blue_orb",
 		"description" : "Blue Orb:\nGain 1 reaction point",
 		"on_add" : func(p: Player): p.add_max_rp(1),
-		"on_remove": func(p: Player): p.add_max_rp(-1)
+		"on_remove": func(p: Player): p.add_max_rp(-1),
+		"cost": 30
 		
 	},
 	"true_faith" : {
 		"name" : "true_faith",
 		"description" : "True Faith:\nRevive with half health when you would die. Breaks upon use.",
 		"on_add" : func(p: Player): p.add_player_status_effect("revive_half",1),
-		"on_remove": func(p: Player): p.add_player_status_effect("revive_half",-1)
+		"on_remove": func(p: Player): p.add_player_status_effect("revive_half",-1),
+		"cost": 40
 		
 	},
 }
@@ -347,9 +364,27 @@ const card_tooltips : Dictionary = {
 }
 
 const dialogue_tooltips : Dictionary = {
-	"beer" : "Beer : fksdf",
-	"wine" : "Wine : fksdf",
-	"whiskey" : "Whiskey : fksdf"
+	"beer" : "Beer:\nRestore 5 health. Lose 1 max rp for 1 fight.",
+	"wine" : "Wine:\nRestore 10 health. Lose 1 max rp for 2 fights.",
+	"whiskey" : "Whiskey:\nRestore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
+}
+
+const items : Dictionary = {
+	"beer" : {
+		ItemEffect.Heal : 5,
+		ItemEffect.Tipsy : 1,
+		ItemEffect.Cost : 10
+	},
+	"wine" : {
+		ItemEffect.Heal : 10,
+		ItemEffect.Tipsy : 2,
+		ItemEffect.Cost : 20
+	},
+	"whiskey" : {
+		ItemEffect.Heal : 10,
+		ItemEffect.Drunk : 3,
+		ItemEffect.Cost : 30
+	}
 }
 
 const fight_rooms : Array[Dictionary] = [
@@ -403,12 +438,12 @@ const rewards : Array[Dictionary] = [
 		#"tooltip" : "Choose one of 3 relics after the next fight."
 		#
 	#},
-	#{
-		#"reward" : "shop",
-		#"amount" : 1,
-		#"tooltip" : "There is a shop after the next fight."
-		#
-	#},
+	{
+		"reward" : "tavern",
+		"amount" : 1,
+		"tooltip" : "There is a tavern after the next fight."
+		
+	},
 ]
 
 const locked_chest_rewards : Array[Dictionary] = [

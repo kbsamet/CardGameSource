@@ -81,11 +81,15 @@ var dialogue_line: DialogueLine:
 func _ready() -> void:
 	balloon.hide()
 	Engine.get_singleton("DialogueManager").mutated.connect(_on_mutated)
-
 	# If the responses menu doesn't have a next action set, use this one
 	if responses_menu.next_action.is_empty():
 		responses_menu.next_action = next_action
 
+func check_flip_response():
+	print($Balloon.global_position + $Balloon/Responses.position)
+	print($Balloon/Responses.size)
+	if $Balloon/Responses.size.x + $Balloon/Responses.global_position.x > get_viewport().size.x:
+		$Balloon/Responses.position.x = -390 
 
 func _unhandled_input(_event: InputEvent) -> void:
 	# Only the balloon is allowed to handle input while it's showing

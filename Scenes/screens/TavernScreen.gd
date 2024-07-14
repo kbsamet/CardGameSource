@@ -1,5 +1,6 @@
 extends Control
 
+var chooseRewardScene = preload("res://Scenes/screens/RewardSelectScreen.tscn")
 var npcScene = preload("res://Scenes/ui/NPC.tscn")
 
 # Called when the node enters the scene tree for the first time.
@@ -31,3 +32,7 @@ func _on_gui_input(event):
 				for k in n.get_children():
 					if k is DialogueBalloon:
 						k._on_balloon_gui_input(event)
+
+
+func _on_button_pressed():
+	get_tree().change_scene_to_packed(chooseRewardScene)

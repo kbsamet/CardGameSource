@@ -5,29 +5,52 @@ if db.player.health < db.player.max_health * 0.3:
 else:
 	You look tired, want something to drink?
 - [#beer]Buy Beer 10[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
-	do db.player.purchase_item("beer")
+	if db.player.gold >= 10:
+		do db.player.purchase_item("beer")
+		Appreciate it.
+	else:
+		Looks like you're a little short on money.
 	=> bought
 - [#wine]Buy Wine 20[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img] 
-	do db.player.purchase_item("wine")
+	if db.player.gold >= 20:
+		do db.player.purchase_item("wine")
+		Appreciate it.
+	else:
+		Looks like you're a little short on money.
 	=> bought
 - [#whiskey]Buy Whiskey 30[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
-	do db.player.purchase_item("whiskey")
+	if db.player.gold >= 30:
+		do db.player.purchase_item("whiskey")
+		Be careful with that.
+	else:
+		Looks like you're a little short on money.
 	=> bought
 - Don't buy anything => no_buy
 => END
 
 ~ bought
-Appreciate it.
 - [#beer]Buy Beer 10[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
-	do db.player.purchase_item("beer")
+	if db.player.gold >= 10:
+		do db.player.purchase_item("beer")
+		Appreciate it.
+	else:
+		Looks like you're a little short on money.
 	=> bought
 - [#wine]Buy Wine 20[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img] 
-	do db.player.purchase_item("wine")
+	if db.player.gold >= 20:
+		do db.player.purchase_item("wine")
+		Appreciate it.
+	else:
+		Looks like you're a little short on money.
 	=> bought
 - [#whiskey]Buy Whiskey 30[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
-	do db.player.purchase_item("whiskey")
+	if db.player.gold >= 30:
+		do db.player.purchase_item("whiskey")
+		Be careful with that.
+	else:
+		Looks like you're a little short on money.
 	=> bought
-- Don't buy anything => bought_leave
+- Leave => bought_leave
 
 ~ bought_leave
 Good luck out there.

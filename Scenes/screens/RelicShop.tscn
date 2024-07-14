@@ -1,6 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://cq55l6b5iivi5"]
+[gd_scene load_steps=6 format=3 uid="uid://cq55l6b5iivi5"]
 
-[ext_resource type="PackedScene" uid="uid://bdgpsvncw3e8e" path="res://Scenes/ui/RelicForSale.tscn" id="1_pgkfi"]
+[ext_resource type="Script" path="res://Scenes/screens/RelicShop.gd" id="1_yqgap"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="2_ylxpe"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="3_vdvwh"]
+[ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="4_h38vx"]
+[ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="5_xxdwi"]
 
 [node name="RelicShop" type="Control"]
 layout_mode = 3
@@ -9,6 +13,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_yqgap")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
@@ -16,7 +21,7 @@ offset_right = 1923.0
 offset_bottom = 1083.0
 color = Color(0.45098, 0.356863, 0.258824, 1)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="RelicContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -29,11 +34,28 @@ grow_vertical = 2
 theme_override_constants/separation = 256
 alignment = 1
 
-[node name="RelicForSale" parent="HBoxContainer" instance=ExtResource("1_pgkfi")]
-layout_mode = 2
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -152.0
+offset_right = 148.0
+offset_bottom = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("2_ylxpe")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("3_vdvwh")
+theme_override_styles/hover = ExtResource("4_h38vx")
+theme_override_styles/pressed = ExtResource("4_h38vx")
+theme_override_styles/focus = ExtResource("4_h38vx")
+text = "Leave"
 
-[node name="RelicForSale2" parent="HBoxContainer" instance=ExtResource("1_pgkfi")]
-layout_mode = 2
+[node name="PlayerInfoUi" parent="." instance=ExtResource("5_xxdwi")]
+layout_mode = 1
 
-[node name="RelicForSale3" parent="HBoxContainer" instance=ExtResource("1_pgkfi")]
-layout_mode = 2
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

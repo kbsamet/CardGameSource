@@ -1,3 +1,11 @@
 ~ start
-Hello there.
+It's dangerous outside. You aren't going to last much in your state.
+Some magical artifacts would help you in your journey.
+Would you like to browse my wares?
+- Yes 
+	do get_tree().change_scene_to_packed(load("res://Scenes/screens/RelicShop.tscn"))
+	=> END
+- No => no
+~ no
+Your loss..
 => END

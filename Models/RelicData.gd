@@ -5,6 +5,7 @@ var _name : String
 var description : String
 var on_add : Callable
 var on_remove : Callable
+var cost : int
 
 static func from_dict(relic_data : Dictionary):
 	var new_relic : RelicData = RelicData.new()
@@ -12,4 +13,5 @@ static func from_dict(relic_data : Dictionary):
 	new_relic.description = relic_data["description"]
 	new_relic.on_add = relic_data["on_add"]
 	new_relic.on_remove = relic_data["on_remove"]
+	new_relic.cost = relic_data["cost"]
 	return new_relic

@@ -9,12 +9,12 @@
 [ext_resource type="Texture2D" uid="uid://dyt0c8aywl7in" path="res://Sprites/ui/hit_particle.png" id="7_n7t8x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
-bg_color = Color(0.388235, 0.380392, 0.403922, 1)
+bg_color = Color(0.207843, 0.207843, 0.25098, 1)
 border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.207843, 0.207843, 0.25098, 1)
+border_color = Color(0.568627, 0.552941, 0.552941, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_qtu0t"]
 font = ExtResource("6_bvov2")
@@ -361,17 +361,17 @@ vertical_alignment = 1
 visible = false
 layout_mode = 0
 offset_left = -106.0
-offset_top = 104.0
+offset_top = 33.0
 offset_right = -11.0
-offset_bottom = 234.0
+offset_bottom = 163.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_3ac47")
 
 [node name="InfoPopup" type="VBoxContainer" parent="Control"]
 layout_mode = 0
 offset_left = -94.0
-offset_top = 106.0
+offset_top = 41.0
 offset_right = 10.0
-offset_bottom = 444.0
+offset_bottom = 379.0
 
 [node name="HitAmount" type="Label" parent="Control"]
 visible = false

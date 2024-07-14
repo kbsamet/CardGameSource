@@ -119,17 +119,19 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/normal_font = ExtResource("3_170w3")
+theme_override_font_sizes/normal_font_size = 32
 text = "Dialogue..."
 
 [node name="Responses" type="MarginContainer" parent="Balloon"]
+custom_minimum_size = Vector2(400, 159)
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -44.0
-offset_top = 7.0
-offset_right = 458.0
-offset_bottom = 166.0
+offset_left = -62.9999
+offset_top = 5.0
+offset_right = 337.0
+offset_bottom = 164.0
 grow_horizontal = 2
 
 [node name="ResponsesMenu" type="VBoxContainer" parent="Balloon/Responses" node_paths=PackedStringArray("response_template")]
@@ -141,7 +143,7 @@ script = ExtResource("3_72ixx")
 response_template = NodePath("ResponseExample")
 
 [node name="ResponseExample" type="Button" parent="Balloon/Responses/ResponsesMenu"]
-custom_minimum_size = Vector2(0, 32)
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_170w3")
 theme_override_styles/normal = ExtResource("2_5p8c8")
@@ -157,13 +159,15 @@ offset_right = 95.0
 offset_bottom = 59.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Balloon/Responses/ResponsesMenu/ResponseExample"]
+clip_contents = false
 layout_mode = 0
-offset_left = 4.0
-offset_top = 3.0
-offset_right = 439.0
-offset_bottom = 30.0
+offset_left = 3.0
+offset_top = 11.0
+offset_right = 335.0
+offset_bottom = 46.0
 mouse_filter = 1
 theme_override_fonts/normal_font = ExtResource("3_170w3")
+theme_override_font_sizes/normal_font_size = 32
 bbcode_enabled = true
 text = "[center]gfdgdfg"
 

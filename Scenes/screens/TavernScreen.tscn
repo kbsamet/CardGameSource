@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c8bhaqe15kinc"]
+[gd_scene load_steps=7 format=3 uid="uid://c8bhaqe15kinc"]
 
 [ext_resource type="Script" path="res://Scenes/screens/TavernScreen.gd" id="1_3fnbj"]
 [ext_resource type="Texture2D" uid="uid://dq50ys80v3a84" path="res://Sprites/ui/screens/tavern.png" id="1_jfnrw"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="3_u0myo"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="4_wykjf"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="5_wngs2"]
+[ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="6_j01k8"]
 
 [node name="TavernScreen" type="Control"]
 layout_mode = 3
@@ -21,7 +24,29 @@ texture = ExtResource("1_jfnrw")
 
 [node name="PlayerInfoUi" parent="." instance=ExtResource("3_u0myo")]
 layout_mode = 1
-offset_top = -34.0
-offset_bottom = -34.0
+offset_top = -187.0
+offset_bottom = -187.0
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = -110.0
+offset_right = 148.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("4_wykjf")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = ExtResource("5_wngs2")
+theme_override_styles/hover = ExtResource("6_j01k8")
+theme_override_styles/pressed = ExtResource("6_j01k8")
+theme_override_styles/focus = ExtResource("6_j01k8")
+text = "Leave"
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -49,12 +49,23 @@ func damage_player(amount):
 	db.player_state_changed.emit()
 
 func add_player_status_effect(effect : String,amount: int):
+	print("status effect: " + effect + " amount: " + str(amount))
 	if effect in status_effects:
 		if status_effects[effect].amount == -amount:
+			if effect == "drunk":
+				add_max_ap(-1)
+				add_max_rp(1)
+			if effect == "tipsy":
+				add_max_rp(1)
 			status_effects.erase(effect)
 		else:
 			status_effects[effect].amount += amount
 	else:
+		if effect == "drunk":
+			add_max_ap(1)
+			add_max_rp(-1)
+		if effect == "tipsy":
+			add_max_rp(-1)
 		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
 	if effect == "block":
 		db.player_state_changed.emit()
@@ -84,7 +95,18 @@ func add_to_deck(card : CardData):
 	db.player_state_changed.emit()
 
 func purchase_item(item: String):
-	print("purchased " + item)
+	var item_data = db.items[item]
+	for effect in item_data:
+		match effect:
+			db.ItemEffect.Heal:
+				heal_player(item_data[effect])
+			db.ItemEffect.Tipsy:
+				add_player_status_effect("tipsy",item_data[effect])
+			db.ItemEffect.Drunk:
+				add_player_status_effect("drunk",item_data[effect])
+			db.ItemEffect.Cost:
+				add_player_items("gold",-item_data[effect])
+			
 
 func reset():
 	health = max_health

@@ -37,4 +37,5 @@ func _on_gui_input(event):
 			var balloon = DialogueManager.show_dialogue_balloon(self,dialogue,"start")
 			balloon.dialogue_ended.connect(func(): dialogue_ended.emit())
 			balloon.get_child(0).global_position = global_position + data.dialogue_offset
+			balloon.check_flip_response()
 			started_dialogue.emit()

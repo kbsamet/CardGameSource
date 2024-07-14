@@ -8,6 +8,7 @@ var select_reward_screen = preload("res://Scenes/screens/RewardSelectScreen.tscn
 var outline_material = preload("res://Shaders/outline.tres")
 var choose_card_scene = preload("res://Scenes/ui/ChooseCardReward.tscn")
 var choose_relic_scene = preload("res://Scenes/ui/ChooseRelicreward.tscn")
+var tavern_scene = preload("res://Scenes/screens/TavernScreen.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if reward_data.reward == "choose_card":
@@ -77,10 +78,14 @@ func get_chest_reward():
 		add_child(relic_scene)
 	else:
 		get_regular_reward(random_reward.reward, random_reward.amount)
+		
 func _on_reward_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
 			if reward_data.reward == "locked_chest":
 				get_chest_reward()
+				return
+			elif reward_data.reward == "tavern":
+				get_tree().change_scene_to_packed(tavern_scene)
 				return
 			get_regular_reward(reward_data.reward,reward_data.amount)

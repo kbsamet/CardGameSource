@@ -21,7 +21,7 @@ func set_data(from : Vector2, to: Vector2,animate: bool = false):
 	var angle = direction.angle()
 	
 	var tween = create_tween().set_parallel(true).set_ease(Tween.EASE_IN)
-	var t = 0 if !animate else 0.1
+	var t = 0.0 if !animate else 0.1
 	tween.tween_property(arrowbody,"global_position",new_from,t)
 	tween.tween_property(arrowbody,"size:y",distance / 2,t)
 	tween.tween_property(arrowbody,"position:x",-arrowbody.size.x / 2 ,t)
