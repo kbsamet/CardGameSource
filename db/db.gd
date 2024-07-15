@@ -3,6 +3,9 @@ extends Node
 func _ready():
 	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
 
+func _process(delta):
+	pass
+	#print("FPS: " + str(Engine.get_frames_per_second()))
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
 
 signal player_state_changed
@@ -79,6 +82,11 @@ var status_effects : Dictionary = {
 		"hidden" : false,
 		"tooltip" : "Drunk:\nYou have +1 action point and -1 reaction point for _ fights"
 	},
+	"empowered": {
+		"name" : "empowered",
+		"hidden" : false,
+		"tooltip" : "Enpowered:\nThis unit will do _ more damage."
+	},
 }
 var cards : Dictionary = {
 	"Strike" :{
@@ -137,7 +145,7 @@ var cards : Dictionary = {
 		"name" : "Dodge",
 		"type" : CardType.Reaction,
 		"description": "Gain 2 dodge.",
-		"cost": 2,
+		"cost": 3,
 		"targeted" : false,
 		"effects": {
 			CardEffect.Dodge : 2,
@@ -313,6 +321,32 @@ var enemies : Dictionary = {
 		],
 		"statusEffects": {
 		}
+	},
+	"Minotaur": {
+		"name" : "Minotaur",
+		"health" : 30,
+		"stamina" : 8,
+		"attacks": [
+			{
+				"damage" : 6,
+				"staminaCost" : 3
+			},
+			{
+				"empower" : 2,
+				"staminaCost" : 3
+			},
+			{
+				"damage" : 1,
+				"daze" : 1,
+				"staminaCost" : 2
+			},
+			{
+				"damage" : 2,
+				"staminaCost" : 1
+			}
+		],
+		"statusEffects": {
+		}
 	}
 }
 
@@ -352,7 +386,8 @@ const enemy_tooltips : Dictionary = {
 	"healAll": "Heal All: This enemy will heal all enemies by _.",
 	"blind": "Blind: You will be unable to target enemies for _ turns.",
 	"burn": "Burn: You will discard a random card for _ turns.",
-	"unstoppable": "Unstoppable: This enemy cannot be stunned."
+	"unstoppable": "Unstoppable: This enemy cannot be stunned.",
+	"empower": "Empower: All enemies will do _ more damage."
 }
 
 const card_tooltips : Dictionary = {
@@ -364,8 +399,8 @@ const card_tooltips : Dictionary = {
 }
 
 const dialogue_tooltips : Dictionary = {
-	"beer" : "Beer:\nRestore 5 health. Lose 1 max rp for 1 fight.",
-	"wine" : "Wine:\nRestore 10 health. Lose 1 max rp for 2 fights.",
+	"beer" : "Beer:\nRestore 5 health. Lose 1 max ap for 1 fight.",
+	"wine" : "Wine:\nRestore 10 health. Lose 1 max ap for 2 fights.",
 	"whiskey" : "Whiskey:\nRestore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
 }
 
@@ -402,7 +437,20 @@ const fight_rooms : Array[Dictionary] = [
 		"Fire Seeker": 1
 	},
 	{
+		"Zombie" : 1,
+		"Minotaur": 1
+	},
+	{
 		"Bat" : 2,
+		"Minotaur": 1
+	},
+	{
+		"Minotaur" : 1,
+		"Fallen Priest": 1
+	},
+	{
+		"Fire Seeker" : 1,
+		"Minotaur" : 1,
 		"Fallen Priest": 1
 	}
 	

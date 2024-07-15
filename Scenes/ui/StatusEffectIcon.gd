@@ -2,32 +2,26 @@ extends Control
 
 @onready var sprite = $Sprite
 @onready var amountLabel = $EffectAmountLabel
-@onready var InfoBox = $InfoBox
-@onready var descriptionLabel = $InfoBox/InfoLabel
+@onready var tooltip = $Tooltip
 
 var data : StatusEffectData
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	load_data()
 
-func set_data(effect : StatusEffectData):
-	data = effect
-
-func load_data():
+func set_data(new_data : StatusEffectData):
+	data = new_data
 	var effect = data
 	sprite.texture = load("res://Sprites/ui/statusEffects/"+effect._name+".png")
 	amountLabel.text = str(effect.amount)
-	var tooltip = effect.tooltip
-	tooltip = tooltip.replace("_", str(effect.amount))
-	descriptionLabel.text = tooltip
+	var tooltip_description = effect.tooltip
+	tooltip_description = tooltip_description.replace("_", str(effect.amount))
+	tooltip.set_data(tooltip_description,Vector2(2,2))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
 
 
 func _on_mouse_entered():
-	InfoBox.visible = true
+	tooltip.visible = true
 
 
 func _on_mouse_exited():
-	InfoBox.visible = false
+	tooltip.visible =false

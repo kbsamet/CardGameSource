@@ -12,12 +12,14 @@ func _ready():
 func _process(delta):
 	pass
 
-func set_data(tooltip: String):
+func set_data(tooltip: String,scale :Vector2 = Vector2(1,1)):
 	text = tooltip
 	descriptionLabel.text = text
-	var scale_factor = Vector2(1,1) / get_global_transform().get_scale()
+	var scale_factor = scale / get_global_transform().get_scale()
 	var newSize = Vector2(InfoBox.size.x * scale_factor.x, InfoBox.size.y * scale_factor.y)
 	InfoBox.size = newSize
 	descriptionLabel.scale = scale_factor
-	InfoBox.size.y = descriptionLabel.get_minimum_size().y + (40 if get_global_transform().get_scale() == Vector2(1,1) else 0)
+	InfoBox.size.y = descriptionLabel.get_minimum_size().y + (40 if get_global_transform().get_scale() == scale else 0)
+	if scale != Vector2(1,1):
+		InfoBox.size.y = descriptionLabel.get_minimum_size().y + 45 * scale.y
 	InfoBox.custom_minimum_size = InfoBox.size

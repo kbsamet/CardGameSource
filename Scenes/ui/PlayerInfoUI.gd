@@ -82,8 +82,8 @@ func status_effect_changed():
 	for effect in db.player.status_effects.values():
 		if effect.amount != 0 && !effect.hidden:
 			var icon = statusEffectIcon.instantiate()
-			icon.set_data(effect)
 			statusEffects.add_child(icon)
+			icon.set_data(effect)
 
 
 

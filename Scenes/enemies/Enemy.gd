@@ -20,6 +20,7 @@ signal enemy_hovered_end(id)
 @onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
 @onready var staminaLabel = $Control/StaminaBar/StaminaLabel
 @onready var animationPlayer = $AnimationPlayer
+@onready var statusEffectContainer = $Control/StatusEffectContainer
 @onready var hitShader = preload("res://Shaders/hit_shader.tres").duplicate()
 @onready var outlineShader = preload("res://Shaders/outline_red.tres")
 @onready var attackIcon = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
@@ -160,7 +161,9 @@ func get_attack() -> Dictionary:
 	for attack in available_attacks:
 		for i in range(attack.staminaCost):
 			weighted_list.append(attack)
-	selected_attack = weighted_list.pick_random()
+	selected_attack = weighted_list.pick_random().duplicate()
+	if "empowered" in enemy_data.status_effects and "damage" in selected_attack:
+		selected_attack["damage"] += enemy_data.status_effects["empowered"].amount 
 	return selected_attack
 
 func _on_input(event):
@@ -177,7 +180,6 @@ func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
 		set_attack_info()
-		remove_status_effect_info()
 	elif anim_name == "attack_end":
 		attack_end_done.emit()
 		remove_attack_info()
@@ -208,7 +210,7 @@ func set_attack_info() -> void:
 		var icon = attackIcon.instantiate()
 		icon.add_to_group("attack_icon")
 		infoPopup.add_child(icon)
-		icon.set_data(attack,selected_attack[attack])
+		icon.set_data(attack,selected_attack[attack],"empowered" in enemy_data.status_effects)
 		infoBox.size.y = (enemy_data.status_effects.keys().size() + selected_attack.keys().size()) * 80
 		infoBox.visible = true
 
@@ -216,14 +218,14 @@ func set_status_effect_info() -> void:
 	for effect in enemy_data.status_effects.values():
 		if effect.amount > 0 and !effect.hidden:
 			var icon = statusEffectIcon.instantiate()
+			statusEffectContainer.add_child(icon)
 			icon.set_data(effect)
 			icon.add_to_group("status_effect")
-			infoPopup.add_child(icon)
 
 func remove_status_effect_info() -> void:
-	for n in infoPopup.get_children():
+	for n in statusEffectContainer.get_children():
 		if n.is_in_group("status_effect"):
-			infoPopup.remove_child(n)
+			statusEffectContainer.remove_child(n)
 			n.queue_free()
 
 func remove_attack_info() -> void:

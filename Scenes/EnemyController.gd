@@ -115,6 +115,9 @@ func end_enemy_attack():
 			"burn":
 				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
 					db.player.add_player_status_effect("burn",attack["burn"])
+			"empower":
+				for enemy in enemies.values():
+					enemy.add_status_effect("empowered",attack["empower"])
 	if "dodge" in db.player.status_effects.keys():
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()

@@ -87,7 +87,7 @@ func _use_card(enemy_id):
 			db.CardEffect.Heal:
 				db.player.heal_player(card_effects[effect])
 			db.CardEffect.Dodge:
-				db.player.add_player_status_effect("dodge",1)
+				db.player.add_player_status_effect("dodge",card_effects[effect])
 			db.CardEffect.DamageAll:
 				for enemy in enemyController.enemies.values():
 					enemy.damage(card_effects[effect])

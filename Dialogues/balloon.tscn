@@ -152,11 +152,12 @@ theme_override_styles/pressed = ExtResource("6_b4cmv")
 theme_override_styles/focus = ExtResource("6_b4cmv")
 
 [node name="Tooltip" parent="Balloon/Responses/ResponsesMenu/ResponseExample" instance=ExtResource("7_oyhj2")]
+z_index = 2
 layout_mode = 1
-offset_left = 455.0
-offset_top = -21.0
-offset_right = 95.0
-offset_bottom = 59.0
+offset_left = 358.0
+offset_top = -20.0
+offset_right = 319.92
+offset_bottom = 60.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Balloon/Responses/ResponsesMenu/ResponseExample"]
 clip_contents = false
