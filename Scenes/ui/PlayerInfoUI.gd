@@ -16,6 +16,7 @@ var relicIcon = preload("res://Scenes/ui/RelicIcon.tscn")
 @onready var goldLabel = $GoldLabel
 @onready var keyLabel = $KeyLabel
 @onready var relicContainer = $RelicsContainer
+@onready var levelLabel = $CurrentLevelLabel
 
 var health_bar_full_width
 # Called when the node enters the scene tree for the first time.
@@ -24,6 +25,7 @@ func _ready():
 	db.player_status_effect_changed.connect(status_effect_changed)
 	db.player_state_changed.connect(update_ui_values)
 	db.player.relics_changed.connect(relics_changed)
+	levelLabel.text = "1-"+str(db.current_room)
 	update_ui_values()
 	status_effect_changed()
 
@@ -37,7 +39,6 @@ func relics_changed():
 		var relic_icon = relicIcon.instantiate()
 		relicContainer.add_child(relic_icon)
 		relic_icon.set_data(relic)
-
 
 func update_ui_values():
 	if !is_inside_tree():

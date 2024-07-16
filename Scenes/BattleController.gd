@@ -130,6 +130,7 @@ func _end_turn_clicked():
 		hand.discard_all()
 		var reward_scene = rewardScene.instantiate() as RewardScreen
 		reward_scene.reward_data = reward
+		db.increase_level()
 		get_tree().root.add_child(reward_scene)
 		get_tree().current_scene = reward_scene
 		queue_free()

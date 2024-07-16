@@ -30,6 +30,7 @@ signal enemy_hovered_end(id)
 @onready var hitAmountLabel = $Control/HitAmount
 @onready var blockHitAmountLabel = $Control/BlockAmount
 @onready var hitParticles = $HitParticles
+@onready var deathParticles = $DeathParticles
 
 var particle_color_red = Color("ca5954")
 var particle_color_blue = Color("5c699f")
@@ -44,10 +45,13 @@ func _ready():
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
 	health_bar_full_width = healthBarRect.size.x
 	stamina_bar_full_width = staminaBarRect.size.x
+	var new_material = deathParticles.process_material.duplicate(true)
+	new_material.set_shader_parameter("sprite",sprite.texture)
+	new_material.set_shader_parameter("emission_box_extents",Vector3(30,60 if sprite.texture.get_height() > 100 else 30,1))
+	deathParticles.process_material = new_material
 	set_status_effect_info()
 	update_health_bar_ui()
 	pass # Replace with function body.
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -82,6 +86,12 @@ func update_health_bar_ui():
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 
+func die():
+	$Control.visible = false
+	deathParticles.emitting = true
+	var tween = create_tween()
+	tween.tween_property(sprite,"modulate:a",0,0.1)
+	
 
 func damage(amount):
 	if !is_inside_tree():
@@ -119,8 +129,7 @@ func damage(amount):
 		tween.tween_callback(func(): hit_animation_playing = false)
 	update_health_bar_ui()
 	if enemy_data.health <= 0:
-		enemy_dead.emit(id)
-
+		die()
 	
 func _on_hover():
 	enemy_hovered.emit(id)
@@ -256,8 +265,11 @@ func add_status_effect(effect : String,amount: int) -> void:
 	remove_status_effect_info()
 	set_status_effect_info()
 	
-	
 func get_status_effect(effect : String) -> StatusEffectData:
 	if effect in enemy_data.status_effects:
 		return enemy_data.status_effects[effect]
 	return null
+
+
+func _on_death_particles_finished():
+	enemy_dead.emit(id)

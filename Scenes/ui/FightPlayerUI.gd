@@ -40,6 +40,11 @@ func turn_changed(new_turn):
 		_:
 			endTurnButton.texture = action_button_texture
 			endTurnButton.material = disabled_material
+			
+func _input(event):
+	if event.is_action_pressed("ui_press_button"):
+		end_turn_clicked.emit()
+		
 func _on_button_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():

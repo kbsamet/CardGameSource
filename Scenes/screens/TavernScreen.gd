@@ -1,7 +1,7 @@
 extends Control
 
 var chooseRewardScene = preload("res://Scenes/screens/RewardSelectScreen.tscn")
-var npcScene = preload("res://Scenes/ui/npc.tscn")
+var npcScene = preload("res://Scenes/ui/NpcScene.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():

@@ -9,6 +9,8 @@ var data : StatusEffectData
 func set_data(new_data : StatusEffectData):
 	data = new_data
 	var effect = data
+	if sprite == null:
+		return
 	sprite.texture = load("res://Sprites/ui/statusEffects/"+effect._name+".png")
 	amountLabel.text = str(effect.amount)
 	var tooltip_description = effect.tooltip

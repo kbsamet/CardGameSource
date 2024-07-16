@@ -27,7 +27,7 @@ outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_bnmci"]
 font = ExtResource("6_4yd53")
-font_size = 32
+font_size = 64
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="PlayerInfoUi" type="Control"]
@@ -207,10 +207,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -35.0
+offset_left = -54.0
 offset_top = 66.0
-offset_right = 19.0
-offset_bottom = 98.0
+offset_right = 54.0
+offset_bottom = 130.0
 grow_horizontal = 2
 text = "1-1"
 label_settings = SubResource("LabelSettings_bnmci")

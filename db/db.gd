@@ -8,12 +8,13 @@ func _process(delta):
 	#print("FPS: " + str(Engine.get_frames_per_second()))
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
 
+signal level_changed
 signal player_state_changed
 signal player_status_effect_changed
 signal turn_changed(new_turn)
 
 var player : Player = Player.new()
-
+var current_room : int = 1
 enum Turn {
 	PlayerAction,PlayerReaction, EnemyAction,EnemyReaction
 }
@@ -460,24 +461,27 @@ const rewards : Array[Dictionary] = [
 	{
 		"reward" : "gold",
 		"amount" : "10-15",
-		"tooltip" : "Gain gold after the next fight."
+		"tooltip" : "Gain gold after the next fight.",
+		"multiplier": 3
 	},
 	{
 		"reward" : "key",
 		"amount" : 1,
-		"tooltip" : "Gain a key after the next fight."
+		"tooltip" : "Gain a key after the next fight.",
+		"multiplier": 3
 	},
 	{
 		"reward" : "locked_chest",
 		"amount" : 1,
-		"tooltip" : "There is a locked chest after the next fight."
+		"tooltip" : "There is a locked chest after the next fight.",
+		"multiplier": 2
 		
 	},
 	{
 		"reward" : "choose_card",
 		"amount" : 3,
 		"tooltip" : "Choose one of 3 cards after the next fight.",
-		"multiplier": 5
+		"multiplier": 3
 		
 	},
 	#{
@@ -489,7 +493,8 @@ const rewards : Array[Dictionary] = [
 	{
 		"reward" : "tavern",
 		"amount" : 1,
-		"tooltip" : "There is a tavern after the next fight."
+		"tooltip" : "There is a tavern after the next fight.",
+		"multiplier": 1
 		
 	},
 ]
@@ -497,7 +502,7 @@ const rewards : Array[Dictionary] = [
 const locked_chest_rewards : Array[Dictionary] = [
 	{
 		"reward": "gold",
-		"amount": "15-20"
+		"amount": "25-30"
 	},
 	{
 		"reward": "choose_card",
@@ -544,9 +549,14 @@ func set_turn(newTurn : Turn):
 	turn_changed.emit(newTurn)
 
 func  reset_player():
+	current_room = 1
 	player.reset()
+	level_changed.emit()
 	
 func check_game_over():
 	if player.health <= 0:
 		get_tree().change_scene_to_packed(gameOverScreen)
 
+func increase_level():
+	current_room += 1
+	level_changed.emit()

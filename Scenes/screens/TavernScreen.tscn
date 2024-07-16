@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://c8bhaqe15kinc"]
+[gd_scene load_steps=7 format=3 uid="uid://c8bhaqe15kinc"]
 
 [ext_resource type="Script" path="res://Scenes/screens/TavernScreen.gd" id="1_3fnbj"]
-[ext_resource type="Texture2D" uid="uid://dq50ys80v3a84" path="res://Sprites/ui/screens/tavern.png" id="2_rfwlu"]
+[ext_resource type="Texture2D" uid="uid://dq50ys80v3a84" path="res://Sprites/ui/screens/tavern.png" id="2_py68j"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="3_u0myo"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="4_nuuj3"]
 [ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="5_wngs2"]
 [ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="6_j01k8"]
 
@@ -19,7 +20,7 @@ script = ExtResource("1_3fnbj")
 [node name="Background" type="Sprite2D" parent="."]
 position = Vector2(957.5, 640)
 scale = Vector2(2.13, 2.13)
-texture = ExtResource("2_rfwlu")
+texture = ExtResource("2_py68j")
 
 [node name="PlayerInfoUi" parent="." instance=ExtResource("3_u0myo")]
 layout_mode = 1
@@ -39,6 +40,7 @@ offset_right = 148.0
 offset_bottom = -54.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_fonts/font = ExtResource("4_nuuj3")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = ExtResource("5_wngs2")
 theme_override_styles/hover = ExtResource("6_j01k8")

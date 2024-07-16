@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://jsbqwsmv1i02"]
+[gd_scene load_steps=9 format=3 uid="uid://jsbqwsmv1i02"]
 
 [ext_resource type="Script" path="res://Scenes/screens/RewardSelectScreen.gd" id="1_2k8yd"]
 [ext_resource type="Texture2D" uid="uid://g7i20tpwqi20" path="res://Sprites/ui/screens/two_doors.png" id="1_ej426"]
@@ -6,6 +6,7 @@
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="4_i5v1p"]
 [ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="4_wvuvt"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="5_ecyo6"]
+[ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="7_0yb05"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4nkid"]
 font = ExtResource("4_i5v1p")
@@ -17,8 +18,15 @@ layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_2k8yd")
 
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_top = 780.0
+offset_right = 1920.0
+offset_bottom = 1180.0
+color = Color(0.141176, 0.133333, 0.14902, 1)
+
 [node name="bg" type="Sprite2D" parent="."]
-position = Vector2(936, 16)
+position = Vector2(936, 120)
 scale = Vector2(2.2, 2.2)
 texture = ExtResource("1_ej426")
 
@@ -76,12 +84,12 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
-offset_top = 680.0
-offset_right = 1920.0
-offset_bottom = 1080.0
-color = Color(0.141176, 0.133333, 0.14902, 1)
+[node name="PlayerInfoUi" parent="." instance=ExtResource("7_0yb05")]
+layout_mode = 1
+offset_left = -36.0
+offset_top = -32.0
+offset_right = -36.0
+offset_bottom = -32.0
 
 [connection signal="gui_input" from="bg/DoorControl" to="." method="_on_doo1_input"]
 [connection signal="mouse_entered" from="bg/DoorControl" to="." method="_on_door1_mouse_entered"]

@@ -35,11 +35,13 @@ func _go_to_select_reward():
 	get_tree().change_scene_to_packed(select_reward_screen)
 
 func _on_reward_mouse_entered():
-	reward.material = outline_material
+	if reward != null:
+		reward.material = outline_material
 
 
 func _on_reward_mouse_exited():
-	reward.material = null
+	if reward != null:
+		reward.material = null
 
 func get_regular_reward(reward_name,reward_amount):
 	var amount = 0

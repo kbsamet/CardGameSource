@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://pkc6cj4lyag0"]
+[gd_scene load_steps=5 format=3 uid="uid://pkc6cj4lyag0"]
 
 [ext_resource type="Script" path="res://Scenes/screens/GameOverScreen.gd" id="1_c6lrm"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="1_q333b"]
@@ -6,6 +6,11 @@
 [sub_resource type="LabelSettings" id="LabelSettings_4171p"]
 font = ExtResource("1_q333b")
 font_size = 128
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wsw5n"]
+font = ExtResource("1_q333b")
+font_size = 32
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="GameOverScreen" type="Control"]
@@ -25,12 +30,20 @@ anchor_bottom = 1.0
 offset_left = 517.0
 offset_right = -554.24
 offset_bottom = 3.0
+theme_override_constants/separation = 128
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Game Over"
 label_settings = SubResource("LabelSettings_4171p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "You made it to 1-1"
+label_settings = SubResource("LabelSettings_wsw5n")
 horizontal_alignment = 1
 vertical_alignment = 1
 

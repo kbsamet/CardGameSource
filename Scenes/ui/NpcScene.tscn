@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://d057olhe20yp4"]
+
+[ext_resource type="Script" path="res://Scenes/ui/NpcScene.gd" id="1_u5v38"]
+
+[node name="NpcScene" type="Control"]
+layout_mode = 3
+anchor_right = 0.096
+anchor_bottom = 0.278
+offset_right = 0.679993
+offset_bottom = -0.240021
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_u5v38")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+position = Vector2(94, 156)
+scale = Vector2(2.13, 2.13)
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]
