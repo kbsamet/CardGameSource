@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://jwu82w31f70x"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_kuxml"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_3vg1q"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_kuxml")
+effect = 10
+amount = 1
+
+[resource]
+script = ExtResource("2_3vg1q")
+_name = "Shield Slam"
+type = 1
+description = "Deal damage equal to your block amount."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_kuxml")]([SubResource("Resource_6w00h")])

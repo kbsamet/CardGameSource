@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=12 format=3 uid="uid://c67dy4ujougn8"]
+
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_ophnv"]
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_pjiu2"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="3_e038j"]
+
+[sub_resource type="Resource" id="Resource_q120q"]
+script = ExtResource("1_ophnv")
+attack_type = 1
+amount = 3
+
+[sub_resource type="Resource" id="Resource_l3cun"]
+script = ExtResource("1_ophnv")
+attack_type = 3
+amount = 1
+
+[sub_resource type="Resource" id="Resource_ookng"]
+script = ExtResource("1_ophnv")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_0nra1"]
+script = ExtResource("2_pjiu2")
+attacks = Array[ExtResource("1_ophnv")]([SubResource("Resource_q120q"), SubResource("Resource_l3cun"), SubResource("Resource_ookng")])
+
+[sub_resource type="Resource" id="Resource_yxbtd"]
+script = ExtResource("1_ophnv")
+attack_type = 1
+amount = 3
+
+[sub_resource type="Resource" id="Resource_eg2rg"]
+script = ExtResource("1_ophnv")
+attack_type = 0
+amount = 2
+
+[sub_resource type="Resource" id="Resource_b5vah"]
+script = ExtResource("1_ophnv")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_tk6hu"]
+script = ExtResource("2_pjiu2")
+attacks = Array[ExtResource("1_ophnv")]([SubResource("Resource_yxbtd"), SubResource("Resource_eg2rg"), SubResource("Resource_b5vah")])
+
+[resource]
+script = ExtResource("3_e038j")
+_name = "Bat"
+health = 12
+max_health = 12
+stamina = 2
+max_stamina = 2
+attacks = Array[ExtResource("2_pjiu2")]([SubResource("Resource_0nra1"), SubResource("Resource_tk6hu")])
+status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])

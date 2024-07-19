@@ -1,0 +1,62 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=14 format=3 uid="uid://jr8nqpf8vc0l"]
+
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_h1y1y"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="1_iovah"]
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_onb48"]
+
+[sub_resource type="Resource" id="Resource_3nj2e"]
+script = ExtResource("1_h1y1y")
+attack_type = 0
+amount = 1
+
+[sub_resource type="Resource" id="Resource_kednr"]
+script = ExtResource("1_h1y1y")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_qvsr3"]
+script = ExtResource("1_h1y1y")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_lklfo"]
+script = ExtResource("1_onb48")
+attacks = Array[ExtResource("1_h1y1y")]([SubResource("Resource_3nj2e"), SubResource("Resource_kednr"), SubResource("Resource_qvsr3")])
+
+[sub_resource type="Resource" id="Resource_kihuo"]
+script = ExtResource("1_h1y1y")
+attack_type = 1
+amount = 3
+
+[sub_resource type="Resource" id="Resource_kjx0w"]
+script = ExtResource("1_h1y1y")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_mym73"]
+script = ExtResource("1_onb48")
+attacks = Array[ExtResource("1_h1y1y")]([SubResource("Resource_kihuo"), SubResource("Resource_kjx0w")])
+
+[sub_resource type="Resource" id="Resource_ki4bt"]
+script = ExtResource("1_h1y1y")
+attack_type = 1
+amount = 1
+
+[sub_resource type="Resource" id="Resource_x6gk4"]
+script = ExtResource("1_h1y1y")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_xu0e4"]
+script = ExtResource("1_onb48")
+attacks = Array[ExtResource("1_h1y1y")]([SubResource("Resource_ki4bt"), SubResource("Resource_x6gk4")])
+
+[resource]
+script = ExtResource("1_iovah")
+_name = "Zombie"
+health = 18
+max_health = 18
+stamina = 3
+max_stamina = 3
+attacks = Array[ExtResource("1_onb48")]([SubResource("Resource_lklfo"), SubResource("Resource_mym73"), SubResource("Resource_xu0e4")])
+status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])

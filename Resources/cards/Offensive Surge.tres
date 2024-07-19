@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://c3xlkvhnlte0i"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_jqymh"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_jdj6r"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_jqymh")
+effect = 8
+amount = 1
+
+[resource]
+script = ExtResource("2_jdj6r")
+_name = "Offensive Surge"
+type = 0
+description = "Convert all reaction points into action points."
+cost = 0
+targeted = false
+effects = Array[ExtResource("1_jqymh")]([SubResource("Resource_6w00h")])

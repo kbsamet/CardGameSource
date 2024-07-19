@@ -17,6 +17,7 @@ func _ready():
 	enemyController.enemy_turn_done.connect(_enemy_turn_done)
 	enemyController.enemy_action_done.connect(_enemy_action_done)
 	enemyController.hovered_enemy_changed.connect(_hovered_enemy_changed)
+	enemyController.enemies_empty.connect(_fight_over)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
 	hand.discardPosition = fightUI.discardPile.global_position
 	hand.deal_hand()
@@ -33,7 +34,7 @@ func _process(delta):
 	
 func spawn_enemy(enemy_name : String):
 	var new_enemy = enemyScene.instantiate() 
-	new_enemy.enemy_data = EnemyData.fromDict(db.enemies[enemy_name]) 
+	new_enemy.enemy_data = db.get_enemy(enemy_name)
 	enemyController.add_enemy(new_enemy)
 
 func spawn_enemies():
@@ -51,15 +52,15 @@ func _use_card(enemy_id):
 	var selected_card = hand.cards[card_id].card_data as CardData
 	if "blind" not in db.player.status_effects && selected_card.targeted && enemyController.attacking_enemy_id != -1 && enemyController.attacking_enemy_id != enemy_id:
 		return
-	var card_effects =  selected_card.effects
+	var card_effects =  selected_card.effects as Array[CardEffectData]
 	if (selected_card.type == db.CardType.Action && db.player.ap < selected_card.cost) || (selected_card.type == db.CardType.Reaction && db.player.rp < selected_card.cost) :
 		return
 	if (selected_card.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
-	for effect in card_effects.keys():
-		match effect:
+	for effect in card_effects:
+		match effect.effect:
 			db.CardEffect.Damage:
-				var damage_amount = card_effects[effect]
+				var damage_amount = effect.amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
@@ -69,28 +70,28 @@ func _use_card(enemy_id):
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Riposte:
-				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null && enemyController.enemies[enemy_id].selected_attack != {} else card_effects[effect]
+				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null else effect.amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Block:
 				if "block" in db.player.status_effects:
-					db.player.change_player_status_effect("block", db.player.status_effects.block.amount + card_effects[effect])
+					db.player.change_player_status_effect("block", db.player.status_effects.block.amount + effect.amount)
 				else:
-					db.player.change_player_status_effect("block", card_effects[effect])
+					db.player.change_player_status_effect("block", effect.amount)
 			db.CardEffect.Daze:
 				if enemy_id in enemyController.enemies:
 					enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
 			db.CardEffect.Bleed:
 				if enemy_id in enemyController.enemies:
-					enemyController.enemies[enemy_id].add_status_effect("bleed", card_effects[effect])
+					enemyController.enemies[enemy_id].add_status_effect("bleed", effect.amount)
 			db.CardEffect.Heal:
-				db.player.heal_player(card_effects[effect])
+				db.player.heal_player(effect.amount)
 			db.CardEffect.Dodge:
-				db.player.add_player_status_effect("dodge",card_effects[effect])
+				db.player.add_player_status_effect("dodge",effect.amount)
 			db.CardEffect.DamageAll:
 				for enemy in enemyController.enemies.values():
-					enemy.damage(card_effects[effect])
+					enemy.damage(effect.amount)
 			db.CardEffect.ConvertAllAp:
 				db.player.rp += db.player.ap
 				db.player.rp = min(db.player.rp, db.player.max_rp)
@@ -102,7 +103,7 @@ func _use_card(enemy_id):
 				db.player.rp = 0
 				db.player_state_changed.emit()
 			db.CardEffect.Crushing:
-				db.player.add_player_status_effect("crushing",card_effects[effect])
+				db.player.add_player_status_effect("crushing",effect.amount)
 	if selected_card.type == db.CardType.Action:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -113,6 +114,10 @@ func _use_card(enemy_id):
 
 
 func _end_turn_clicked():
+	for enemy in enemyController.enemies.values():
+		enemy = enemy as EnemyNode
+		if enemy.death_animation_playing:
+			return
 	if db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
 	if db.current_turn == db.Turn.PlayerAction:
@@ -121,19 +126,6 @@ func _end_turn_clicked():
 	else:
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
-	if enemyController.enemies.is_empty():
-		if "drunk" in db.player.status_effects:
-			db.player.add_player_status_effect("drunk",-1)
-		if "tipsy" in db.player.status_effects:
-			db.player.add_player_status_effect("tipsy",-1)
-		
-		hand.discard_all()
-		var reward_scene = rewardScene.instantiate() as RewardScreen
-		reward_scene.reward_data = reward
-		db.increase_level()
-		get_tree().root.add_child(reward_scene)
-		get_tree().current_scene = reward_scene
-		queue_free()
 
 func _enemy_turn_done():
 	db.player.ap = db.player.max_ap
@@ -159,7 +151,28 @@ func _enemy_turn_done():
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.start_turn()
 		
+func _fight_over():
+	db.player.ap = db.player.max_ap
+	db.player.rp = db.player.max_rp
+	db.player_state_changed.emit()
+	db.player.end_turn_process_player_status_effects()
+	db.check_game_over()
+	db.set_turn(db.Turn.PlayerAction)
+	enemyController.attacking_enemy_id = -1
+	if "drunk" in db.player.status_effects:
+		db.player.add_player_status_effect("drunk",-1)
+	if "tipsy" in db.player.status_effects:
+		db.player.add_player_status_effect("tipsy",-1)
+	
+	hand.discard_all()
+	var reward_scene = rewardScene.instantiate() as RewardScreen
+	reward_scene.reward_data = reward
+	db.increase_level()
+	get_tree().root.add_child(reward_scene)
+	get_tree().current_scene = reward_scene
+	queue_free()
 
+	
 func _enemy_action_done(enemy_id):
 	db.set_turn(db.Turn.PlayerReaction)
 
@@ -171,9 +184,9 @@ func _hovered_enemy_changed(enemy_id):
 	 
 func create_deck():
 	for i in range(4):
-		db.player.deck.push_back(CardData.from_dict(db.cards["Strike"]))
-		db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
-	db.player.deck.push_back(CardData.from_dict(db.cards["Daze"]))
-	db.player.deck.push_back(CardData.from_dict(db.cards["Block"]))
+		db.player.deck.push_back(db.get_card("Strike"))
+		db.player.deck.push_back(db.get_card("Block"))
+	db.player.deck.push_back(db.get_card("Daze"))
+	db.player.deck.push_back(db.get_card("Block"))
 	fightUI.update_ui_values()
 

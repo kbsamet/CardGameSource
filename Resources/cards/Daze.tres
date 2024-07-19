@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://b0srngcvi7l2c"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_qinqs"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_62jia"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_qinqs")
+effect = 0
+amount = 5
+
+[sub_resource type="Resource" id="Resource_h6vvo"]
+script = ExtResource("1_qinqs")
+effect = 3
+amount = 1
+
+[resource]
+script = ExtResource("2_62jia")
+_name = "Daze"
+type = 0
+description = "Deal 5 damage. Daze the enemy."
+cost = 2
+targeted = true
+effects = Array[ExtResource("1_qinqs")]([SubResource("Resource_6w00h"), SubResource("Resource_h6vvo")])

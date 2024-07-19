@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=18 format=3 uid="uid://ceoag1uknoujf"]
+
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_puhyf"]
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_1e2xj"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="3_647fp"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="4_fhxf4"]
+
+[sub_resource type="Resource" id="Resource_32xq0"]
+script = ExtResource("1_puhyf")
+attack_type = 5
+amount = 5
+
+[sub_resource type="Resource" id="Resource_4466o"]
+script = ExtResource("1_puhyf")
+attack_type = 6
+amount = 3
+
+[sub_resource type="Resource" id="Resource_vcfaa"]
+script = ExtResource("1_puhyf")
+attack_type = 7
+amount = 1
+
+[sub_resource type="Resource" id="Resource_csu4c"]
+script = ExtResource("1_puhyf")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_7txjy"]
+script = ExtResource("2_1e2xj")
+attacks = Array[ExtResource("1_puhyf")]([SubResource("Resource_32xq0"), SubResource("Resource_4466o"), SubResource("Resource_vcfaa"), SubResource("Resource_csu4c")])
+
+[sub_resource type="Resource" id="Resource_3034a"]
+script = ExtResource("1_puhyf")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_jj00e"]
+script = ExtResource("1_puhyf")
+attack_type = 4
+amount = 2
+
+[sub_resource type="Resource" id="Resource_lh223"]
+script = ExtResource("1_puhyf")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_icxrp"]
+script = ExtResource("2_1e2xj")
+attacks = Array[ExtResource("1_puhyf")]([SubResource("Resource_3034a"), SubResource("Resource_jj00e"), SubResource("Resource_lh223")])
+
+[sub_resource type="Resource" id="Resource_541i2"]
+script = ExtResource("1_puhyf")
+attack_type = 1
+amount = 2
+
+[sub_resource type="Resource" id="Resource_vrdtm"]
+script = ExtResource("1_puhyf")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_5k1j2"]
+script = ExtResource("2_1e2xj")
+attacks = Array[ExtResource("1_puhyf")]([SubResource("Resource_541i2"), SubResource("Resource_vrdtm")])
+
+[sub_resource type="Resource" id="Resource_1jpq1"]
+script = ExtResource("4_fhxf4")
+_name = "block"
+amount = 5
+tooltip = "Block:\\nBlock _ damage. Block is removed at the end of the round."
+hidden = true
+
+[resource]
+script = ExtResource("3_647fp")
+_name = "Fallen Priest"
+health = 23
+max_health = 23
+stamina = 5
+max_stamina = 5
+attacks = Array[ExtResource("2_1e2xj")]([SubResource("Resource_7txjy"), SubResource("Resource_icxrp"), SubResource("Resource_5k1j2")])
+status_effects = Array[ExtResource("4_fhxf4")]([SubResource("Resource_1jpq1")])

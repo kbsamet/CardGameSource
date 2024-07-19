@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://rx1vk6wyl1ar"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_vlfq0"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_4ermq"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_vlfq0")
+effect = 0
+amount = 3
+
+[sub_resource type="Resource" id="Resource_pt1kc"]
+script = ExtResource("1_vlfq0")
+effect = 3
+amount = 1
+
+[resource]
+script = ExtResource("2_4ermq")
+_name = "Shield Bash"
+type = 1
+description = "Deal 3 damage. Daze the enemy."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_vlfq0")]([SubResource("Resource_6w00h"), SubResource("Resource_pt1kc")])

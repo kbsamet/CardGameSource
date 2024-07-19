@@ -2,10 +2,10 @@ extends Resource
 
 class_name StatusEffectData
 
-var _name : String
-var amount : int = 0
-var tooltip : String
-var hidden : bool = false
+@export var _name : String
+@export var amount : int = 0
+@export var tooltip : String
+@export var hidden : bool = false
 
 static func fromDict(effect_data : Dictionary,_amount : int) -> StatusEffectData:
 	var new_effect : StatusEffectData = StatusEffectData.new()

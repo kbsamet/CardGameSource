@@ -66,7 +66,7 @@ func add_player_status_effect(effect : String,amount: int):
 			add_max_rp(-1)
 		if effect == "tipsy":
 			add_max_ap(-1)
-		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],amount)
+		status_effects[effect] = db.get_status_effect(effect,amount)
 	if effect == "block":
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
@@ -78,7 +78,7 @@ func change_player_status_effect(effect:String,new_stat:int):
 		else:
 			status_effects[effect].amount = new_stat
 	else:
-		status_effects[effect] = StatusEffectData.fromDict(db.status_effects[effect],new_stat)
+		status_effects[effect] =  db.get_status_effect(effect,new_stat)
 	if effect == "block":
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://c441a1nbdwuvr"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_3jcf4"]
+
+[resource]
+script = ExtResource("1_3jcf4")
+_name = "drunk"
+amount = 0
+tooltip = "Drunk:\\nYou have +1 action point and -1 reaction point for _ fights."
+hidden = false

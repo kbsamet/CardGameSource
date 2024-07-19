@@ -52,10 +52,10 @@ func show_info():
 	for n in tooltipContainer.get_children():
 		n.visible = true
 func init_info():
-	for effect in card_data.effects.keys():
-		if effect in db.card_tooltips:
-			var tooltip = db.card_tooltips[effect] as String
-			tooltip = tooltip.replace("_",str(card_data.effects[effect]))
+	for effect in card_data.effects:
+		if effect.effect in db.card_tooltips:
+			var tooltip = db.card_tooltips[effect.effect] as String
+			tooltip = tooltip.replace("_",str(effect.amount))
 			var new_tooltip = tooltipScene.instantiate()
 			tooltipContainer.add_child(new_tooltip)
 			new_tooltip.set_data(tooltip)

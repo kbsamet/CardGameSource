@@ -3,6 +3,7 @@ class_name EnemyController
 
 signal _on_card_used(enemy_id)
 signal enemy_turn_done
+signal enemies_empty
 signal enemy_action_done(enemy_id)
 signal hovered_enemy_changed(id)
 var attacking_enemy_id = -1
@@ -85,39 +86,42 @@ func end_enemy_attack():
 		return 
 	assert(attacking_enemy_id != -1,"No enemies are attacking!")
 	var attacking_enemy = enemies[attacking_enemy_id] as EnemyNode
-	var attack = attacking_enemy.selected_attack
-	assert(attack != null,"Enemy does not have an attack selected!")
+	var attack = attacking_enemy.selected_attack as EnemyAttackData
 	if attacking_enemy.get_status_effect("dazed") != null:
 		attacking_enemy.add_status_effect("dazed",-1)
 		attacking_enemy.start_attack_end_animation()
 		return
-	for key in attack.keys():
-		match key:
-			"damage":
+	if attack == null:
+		attacking_enemy.start_attack_end_animation()
+		return
+	for single_attack in attack.attacks:
+		single_attack = single_attack as EnemySingleAttackData
+		match single_attack.attack_type:
+			db.EnemyAttack.Damage:
 				if !("dodge" in db.player.status_effects.keys()):
-					db.player.damage_player(attack["damage"])
-			"staminaCost":
-				attacking_enemy.change_stamina(-attack["staminaCost"])
-			"bleed":
+					db.player.damage_player(single_attack.amount)
+			db.EnemyAttack.StaminaCost:
+				attacking_enemy.change_stamina(-single_attack.amount)
+			db.EnemyAttack.Bleed:
 				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
-					db.player.add_player_status_effect("bleed",attack["bleed"])
-			"daze":
+					db.player.add_player_status_effect("bleed",single_attack.amount)
+			db.EnemyAttack.Daze:
 				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
-					db.player.add_player_status_effect("dazed",attack["daze"])
-			"blind":
+					db.player.add_player_status_effect("dazed",single_attack.amount)
+			db.EnemyAttack.Blind:
 				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
-					db.player.add_player_status_effect("blind",attack["blind"])
-			"armorUp":
-				attacking_enemy.add_status_effect("block",attack["armorUp"])
-			"healAll":
+					db.player.add_player_status_effect("blind",single_attack.amount)
+			db.EnemyAttack.ArmorUp:
+				attacking_enemy.add_status_effect("block",single_attack.amount)
+			db.EnemyAttack.HealAll:
 				for enemy in enemies.values():
-					enemy.heal(attack["healAll"])
-			"burn":
+					enemy.heal(single_attack.amount)
+			db.EnemyAttack.Burn:
 				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
-					db.player.add_player_status_effect("burn",attack["burn"])
-			"empower":
+					db.player.add_player_status_effect("burn",single_attack.amount)
+			db.EnemyAttack.Empower:
 				for enemy in enemies.values():
-					enemy.add_status_effect("empowered",attack["empower"])
+					enemy.add_status_effect("empowered",single_attack.amount)
 	if "dodge" in db.player.status_effects.keys():
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()
@@ -130,6 +134,8 @@ func _enemy_dead(enemy_id):
 	remove_child(enemies[enemy_id])
 	enemies[enemy_id].queue_free()
 	enemies.erase(enemy_id)
+	if enemies.is_empty():
+		enemies_empty.emit()
 	center_enemies()
 	
 func array_generator(arr):

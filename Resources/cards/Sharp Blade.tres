@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://wlq4skt8yyua"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_5kyvl"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_jw0hd"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_5kyvl")
+effect = 4
+amount = 4
+
+[resource]
+script = ExtResource("2_jw0hd")
+_name = "Sharp Blade"
+type = 0
+description = "Inflict 4 bleed to an enemy."
+cost = 2
+targeted = true
+effects = Array[ExtResource("1_5kyvl")]([SubResource("Resource_6w00h")])

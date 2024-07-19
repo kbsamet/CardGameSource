@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceGroup" load_steps=2 format=3 uid="uid://cewxcvc1yk5kc"]
+
+[ext_resource type="Script" path="res://addons/godot_resource_groups/resource_group.gd" id="1_bxr60"]
+
+[resource]
+script = ExtResource("1_bxr60")
+base_folder = "res://Resources/enemies"
+includes = Array[String](["*.tres"])
+excludes = Array[String]([])
+paths = Array[String](["res://Resources/enemies/Bat.tres", "res://Resources/enemies/Fallen Priest.tres", "res://Resources/enemies/Fire Seeker.tres", "res://Resources/enemies/Minotaur.tres", "res://Resources/enemies/Zombie.tres"])

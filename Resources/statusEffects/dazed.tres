@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://i2wbqiid2vc2"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_0rp10"]
+
+[resource]
+script = ExtResource("1_0rp10")
+_name = "dazed"
+amount = 0
+tooltip = "Dazed:\\nThis unit will be unable to attack for _ turns."
+hidden = false

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://c6tqwl8udngi4"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_070au"]
+
+[resource]
+script = ExtResource("1_070au")
+_name = "crushing"
+amount = 0
+tooltip = "Crushing:\\nDeal double damage to dazed enemies for _ turns."
+hidden = false

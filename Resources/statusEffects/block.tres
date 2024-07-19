@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://lrxo0bgwqsl3"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_6rf73"]
+
+[resource]
+script = ExtResource("1_6rf73")
+_name = "block"
+amount = 0
+tooltip = "Block:\\nBlock _ damage. Block is removed at the end of the round."
+hidden = true

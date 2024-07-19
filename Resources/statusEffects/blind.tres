@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://bopvbl6dqwie1"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_rvye4"]
+
+[resource]
+script = ExtResource("1_rvye4")
+_name = "blind"
+amount = 0
+tooltip = "Blind:\\nYou will be unable to target enemies for _ turns."
+hidden = false
