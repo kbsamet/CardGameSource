@@ -1,6 +1,6 @@
 extends Control
 class_name BattleController
-@onready var hand : Hand  = $Control/Hand
+@onready var hand : Hand  = $Control/CanvasLayer/Hand
 @onready var enemyController : EnemyController = $Control/EnemyController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
 var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")

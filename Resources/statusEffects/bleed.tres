@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://scb285y1wfv2"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_deiat"]
+
+[resource]
+script = ExtResource("1_deiat")
+_name = "bleed"
+amount = 0
+tooltip = "Bleed: Take _ damage per turn. Reduces by 1 each turn."
+hidden = false

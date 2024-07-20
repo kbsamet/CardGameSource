@@ -65,7 +65,12 @@ func get_chest_reward():
 		get_tree().change_scene_to_packed(select_reward_screen)
 		return
 	db.player.keys -= 1
-	var random_reward = db.locked_chest_rewards.pick_random()
+	var reward_pool = []
+	for reward in db.locked_chest_rewards:
+		for m in reward.multiplier:
+			reward_pool.append(reward.duplicate(true))
+	
+	var random_reward = reward_pool.pick_random()
 	if random_reward.reward == "choose_card":
 		reward.visible = false
 		reward.queue_free()

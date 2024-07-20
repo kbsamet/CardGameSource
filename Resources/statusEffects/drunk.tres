@@ -6,5 +6,5 @@
 script = ExtResource("1_3jcf4")
 _name = "drunk"
 amount = 0
-tooltip = "Drunk:\\nYou have +1 action point and -1 reaction point for _ fights."
+tooltip = "Drunk: You have +1 action point and -1 reaction point for _ fights."
 hidden = false

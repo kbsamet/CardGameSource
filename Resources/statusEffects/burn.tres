@@ -6,5 +6,5 @@
 script = ExtResource("1_fud3j")
 _name = "burn"
 amount = 0
-tooltip = "Burn:\\nYou will discard a random card for _ turns."
+tooltip = "Burn: You will discard a random card for _ turns."
 hidden = false

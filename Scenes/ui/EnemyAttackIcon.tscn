@@ -15,6 +15,8 @@ border_width_bottom = 3
 border_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [node name="EnemyAttackIcon" type="Control"]
+light_mask = 4
+visibility_layer = 4
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 3
 anchor_right = 0.067
@@ -27,14 +29,20 @@ scale = Vector2(2, 2)
 script = ExtResource("1_h63hl")
 
 [node name="Node2D" type="Node2D" parent="."]
+light_mask = 4
+visibility_layer = 4
 scale = Vector2(2, 2)
 
 [node name="Sprite" type="Sprite2D" parent="Node2D"]
+light_mask = 4
+visibility_layer = 4
 position = Vector2(16.05, 16.05)
 scale = Vector2(1.02813, 1.0125)
 texture = SubResource("CompressedTexture2D_8h5h7")
 
 [node name="AmountLabel" type="Label" parent="Node2D"]
+light_mask = 4
+visibility_layer = 4
 offset_left = 24.0
 offset_top = 18.5
 offset_right = 34.0
@@ -44,6 +52,8 @@ label_settings = ExtResource("2_ujt7e")
 
 [node name="InfoBox" type="Panel" parent="."]
 visible = false
+light_mask = 4
+visibility_layer = 4
 layout_mode = 0
 offset_left = -218.0
 offset_top = 1.0
@@ -52,6 +62,8 @@ offset_bottom = 69.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_o4gl3")
 
 [node name="InfoLabel" type="Label" parent="InfoBox"]
+light_mask = 4
+visibility_layer = 4
 layout_mode = 0
 offset_left = 5.0
 offset_top = 5.0

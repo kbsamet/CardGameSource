@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=22 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
@@ -7,28 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="5_pxudm"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="6_bvov2"]
 [ext_resource type="Texture2D" uid="uid://dyt0c8aywl7in" path="res://Sprites/ui/hit_particle.png" id="7_n7t8x"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
-bg_color = Color(0.207843, 0.207843, 0.25098, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.568627, 0.552941, 0.552941, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_qtu0t"]
-font = ExtResource("6_bvov2")
-font_size = 64
-font_color = Color(0.662745, 0.286275, 0.286275, 1)
-outline_size = 8
-outline_color = Color(0.207843, 0.207843, 0.25098, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_5s5wb"]
-font = ExtResource("6_bvov2")
-font_size = 64
-font_color = Color(0.309804, 0.392157, 0.721569, 1)
-outline_size = 8
-outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="Animation" id="Animation_qnc5y"]
 length = 0.001
@@ -668,156 +646,41 @@ gradient = SubResource("Gradient_fvor1")
 width = 1
 height = 1
 
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hqvuq"]
+polygon = PackedVector2Array(-41, 110, 39, 113, 52, 189, -58, 192)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
+bg_color = Color(0.207843, 0.207843, 0.25098, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.568627, 0.552941, 0.552941, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_qtu0t"]
+font = ExtResource("6_bvov2")
+font_size = 64
+font_color = Color(0.662745, 0.286275, 0.286275, 1)
+outline_size = 8
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5s5wb"]
+font = ExtResource("6_bvov2")
+font_size = 64
+font_color = Color(0.309804, 0.392157, 0.721569, 1)
+outline_size = 8
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
 [node name="Enemy" type="Node2D"]
+light_mask = 7
 z_index = 5
 script = ExtResource("1_iuwds")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+light_mask = 2
+position = Vector2(1, 0)
 scale = Vector2(3, 3)
 texture = ExtResource("2_mm60a")
-
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -81.0
-offset_top = -251.0
-offset_right = 78.0
-offset_bottom = 202.0
-
-[node name="HealthBar" type="Sprite2D" parent="Control"]
-position = Vector2(81, -4)
-texture = ExtResource("2_6xp31")
-
-[node name="HealthBarRect" type="ColorRect" parent="Control/HealthBar"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -61.0
-offset_top = -14.0
-offset_right = -67.0
-offset_bottom = -19.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.662745, 0.286275, 0.286275, 1)
-
-[node name="BlockBarRect" type="ColorRect" parent="Control/HealthBar"]
-anchors_preset = -1
-anchor_left = 0.03
-anchor_top = 0.062
-anchor_right = 0.977
-anchor_bottom = 0.906
-offset_left = 39.16
-offset_top = -15.984
-offset_right = -64.056
-offset_bottom = -15.992
-color = Color(0.309804, 0.392157, 0.721569, 1)
-
-[node name="BlockIcon" type="Sprite2D" parent="Control/HealthBar"]
-visible = false
-position = Vector2(-88, 0.99999)
-scale = Vector2(1.08854, 1.08854)
-texture = ExtResource("5_pxudm")
-
-[node name="Label" type="Label" parent="Control/HealthBar/BlockIcon"]
-anchors_preset = -1
-anchor_right = 1.031
-anchor_bottom = 1.094
-offset_left = -16.0
-offset_top = -15.0
-offset_right = -15.992
-offset_bottom = -16.008
-text = "3"
-label_settings = ExtResource("3_22tp7")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HealthLabel" type="Label" parent="Control/HealthBar"]
-anchors_preset = -1
-anchor_right = 0.977
-anchor_bottom = 0.906
-offset_left = -61.0
-offset_top = -14.0
-offset_right = -64.056
-offset_bottom = -15.992
-text = "10/10
-"
-label_settings = ExtResource("3_22tp7")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="StaminaBar" type="Sprite2D" parent="Control"]
-position = Vector2(81, 32)
-texture = ExtResource("2_6xp31")
-
-[node name="StaminaBarRect" type="ColorRect" parent="Control/StaminaBar"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -61.0
-offset_top = -13.0
-offset_right = -67.0
-offset_bottom = -19.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.333333, 0.490196, 0.333333, 1)
-
-[node name="StaminaLabel" type="Label" parent="Control/StaminaBar"]
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 0.969
-offset_left = -61.0
-offset_top = -13.0
-offset_right = -67.0
-offset_bottom = -18.008
-text = "3/3
-"
-label_settings = ExtResource("3_22tp7")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="InfoBox" type="Panel" parent="Control"]
-visible = false
-layout_mode = 0
-offset_left = -106.0
-offset_top = 33.0
-offset_right = -11.0
-offset_bottom = 163.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_3ac47")
-
-[node name="InfoPopup" type="VBoxContainer" parent="Control"]
-layout_mode = 0
-offset_left = -94.0
-offset_top = 41.0
-offset_right = 10.0
-offset_bottom = 379.0
-
-[node name="StatusEffectContainer" type="HBoxContainer" parent="Control"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = -57.0
-offset_right = 337.0
-offset_bottom = 13.0
-scale = Vector2(0.5, 0.5)
-
-[node name="HitAmount" type="Label" parent="Control"]
-visible = false
-layout_mode = 0
-offset_left = 34.0
-offset_top = 135.0
-offset_right = 74.0
-offset_bottom = 199.0
-text = "8"
-label_settings = SubResource("LabelSettings_qtu0t")
-
-[node name="BlockAmount" type="Label" parent="Control"]
-visible = false
-layout_mode = 0
-offset_left = 83.0
-offset_top = 137.0
-offset_right = 123.0
-offset_bottom = 201.0
-text = "8"
-label_settings = SubResource("LabelSettings_5s5wb")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -857,8 +720,184 @@ fixed_fps = 60
 local_coords = true
 draw_order = 0
 
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_hqvuq")
+
+[node name="Control" type="Control" parent="."]
+light_mask = 4
+visibility_layer = 4
+layout_mode = 3
+anchors_preset = 0
+offset_left = -81.0
+offset_top = -251.0
+offset_right = 78.0
+offset_bottom = 202.0
+
+[node name="HealthBar" type="Sprite2D" parent="Control"]
+light_mask = 4
+visibility_layer = 4
+position = Vector2(81, -4)
+texture = ExtResource("2_6xp31")
+
+[node name="HealthBarRect" type="ColorRect" parent="Control/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -14.0
+offset_right = -67.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.662745, 0.286275, 0.286275, 1)
+
+[node name="BlockBarRect" type="ColorRect" parent="Control/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = -1
+anchor_left = 0.03
+anchor_top = 0.062
+anchor_right = 0.977
+anchor_bottom = 0.906
+offset_left = 39.16
+offset_top = -15.984
+offset_right = -64.056
+offset_bottom = -15.992
+color = Color(0.309804, 0.392157, 0.721569, 1)
+
+[node name="BlockIcon" type="Sprite2D" parent="Control/HealthBar"]
+visible = false
+light_mask = 4
+visibility_layer = 4
+position = Vector2(-88, 0.99999)
+scale = Vector2(1.08854, 1.08854)
+texture = ExtResource("5_pxudm")
+
+[node name="Label" type="Label" parent="Control/HealthBar/BlockIcon"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = -1
+anchor_right = 1.031
+anchor_bottom = 1.094
+offset_left = -16.0
+offset_top = -15.0
+offset_right = -15.992
+offset_bottom = -16.008
+text = "3"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthLabel" type="Label" parent="Control/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = -1
+anchor_right = 0.977
+anchor_bottom = 0.906
+offset_left = -61.0
+offset_top = -14.0
+offset_right = -64.056
+offset_bottom = -15.992
+text = "10/10
+"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StaminaBar" type="Sprite2D" parent="Control"]
+light_mask = 4
+visibility_layer = 4
+position = Vector2(81, 32)
+texture = ExtResource("2_6xp31")
+
+[node name="StaminaBarRect" type="ColorRect" parent="Control/StaminaBar"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -61.0
+offset_top = -13.0
+offset_right = -67.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.333333, 0.490196, 0.333333, 1)
+
+[node name="StaminaLabel" type="Label" parent="Control/StaminaBar"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.969
+offset_left = -61.0
+offset_top = -13.0
+offset_right = -67.0
+offset_bottom = -18.008
+text = "3/3
+"
+label_settings = ExtResource("3_22tp7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="InfoBox" type="Panel" parent="Control"]
+visible = false
+light_mask = 4
+visibility_layer = 4
+layout_mode = 0
+offset_left = -106.0
+offset_top = 33.0
+offset_right = -11.0
+offset_bottom = 163.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3ac47")
+
+[node name="InfoPopup" type="VBoxContainer" parent="Control"]
+light_mask = 4
+visibility_layer = 4
+layout_mode = 0
+offset_left = -94.0
+offset_top = 41.0
+offset_right = 10.0
+offset_bottom = 379.0
+
+[node name="StatusEffectContainer" type="HBoxContainer" parent="Control"]
+light_mask = 4
+visibility_layer = 4
+layout_mode = 0
+offset_left = 20.0
+offset_top = -57.0
+offset_right = 337.0
+offset_bottom = 13.0
+scale = Vector2(0.5, 0.5)
+
+[node name="HitAmount" type="Label" parent="Control"]
+visible = false
+light_mask = 4
+visibility_layer = 4
+layout_mode = 0
+offset_left = 34.0
+offset_top = 135.0
+offset_right = 74.0
+offset_bottom = 199.0
+text = "8"
+label_settings = SubResource("LabelSettings_qtu0t")
+
+[node name="BlockAmount" type="Label" parent="Control"]
+visible = false
+light_mask = 4
+visibility_layer = 4
+layout_mode = 0
+offset_left = 83.0
+offset_top = 137.0
+offset_right = 123.0
+offset_bottom = 201.0
+text = "8"
+label_settings = SubResource("LabelSettings_5s5wb")
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]
+[connection signal="finished" from="DeathParticles" to="." method="_on_death_particles_finished"]
 [connection signal="gui_input" from="Control" to="." method="_on_input"]
 [connection signal="mouse_entered" from="Control" to="." method="_on_hover"]
 [connection signal="mouse_exited" from="Control" to="." method="_on_hover_end"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]
-[connection signal="finished" from="DeathParticles" to="." method="_on_death_particles_finished"]

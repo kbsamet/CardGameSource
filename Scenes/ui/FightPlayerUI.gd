@@ -1,11 +1,11 @@
 extends Control
 class_name PlayerUI
 
-@onready var endTurnButton = $Container/EndTurnButton
-@onready var endTurnButtonLabel = $Container/EndTurnButton/EndTurnlabel
-@onready var deckCountLabel = $Deck/DeckCountLabel
-@onready var discardPile = $DiscardPile
-@onready var discardPileLabel = $DiscardPile/DiscardPileCountLabel
+@onready var endTurnButton = $CanvasLayer/Container/EndTurnButton
+@onready var endTurnButtonLabel = $CanvasLayer/Container/EndTurnButton/EndTurnlabel
+@onready var deckCountLabel = $CanvasLayer/Deck/DeckCountLabel
+@onready var discardPile = $CanvasLayer/DiscardPile
+@onready var discardPileLabel = $CanvasLayer/DiscardPile/DiscardPileCountLabel
 
 signal end_turn_clicked
 

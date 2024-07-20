@@ -10,7 +10,6 @@ var random = RandomNumberGenerator.new()
 @export var discardPosition : Vector2
 @export var cardScene = preload("res://Scenes/Card.tscn")
 @onready var arrow = $CardDragArrow
-
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
 # Called when the node enters the scene tree for the first time.
@@ -45,7 +44,7 @@ func center_cards():
 	var card_keys = cards.keys()
 	for i in range(card_keys.size()):
 		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
-		cards[card_keys[i]].position.x = (i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) + 10)
+		cards[card_keys[i]].position.x = (i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40)
 
 func turn_changed(new_turn):
 	if selected_card != -1:

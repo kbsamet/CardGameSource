@@ -32,7 +32,7 @@ signal enemy_hovered_end(id)
 @onready var blockHitAmountLabel = $Control/BlockAmount
 @onready var hitParticles = $HitParticles
 @onready var deathParticles = $DeathParticles
-
+@onready var lightOccluder = $LightOccluder2D
 var particle_color_red = Color("ca5954")
 var particle_color_blue = Color("5c699f")
 
@@ -52,12 +52,8 @@ func _ready():
 	deathParticles.process_material = new_material
 	set_status_effect_info()
 	update_health_bar_ui()
-	for attack in enemy_data.attacks:
-		print("enemy - " + enemy_data._name+ " attacks:")
-		for single_attack in attack.attacks:
-			single_attack = single_attack as EnemySingleAttackData
-			print("type: " + str(single_attack.attack_type) + " amount: " + str(single_attack.amount))
-	pass # Replace with function body.
+	if sprite.texture.get_height() < 100:
+		lightOccluder.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

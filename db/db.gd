@@ -1,5 +1,7 @@
 extends Node
 
+@onready var background_music = preload("res://Sounds/Music/backgroundMusic.tscn")
+
 @onready var all_cards : ResourceGroup = preload("res://Resources/all_cards.tres")
 @onready var all_status_effects : ResourceGroup = preload("res://Resources/all_status_effects.tres")
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
@@ -12,7 +14,9 @@ func _ready():
 	all_cards.load_all_into(cards)
 	all_status_effects.load_all_into(status_effects)
 	all_enemies.load_all_into(enemies)
-	
+	var music = background_music.instantiate() as AudioStreamPlayer
+	add_child(music)
+	music.play()
 func _process(delta):
 	pass
 	#print("FPS: " + str(Engine.get_frames_per_second()))
@@ -197,15 +201,18 @@ const rewards : Array[Dictionary] = [
 const locked_chest_rewards : Array[Dictionary] = [
 	{
 		"reward": "gold",
-		"amount": "25-30"
+		"amount": "25-30",
+		"multiplier" : 3
 	},
 	{
 		"reward": "choose_card",
-		"amount": 3
+		"amount": 3,
+		"multiplier" : 2
 	},
 	{
 		"reward": "choose_relic",
-		"amount": 3
+		"amount": 3,
+		"multiplier" : 1
 	},
 	
 ]

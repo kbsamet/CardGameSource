@@ -6,5 +6,5 @@
 script = ExtResource("1_0rp10")
 _name = "dazed"
 amount = 0
-tooltip = "Dazed:\\nThis unit will be unable to attack for _ turns."
+tooltip = "Dazed: This unit will be unable to attack for _ turns."
 hidden = false

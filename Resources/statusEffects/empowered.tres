@@ -6,5 +6,5 @@
 script = ExtResource("1_ilnvd")
 _name = "empowered"
 amount = 0
-tooltip = "Enpowered:\\nThis unit will do _ more damage."
+tooltip = "Empowered: This unit will do _ more damage."
 hidden = false

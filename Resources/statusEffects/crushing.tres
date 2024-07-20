@@ -6,5 +6,5 @@
 script = ExtResource("1_070au")
 _name = "crushing"
 amount = 0
-tooltip = "Crushing:\\nDeal double damage to dazed enemies for _ turns."
+tooltip = "Crushing: Deal double damage to dazed enemies for _ turns."
 hidden = false

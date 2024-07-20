@@ -18,11 +18,15 @@ scale = Vector2(2, 2)
 script = ExtResource("1_iq4hh")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+light_mask = 4
+visibility_layer = 4
 position = Vector2(32, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("2_ol16x")
 
 [node name="EffectAmountLabel" type="Label" parent="."]
+light_mask = 4
+visibility_layer = 4
 layout_mode = 0
 offset_left = 53.0
 offset_top = 43.5
@@ -32,6 +36,8 @@ text = "3"
 label_settings = SubResource("LabelSettings_6ipjv")
 
 [node name="Tooltip" parent="." instance=ExtResource("4_gsofu")]
+light_mask = 4
+z_index = 5
 layout_mode = 1
 offset_left = 88.0
 offset_right = 96.96

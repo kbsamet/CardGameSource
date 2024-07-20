@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://rhrvkkyigl2h"]
+
+[ext_resource type="AudioStream" uid="uid://bfb48wo3gia48" path="res://Sounds/Music/forest.mp3" id="1_vkffe"]
+
+[node name="BackgroundMusic" type="AudioStreamPlayer"]
+stream = ExtResource("1_vkffe")
+volume_db = -23.623

@@ -1,20 +1,23 @@
-[gd_scene load_steps=5 format=3 uid="uid://cn44o3l7krv"]
+[gd_scene load_steps=8 format=3 uid="uid://cn44o3l7krv"]
 
 [ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
+[ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_3kwnt"]
 [ext_resource type="PackedScene" uid="uid://cip36jni5jcjx" path="res://Scenes/EnemyController.tscn" id="2_63inp"]
 [ext_resource type="PackedScene" uid="uid://cxj0poh31buc8" path="res://Scenes/Hand.tscn" id="3_lhgsg"]
 [ext_resource type="PackedScene" uid="uid://ddtkpa3ifuhnj" path="res://Scenes/ui/FightPlayerUI.tscn" id="4_b61bc"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="6_mm88r"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_3xgc3"]
 
 [node name="BattleController" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_iqj2w")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-layout_mode = 0
-offset_right = 1917.0
-offset_bottom = 1073.0
-color = Color(0, 0, 0, 1)
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.61339, 0.61339, 0.61339, 1)
+position = Vector2(959, 569)
+scale = Vector2(2.1335, 2.19115)
+texture = ExtResource("2_3kwnt")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
@@ -24,28 +27,72 @@ offset_right = 1922.0
 offset_bottom = 1080.0
 
 [node name="EnemyController" parent="Control" instance=ExtResource("2_63inp")]
+light_mask = 5
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_top = 491.0
-offset_bottom = 491.0
+offset_top = 577.0
+offset_bottom = 577.0
 grow_horizontal = 2
 
-[node name="Hand" parent="Control" instance=ExtResource("3_lhgsg")]
-layout_mode = 1
+[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
+layer = 8
+
+[node name="Hand" parent="Control/CanvasLayer" instance=ExtResource("3_lhgsg")]
+light_mask = 8
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 2.0
-offset_top = 361.5
-offset_right = 2.0
-offset_bottom = 361.5
+offset_left = 3.0
+offset_top = 460.0
+offset_right = 3.0
+offset_bottom = 460.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Control/CanvasLayer"]
+color = Color(0.864675, 0.864675, 0.864675, 1)
 
 [node name="FightPlayerUI" parent="Control" instance=ExtResource("4_b61bc")]
 layout_mode = 1
 mouse_filter = 2
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.633138, 0.632935, 0.721364, 1)
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(904, 1111)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-9.58897, 19.6826)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.63
+range_z_max = 7
+range_item_cull_mask = 2
+texture = ExtResource("6_mm88r")
+texture_scale = 2.51
+height = 30.0
+script = ExtResource("7_3xgc3")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.64
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("6_mm88r")
+texture_scale = 1.75
+script = ExtResource("7_3xgc3")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.2
+range_z_max = 7
+shadow_enabled = true
+texture = ExtResource("6_mm88r")
+texture_scale = 1.39
+height = 49.0
+script = ExtResource("7_3xgc3")

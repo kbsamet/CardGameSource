@@ -19,19 +19,23 @@ grow_vertical = 2
 mouse_filter = 1
 script = ExtResource("1_cpms0")
 
-[node name="Container" type="Control" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 8
+
+[node name="Container" type="Control" parent="CanvasLayer"]
+layout_mode = 3
 anchors_preset = 0
 offset_left = 1606.0
-offset_top = 204.0
+offset_top = 203.0
 offset_right = 1860.0
-offset_bottom = 266.0
+offset_bottom = 265.0
 
-[node name="EndTurnButton" type="Sprite2D" parent="Container"]
+[node name="EndTurnButton" type="Sprite2D" parent="CanvasLayer/Container"]
 position = Vector2(126, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("6_apsm4")
 
-[node name="EndTurnlabel" type="Label" parent="Container/EndTurnButton"]
+[node name="EndTurnlabel" type="Label" parent="CanvasLayer/Container/EndTurnButton"]
 anchors_preset = -1
 anchor_right = 1.0
 anchor_bottom = 0.969
@@ -44,12 +48,12 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Deck" type="Sprite2D" parent="."]
-position = Vector2(1776, 849)
+[node name="Deck" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(1776, 848)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("7_gocp1")
 
-[node name="DeckCountLabel" type="Label" parent="Deck"]
+[node name="DeckCountLabel" type="Label" parent="CanvasLayer/Deck"]
 offset_left = -29.2
 offset_top = -89.2
 offset_right = 29.8
@@ -59,12 +63,12 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DiscardPile" type="Sprite2D" parent="."]
-position = Vector2(134, 849)
+[node name="DiscardPile" type="Sprite2D" parent="CanvasLayer"]
+position = Vector2(134, 848)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("11_2b7bs")
 
-[node name="DiscardPileCountLabel" type="Label" parent="DiscardPile"]
+[node name="DiscardPileCountLabel" type="Label" parent="CanvasLayer/DiscardPile"]
 offset_left = -29.2
 offset_top = -89.2
 offset_right = 29.8
@@ -74,7 +78,11 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PlayerInfoUi" parent="." instance=ExtResource("6_rgsw4")]
-layout_mode = 1
+[node name="PlayerInfoUi" parent="CanvasLayer" instance=ExtResource("6_rgsw4")]
+offset_top = -1.0
+offset_bottom = -1.0
 
-[connection signal="gui_input" from="Container" to="." method="_on_button_input"]
+[node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer"]
+color = Color(0.758191, 0.758192, 0.758192, 1)
+
+[connection signal="gui_input" from="CanvasLayer/Container" to="." method="_on_button_input"]

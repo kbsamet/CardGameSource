@@ -6,5 +6,5 @@
 script = ExtResource("1_bomxp")
 _name = "dodge"
 amount = 0
-tooltip = "Dodge:\\nDodge the next _ attacks."
+tooltip = "Dodge: Dodge the next _ attacks."
 hidden = false
