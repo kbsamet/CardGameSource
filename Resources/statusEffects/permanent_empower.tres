@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://s4lmkg8h5fya"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_hjqun"]
+
+[resource]
+script = ExtResource("1_hjqun")
+_name = "permanent_empower"
+amount = 0
+tooltip = ""
+hidden = true

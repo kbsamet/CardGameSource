@@ -8,6 +8,10 @@
       "resource_local_to_scene": true,
       "resource_name": true
     },
+    "res://Resources/relics/": {
+      "resource_local_to_scene": true,
+      "resource_name": true
+    },
     "res://Resources/statusEffects/": {
       "resource_local_to_scene": true,
       "resource_name": true
@@ -16,7 +20,8 @@
   "recent_paths": [
     "res://Resources/cards/",
     "res://Resources/enemies/",
-    "res://Resources/statusEffects/"
+    "res://Resources/statusEffects/",
+    "res://Resources/relics/"
   ],
   "table_functions": {
     "filter": [

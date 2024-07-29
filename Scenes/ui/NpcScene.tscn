@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_u5v38")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+light_mask = 2
 position = Vector2(94, 156)
 scale = Vector2(2.13, 2.13)
 

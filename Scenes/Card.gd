@@ -9,10 +9,11 @@ var selected = false
 var disabled = false
 var hovered = false
 var dragged = false
+var original_text = ""
 @onready var manaLabel = $Control/ManaLabel
 @onready var typeLabel = $Control/TypeLabel
 @onready var nameLabel = $Control/NameLabel
-@onready var descriptionLabel = $Control/DescriptionLabel
+@onready var descriptionLabel = $Control/DescriptionContainer/DescriptionLabel as RichTextLabel
 @onready var sprite = $Sprite
 @onready var animationPlayer = $AnimationPlayer
 @onready var control = $Control
@@ -24,18 +25,64 @@ var dragged = false
 @onready var disabledShader = preload("res://Shaders/gray_tint.tres")
 @onready var tooltipNode = preload("res://Scenes/ui/Tooltip.tscn")
 
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	db.turn_changed.connect(_turn_changed)
 	db.player_state_changed.connect(_player_state_changed)
+	db.player_status_effect_changed.connect(_player_status_effect_changed)
 	_turn_changed(db.current_turn)
 	manaLabel.text = str(card_data.cost)
 	typeLabel.text = "A" if (card_data.type == db.CardType.Action) else "R"
 	nameLabel.text = card_data._name
-	descriptionLabel.text = card_data.description
+	descriptionLabel.text = "[center]" + card_data.description
+	add_description_colors()
+	original_text = descriptionLabel.text
+	if card_data.is_damage_card():
+		add_damage_color()
 	sprite.texture = load("res://Sprites/cards/"+card_data._name+".png")
+	if len(nameLabel.text) > 16:
+		nameLabel.scale = Vector2(0.7,0.7)
 	init_info()
 
+func add_description_colors():
+	var keyword_loc = -1
+	for keyword in db.card_keywords:
+		keyword_loc = descriptionLabel.text.to_lower().find(keyword)
+		if keyword_loc != -1:
+			descriptionLabel.text = descriptionLabel.text.insert(keyword_loc+len(keyword),"[/color]").insert(keyword_loc,"[color=e8c65b]")
+	
+func add_damage_color():
+	descriptionLabel.text = original_text
+		
+	if not "empowered" in db.player.status_effects:
+		for effect in card_data.effects:
+			if effect.effect == db.CardEffect.Damage:
+				descriptionLabel.text = descriptionLabel.text.replace("/damage",str(effect.amount))
+			elif effect.effect == db.CardEffect.DamageAll:
+				descriptionLabel.text =descriptionLabel.text.replace("/damageAll",str(effect.amount))
+			elif effect.effect == db.CardEffect.Riposte:
+				descriptionLabel.text =descriptionLabel.text.replace("/riposte",str(effect.amount))
+		add_description_colors()
+		return
+	var new_damage = ""
+	for effect in card_data.effects:
+		if effect.effect == db.CardEffect.Damage:
+			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
+			descriptionLabel.text = descriptionLabel.text.replace("/damage","[color=74ab74]"+ new_damage + "[/color]")
+		elif effect.effect == db.CardEffect.DamageAll:
+			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
+			descriptionLabel.text = descriptionLabel.text.replace("/damageAll","[color=74ab74]"+ new_damage + "[/color]")
+		elif effect.effect == db.CardEffect.Riposte:
+			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
+			descriptionLabel.text = descriptionLabel.text.replace("/riposte","[color=74ab74]"+ new_damage + "[/color]")
+			
+		add_description_colors()
+func _player_status_effect_changed():
+	if card_data.is_damage_card():
+		add_damage_color()
+		
 func _player_state_changed():
 	if (card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
 		(card_data.type == db.CardType.Reaction && db.player.rp < card_data.cost):

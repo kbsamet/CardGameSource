@@ -11,6 +11,7 @@ var card_selected = false
 func _ready():
 	if db.player.deck.is_empty() && db.player.discardPile.is_empty():
 		create_deck()
+	db.player.start_fight_effects()
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
 	hand.play_card.connect(_use_card)
 	enemyController._on_card_used.connect(_use_card)
@@ -20,6 +21,7 @@ func _ready():
 	enemyController.enemies_empty.connect(_fight_over)
 	fightUI.end_turn_clicked.connect(_end_turn_clicked)
 	hand.discardPosition = fightUI.discardPile.global_position
+	hand.deckPosition = fightUI.deck.global_position
 	hand.deal_hand()
 	spawn_enemies()
 	pass # Replace with function body.
@@ -61,16 +63,22 @@ func _use_card(enemy_id):
 		match effect.effect:
 			db.CardEffect.Damage:
 				var damage_amount = effect.amount
+				if "empowered" in db.player.status_effects:
+					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.ShieldSlam:
 				var damage_amount = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
+				if "empowered" in db.player.status_effects:
+					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Riposte:
 				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null else effect.amount
+				if "empowered" in db.player.status_effects:
+					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
 				enemyController.enemies[enemy_id].damage(damage_amount)
@@ -91,7 +99,12 @@ func _use_card(enemy_id):
 				db.player.add_player_status_effect("dodge",effect.amount)
 			db.CardEffect.DamageAll:
 				for enemy in enemyController.enemies.values():
-					enemy.damage(effect.amount)
+					var damage_amount = effect.amount
+					if "empowered" in db.player.status_effects:
+						damage_amount += db.player.status_effects["empowered"].amount
+					if "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != null:
+						damage_amount *= 2
+					enemy.damage(damage_amount)
 			db.CardEffect.ConvertAllAp:
 				db.player.rp += db.player.ap
 				db.player.rp = min(db.player.rp, db.player.max_rp)
@@ -104,6 +117,12 @@ func _use_card(enemy_id):
 				db.player_state_changed.emit()
 			db.CardEffect.Crushing:
 				db.player.add_player_status_effect("crushing",effect.amount)
+			db.CardEffect.Draw:
+				for i in range(effect.amount):
+					hand.draw_card()
+			db.CardEffect.Empower:
+				db.player.add_player_status_effect("empowered",effect.amount)
+				
 	if selected_card.type == db.CardType.Action:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -146,6 +165,8 @@ func _enemy_turn_done():
 		db.player.add_player_status_effect("burn",-1)
 	if "crushing" in db.player.status_effects:
 		db.player.add_player_status_effect("crushing",-1)
+	if "empowered" in db.player.status_effects:
+		db.player.add_player_status_effect("empowered",-1)
 	if "dazed" in db.player.status_effects:
 		db.player.add_player_status_effect("dazed", -1)
 		db.set_turn(db.Turn.EnemyAction)
@@ -158,12 +179,9 @@ func _fight_over():
 	db.player.end_turn_process_player_status_effects()
 	db.check_game_over()
 	db.set_turn(db.Turn.PlayerAction)
+	db.player.gold += 5
 	enemyController.attacking_enemy_id = -1
-	if "drunk" in db.player.status_effects:
-		db.player.add_player_status_effect("drunk",-1)
-	if "tipsy" in db.player.status_effects:
-		db.player.add_player_status_effect("tipsy",-1)
-	
+	db.player.end_fight_process_player_status_effects()
 	hand.discard_all()
 	var reward_scene = rewardScene.instantiate() as RewardScreen
 	reward_scene.reward_data = reward
@@ -187,6 +205,6 @@ func create_deck():
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
 	db.player.deck.push_back(db.get_card("Daze"))
-	db.player.deck.push_back(db.get_card("Block"))
+	db.player.deck.push_back(db.get_card("Minotaur's Rage"))
 	fightUI.update_ui_values()
 

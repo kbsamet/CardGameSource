@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://hy3kxb5vawhs"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_p75p2"]
+
+[resource]
+script = ExtResource("1_p75p2")
+_name = "Red Orb"
+description = "Red Orb:\\nGain an action point but lose 1 hand size."
+cost = 30

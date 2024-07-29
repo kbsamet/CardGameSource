@@ -22,7 +22,15 @@ func set_data(data:CardData,_id : int):
 	manaLabel.text = str(data.cost)
 	typeLabel.text = "A" if data.type == db.CardType.Action else "R"
 	nameLabel.text = data._name
-	descriptionLabel.text = data.description
+	descriptionLabel.text = "[center]" + data.description
+	if data.is_damage_card():
+		for effect in card_data.effects:
+			if effect.effect == db.CardEffect.Damage:
+				descriptionLabel.text = descriptionLabel.text.replace("/damage",str(effect.amount))
+			elif effect.effect == db.CardEffect.DamageAll:
+				descriptionLabel.text =descriptionLabel.text.replace("/damageAll",str(effect.amount))
+			elif effect.effect == db.CardEffect.Riposte:
+				descriptionLabel.text =descriptionLabel.text.replace("/riposte",str(effect.amount))
 	init_info()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

@@ -50,10 +50,11 @@ func _ready():
 	new_material.set_shader_parameter("sprite",sprite.texture)
 	new_material.set_shader_parameter("emission_box_extents",Vector3(30,60 if sprite.texture.get_height() > 100 else 30,1))
 	deathParticles.process_material = new_material
+	lightOccluder.occluder = enemy_data.occluder
 	set_status_effect_info()
 	update_health_bar_ui()
-	if sprite.texture.get_height() < 100:
-		lightOccluder.visible = false
+		
+		#lightOccluder.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -243,7 +244,7 @@ func set_status_effect_info() -> void:
 		if effect.amount > 0 and !effect.hidden:
 			var icon = statusEffectIcon.instantiate()
 			statusEffectContainer.add_child(icon)
-			icon.set_data(effect)
+			icon.set_data(effect,Vector2(2,2))
 			icon.add_to_group("status_effect")
 
 func remove_status_effect_info() -> void:

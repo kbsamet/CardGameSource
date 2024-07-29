@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://54bbmmbrcy0"
-path="res://.godot/imported/blue_orb.png-22963f267782f27a399e3669fcee5eb8.ctex"
+uid="uid://ds0dckafonsu2"
+path="res://.godot/imported/Overwhelming Strike.png-f1ac318d6b748fa4634a316d47a2eec7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/ui/relics/blue_orb.png"
-dest_files=["res://.godot/imported/blue_orb.png-22963f267782f27a399e3669fcee5eb8.ctex"]
+source_file="res://Sprites/cards/Overwhelming Strike.png"
+dest_files=["res://.godot/imported/Overwhelming Strike.png-f1ac318d6b748fa4634a316d47a2eec7.ctex"]
 
 [params]
 

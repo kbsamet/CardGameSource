@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://cv6uxqmwretxo"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_812ww"]
+
+[resource]
+script = ExtResource("1_812ww")
+_name = "permanent_block"
+amount = 0
+tooltip = ""
+hidden = true

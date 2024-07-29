@@ -13,10 +13,10 @@ func _ready():
 	relics_copy.erase("Strike")
 	relics_copy.erase("Block")
 	for i in range(3):
-		var chosen_key = relics_copy.keys().pick_random()
-		var relic_data = RelicData.from_dict(relics_copy[chosen_key])
+		var chosen_index = randi_range(0,relics_copy.size()-1)
+		var relic_data = relics_copy[chosen_index]
 		relics.push_back(relic_data)
-		relics_copy.erase(chosen_key)
+		relics_copy.remove_at(chosen_index)
 	relicIcon.set_data(relics[0])
 	relic2Icon.set_data(relics[1])
 	relic3Icon.set_data(relics[2])

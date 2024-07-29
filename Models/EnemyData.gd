@@ -8,17 +8,8 @@ class_name EnemyData
 @export var max_stamina : int
 @export var attacks : Array[EnemyAttackData]
 @export var status_effects : Array[StatusEffectData]
+@export var occluder : OccluderPolygon2D
 
-static func fromDict(enemy_data : Dictionary):
-	var new_enemy : EnemyData = EnemyData.new()
-	new_enemy._name = enemy_data["name"]
-	new_enemy.health = enemy_data["health"]
-	new_enemy.max_health = enemy_data["health"]
-	new_enemy.stamina = enemy_data["stamina"]
-	new_enemy.max_stamina = enemy_data["stamina"]
-	new_enemy.attacks = enemy_data["attacks"]
-	new_enemy.status_effects = enemy_data["statusEffects"].duplicate(true)
-	return new_enemy
 
 func get_status_effect_data(effect : String) -> StatusEffectData:
 	var filtered_status_effects = status_effects.filter(func(e) : return e._name == effect)

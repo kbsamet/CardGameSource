@@ -7,7 +7,7 @@ var max_ap : int = 3
 var ap : int = 3
 var rp : int = 3
 var max_rp : int = 3
-var hand_size : int = 5
+var hand_size : int = 6
 var deck_size : int = 10
 var status_effects : Dictionary = {}
 var deck : Array[CardData] = []
@@ -18,9 +18,23 @@ var keys : int = 1
 
 signal relics_changed
 
-func add_relic(relic : RelicData):
+func add_relic(relic : RelicData,purchased: bool = false):
 	relics.push_back(relic)
-	relic.on_add.call(self)
+	match relic._name:
+		"Blue Orb":
+			add_max_ap(-1)
+			add_max_rp(2)
+		"Red Orb":
+			add_max_ap(1)
+			hand_size -= 1
+		"Holy Cross":
+			add_player_status_effect("revive_half",1)
+		"Iron Breastplate":
+			add_player_status_effect("permanent_block",5)
+		"Minotaur's Horns":
+			add_player_status_effect("permanent_empower",5)
+	if purchased:
+		gold -= relic.cost
 	db.player_state_changed.emit()
 	relics_changed.emit()
 
@@ -89,6 +103,16 @@ func end_turn_process_player_status_effects():
 		damage_player(status_effects["bleed"].amount)
 		add_player_status_effect("bleed",-1)
 
+func end_fight_process_player_status_effects():
+	if "drunk" in db.player.status_effects:
+		db.player.add_player_status_effect("drunk",-1)
+	if "tipsy" in db.player.status_effects:
+		db.player.add_player_status_effect("tipsy",-1)
+	
+	change_player_status_effect("block",0)
+	change_player_status_effect("empowered",0)
+	change_player_status_effect("dodge",0)
+	
 func add_to_deck(card : CardData):
 	deck.push_back(card)
 	deck_size += 1
@@ -107,7 +131,13 @@ func purchase_item(item: String):
 			db.ItemEffect.Cost:
 				add_player_items("gold",-item_data[effect])
 			
-
+func start_fight_effects():
+	if "permanent_block" in status_effects:
+		add_player_status_effect("block",status_effects["permanent_block"].amount)
+	if "permanent_empower" in status_effects:
+		add_player_status_effect("empowered",status_effects["permanent_empower"].amount)
+		
+	
 func reset():
 	health = max_health
 	ap = max_ap
@@ -116,7 +146,7 @@ func reset():
 	deck = []
 	discardPile = []
 	gold = 0
-	keys = 0
+	keys = 1
 	relics = []
 	
 	

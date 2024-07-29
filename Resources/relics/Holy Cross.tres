@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://b1nsjma07giaf"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_y3i7p"]
+
+[resource]
+script = ExtResource("1_y3i7p")
+_name = "Holy Cross"
+description = "True Faith:\\nRevive with half health when you would die. Breaks upon use."
+cost = 30

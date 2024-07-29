@@ -6,5 +6,5 @@
 script = ExtResource("1_deiat")
 _name = "bleed"
 amount = 0
-tooltip = "Bleed: Take _ damage per turn. Reduces by 1 each turn."
+tooltip = "Bleed:Take _ damage per turn. Reduces by 1 each turn."
 hidden = false

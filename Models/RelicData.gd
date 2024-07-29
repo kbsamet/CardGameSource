@@ -1,17 +1,6 @@
 extends Resource
 class_name RelicData
 
-var _name : String
-var description : String
-var on_add : Callable
-var on_remove : Callable
-var cost : int
-
-static func from_dict(relic_data : Dictionary):
-	var new_relic : RelicData = RelicData.new()
-	new_relic._name = relic_data["name"]
-	new_relic.description = relic_data["description"]
-	new_relic.on_add = relic_data["on_add"]
-	new_relic.on_remove = relic_data["on_remove"]
-	new_relic.cost = relic_data["cost"]
-	return new_relic
+@export var _name : String
+@export var description : String
+@export var cost : int

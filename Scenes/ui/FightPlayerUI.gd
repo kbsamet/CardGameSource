@@ -5,6 +5,7 @@ class_name PlayerUI
 @onready var endTurnButtonLabel = $CanvasLayer/Container/EndTurnButton/EndTurnlabel
 @onready var deckCountLabel = $CanvasLayer/Deck/DeckCountLabel
 @onready var discardPile = $CanvasLayer/DiscardPile
+@onready var deck = $CanvasLayer/Deck
 @onready var discardPileLabel = $CanvasLayer/DiscardPile/DiscardPileCountLabel
 
 signal end_turn_clicked

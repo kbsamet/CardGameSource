@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://ciapgmskj17v1"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_tndv1"]
+
+[resource]
+script = ExtResource("1_tndv1")
+_name = "tipsy"
+amount = 0
+tooltip = "Tipsy:You have -1 reaction point for _ fights"
+hidden = false

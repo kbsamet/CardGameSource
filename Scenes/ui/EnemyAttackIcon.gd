@@ -2,8 +2,7 @@ extends Control
 
 @onready var sprite = $Node2D/Sprite
 @onready var amountLabel = $Node2D/AmountLabel
-@onready var descriptionLabel = $InfoBox/InfoLabel
-@onready var infoBox = $InfoBox
+@onready var tooltip = $Tooltip as TooltipNode
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -12,9 +11,9 @@ func _ready():
 func set_data(attack: EnemySingleAttackData,empowered : bool):
 	sprite.texture = load("res://Sprites/ui/enemyAttacks/"+get_attack_name(attack.attack_type)+".png")
 	amountLabel.text = str(attack.amount)
-	var tooltip = db.enemy_tooltips[attack.attack_type]
-	tooltip = tooltip.replace("_", str(attack.amount))
-	descriptionLabel.text = tooltip
+	var tooltip_text_ = db.enemy_tooltips[attack.attack_type]
+	tooltip_text_ = tooltip_text_.replace("_", str(attack.amount))
+	tooltip.set_data(tooltip_text_)
 	if attack.attack_type == db.EnemyAttack.Damage and empowered:
 		amountLabel.label_settings = amountLabel.label_settings.duplicate()
 		amountLabel.label_settings.font_color = Color("557d55")
@@ -48,8 +47,8 @@ func _process(delta):
 
 
 func _on_mouse_entered():
-	infoBox.visible = true
+	tooltip.visible = true
 
 
 func _on_mouse_exited():
-	infoBox.visible = false
+	tooltip.visible = false

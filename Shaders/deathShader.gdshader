@@ -298,7 +298,7 @@ void process() {
 	
 	// Fade out pixels as time progresses
 	if (COLOR.a > 0.0){
-		COLOR.a -= 1.0/LIFETIME*DELTA;
+		COLOR.a -= 2.0/LIFETIME*DELTA;
 	}
 }
 

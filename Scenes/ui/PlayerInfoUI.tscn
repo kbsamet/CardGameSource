@@ -188,17 +188,17 @@ texture = ExtResource("8_kr8wf")
 
 [node name="RelicsContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 456.0
-offset_top = 46.0
-offset_right = 1064.0
-offset_bottom = 137.0
+offset_left = 481.0
+offset_top = 69.0
+offset_right = 1089.0
+offset_bottom = 160.0
 mouse_filter = 2
 
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 16.0
+offset_left = 71.0
 offset_top = 334.0
-offset_right = 448.0
+offset_right = 503.0
 offset_bottom = 425.0
 mouse_filter = 2
 

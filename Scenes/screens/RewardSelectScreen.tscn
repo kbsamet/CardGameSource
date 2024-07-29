@@ -1,12 +1,15 @@
-[gd_scene load_steps=9 format=3 uid="uid://jsbqwsmv1i02"]
+[gd_scene load_steps=12 format=3 uid="uid://jsbqwsmv1i02"]
 
 [ext_resource type="Script" path="res://Scenes/screens/RewardSelectScreen.gd" id="1_2k8yd"]
-[ext_resource type="Texture2D" uid="uid://g7i20tpwqi20" path="res://Sprites/ui/screens/two_doors.png" id="1_ej426"]
-[ext_resource type="Texture2D" uid="uid://crtq5w4jd1srq" path="res://Sprites/ui/screens/door.png" id="2_a7nek"]
+[ext_resource type="Texture2D" uid="uid://b352nk83os1tg" path="res://Sprites/ui/screens/pick_road.png" id="2_4l5c1"]
+[ext_resource type="Texture2D" uid="uid://chr88y3boxsm1" path="res://Sprites/ui/screens/road_left.png" id="3_vfcph"]
+[ext_resource type="Texture2D" uid="uid://jjjcxa3jwrjr" path="res://Sprites/ui/screens/road_right.png" id="4_61hnb"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="4_i5v1p"]
 [ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="4_wvuvt"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="5_ecyo6"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="7_0yb05"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="9_815pw"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="10_rt2ff"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4nkid"]
 font = ExtResource("4_i5v1p")
@@ -20,54 +23,62 @@ script = ExtResource("1_2k8yd")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 0
+offset_left = 120.0
 offset_top = 780.0
-offset_right = 1920.0
+offset_right = 2040.0
 offset_bottom = 1180.0
 color = Color(0.141176, 0.133333, 0.14902, 1)
 
 [node name="bg" type="Sprite2D" parent="."]
-position = Vector2(936, 120)
-scale = Vector2(2.2, 2.2)
-texture = ExtResource("1_ej426")
+modulate = Color(0.510692, 0.511276, 0.607808, 1)
+light_mask = 7
+position = Vector2(1026, 495)
+scale = Vector2(2.29833, 2.29833)
+texture = ExtResource("2_4l5c1")
 
 [node name="DoorControl" type="Control" parent="bg"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -247.0
-offset_top = 105.0
-offset_right = -96.0
-offset_bottom = 300.0
+offset_left = -318.0
+offset_top = -25.0
+offset_right = -178.0
+offset_bottom = 283.0
 
 [node name="Door1" type="Sprite2D" parent="bg/DoorControl"]
-position = Vector2(76.0909, 98.6364)
-texture = ExtResource("2_a7nek")
+position = Vector2(81.7985, 150.979)
+scale = Vector2(0.935963, 0.935963)
+texture = ExtResource("3_vfcph")
 
 [node name="Door2Control" type="Control" parent="bg"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 104.0
-offset_top = 105.0
-offset_right = 253.0
-offset_bottom = 301.0
+offset_left = 138.0
+offset_top = -43.0
+offset_right = 292.0
+offset_bottom = 300.0
 
 [node name="Door2" type="Sprite2D" parent="bg/Door2Control"]
-position = Vector2(74.1818, 98.6364)
-texture = ExtResource("2_a7nek")
+position = Vector2(77.9177, 171.137)
+scale = Vector2(0.936, 0.936)
+texture = ExtResource("4_61hnb")
 
 [node name="Reward1Icon" type="Sprite2D" parent="bg"]
-position = Vector2(-170.909, 25.4545)
+light_mask = 7
+position = Vector2(-265.648, -134.406)
 scale = Vector2(1.055, 1.055)
 texture = ExtResource("4_wvuvt")
 
 [node name="Reward2Icon" type="Sprite2D" parent="bg"]
-position = Vector2(178.182, 25.4545)
+light_mask = 7
+position = Vector2(232.111, -114.213)
 scale = Vector2(1.055, 1.055)
 
 [node name="Reward1Label" type="Label" parent="bg"]
-offset_left = -295.0
-offset_top = 52.0
-offset_right = -47.0
-offset_bottom = 106.0
+light_mask = 7
+offset_left = -389.74
+offset_top = -107.86
+offset_right = -141.739
+offset_bottom = -53.8601
 text = "There is a locked chest after the next fight."
 label_settings = SubResource("LabelSettings_4nkid")
 horizontal_alignment = 1
@@ -75,10 +86,11 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="Reward2Label" type="Label" parent="bg"]
-offset_left = 58.0
-offset_top = 51.0
-offset_right = 302.0
-offset_bottom = 105.0
+light_mask = 7
+offset_left = 111.929
+offset_top = -88.6679
+offset_right = 355.929
+offset_bottom = -34.6678
 label_settings = ExtResource("5_ecyo6")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -86,10 +98,48 @@ autowrap_mode = 2
 
 [node name="PlayerInfoUi" parent="." instance=ExtResource("7_0yb05")]
 layout_mode = 1
-offset_left = -36.0
-offset_top = -32.0
-offset_right = -36.0
-offset_bottom = -32.0
+offset_left = -46.0
+offset_top = -180.0
+offset_right = -46.0
+offset_bottom = -180.0
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.690196, 0.690196, 0.772549, 1)
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1740, -11)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.3
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("9_815pw")
+texture_scale = 2.94
+height = 30.0
+script = ExtResource("10_rt2ff")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.15
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("9_815pw")
+texture_scale = 1.37
+script = ExtResource("10_rt2ff")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.00934, 0.336456)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+texture = ExtResource("9_815pw")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("10_rt2ff")
 
 [connection signal="gui_input" from="bg/DoorControl" to="." method="_on_doo1_input"]
 [connection signal="mouse_entered" from="bg/DoorControl" to="." method="_on_door1_mouse_entered"]

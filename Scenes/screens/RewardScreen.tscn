@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bareyjdqdv0qw"]
+[gd_scene load_steps=9 format=3 uid="uid://bareyjdqdv0qw"]
 
 [ext_resource type="Script" path="res://Scenes/screens/RewardScreen.gd" id="1_teth2"]
+[ext_resource type="Texture2D" uid="uid://6nhx6bjh1dd7" path="res://Sprites/ui/screens/moon.png" id="2_eo0sp"]
 [ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_irkvw"]
 [ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="2_mqwrk"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="3_rmhc3"]
@@ -23,7 +24,13 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_teth2")
 
+[node name="Moon" type="Sprite2D" parent="."]
+position = Vector2(688, -614)
+scale = Vector2(2.291, 2.291)
+texture = ExtResource("2_eo0sp")
+
 [node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.509804, 0.509804, 0.607843, 1)
 position = Vector2(-19, -132.292)
 scale = Vector2(2.29097, 2.29097)
 texture = ExtResource("2_irkvw")
@@ -58,39 +65,40 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.631373, 0.631373, 0.721569, 1)
+color = Color(0.690196, 0.690196, 0.772549, 1)
 
 [node name="light" type="Node2D" parent="."]
-position = Vector2(6, 405)
+position = Vector2(702, -570)
 scale = Vector2(5.94433, 5.94433)
 
 [node name="SpriteLight" type="PointLight2D" parent="light"]
-position = Vector2(-9.58897, 19.6826)
+position = Vector2(-0.168238, 0.841135)
 color = Color(0.67451, 0.67451, 0.756863, 1)
-energy = 0.63
+energy = 0.3
 range_z_max = 7
-range_item_cull_mask = 2
+range_item_cull_mask = 6
 texture = ExtResource("5_geqtm")
-texture_scale = 2.51
+texture_scale = 2.94
 height = 30.0
 script = ExtResource("6_yf2if")
 
 [node name="UILight" type="PointLight2D" parent="light"]
 position = Vector2(-1.02678e-05, -2.05356e-05)
-energy = 0.64
+energy = 0.15
 range_z_max = 1000
 range_item_cull_mask = 4
 texture = ExtResource("5_geqtm")
-texture_scale = 1.75
+texture_scale = 1.37
 script = ExtResource("6_yf2if")
 
 [node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.00934, 0.336456)
 color = Color(0.67451, 0.67451, 0.756863, 1)
-energy = 0.2
+energy = 0.97
 range_z_max = 7
 shadow_enabled = true
 texture = ExtResource("5_geqtm")
-texture_scale = 1.39
+texture_scale = 4.06
 height = 49.0
 script = ExtResource("6_yf2if")
 

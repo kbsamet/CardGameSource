@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://dhrmbgcm2m230"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_q2bfd"]
+
+[resource]
+script = ExtResource("1_q2bfd")
+_name = "Minotaur's Horns"
+description = "Minotaur's Horns:\\nStart every fight with 5 empowered."
+cost = 25

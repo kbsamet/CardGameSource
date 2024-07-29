@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dkidrfnurh1je"]
 
 [ext_resource type="Script" path="res://Scenes/ui/RelicIcon.gd" id="1_iglts"]
-[ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/blue_orb.png" id="2_cc4ev"]
+[ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/Blue Orb.png" id="2_cc4ev"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_is785"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2vye"]

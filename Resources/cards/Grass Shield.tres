@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://cqcab7yqu72ie"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_08ccw"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_plk6t"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_08ccw")
+effect = 1
+amount = 3
+
+[sub_resource type="Resource" id="Resource_do7ng"]
+script = ExtResource("1_08ccw")
+effect = 12
+amount = 1
+
+[resource]
+script = ExtResource("2_plk6t")
+_name = "Grass Shield"
+type = 1
+description = "Block 3 damage. Draw a card."
+cost = 2
+targeted = false
+effects = Array[ExtResource("1_08ccw")]([SubResource("Resource_6w00h"), SubResource("Resource_do7ng")])

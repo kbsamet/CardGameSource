@@ -1,10 +1,12 @@
-[gd_scene load_steps=22 format=3 uid="uid://bjrjps2akf3w2"]
+[gd_scene load_steps=23 format=3 uid="uid://bjrjps2akf3w2"]
 
 [ext_resource type="Script" path="res://Scenes/enemies/Enemy.gd" id="1_iuwds"]
 [ext_resource type="Texture2D" uid="uid://cuni7yv8mtpjw" path="res://Sprites/ui/empty_bar.png" id="2_6xp31"]
+[ext_resource type="Texture2D" uid="uid://d32vph35s6xca" path="res://Sprites/enemies/Fire Seeker.png" id="2_hsdpf"]
 [ext_resource type="Texture2D" uid="uid://d2y6kkvtrttwx" path="res://Sprites/enemies/Zombie.png" id="2_mm60a"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_22tp7"]
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="5_pxudm"]
+[ext_resource type="OccluderPolygon2D" uid="uid://dxemfpwiojf6d" path="res://Resources/enemies/occluders/Fire Sekeer Occluder.tres" id="5_t25wk"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="6_bvov2"]
 [ext_resource type="Texture2D" uid="uid://dyt0c8aywl7in" path="res://Sprites/ui/hit_particle.png" id="7_n7t8x"]
 
@@ -646,9 +648,6 @@ gradient = SubResource("Gradient_fvor1")
 width = 1
 height = 1
 
-[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hqvuq"]
-polygon = PackedVector2Array(-41, 110, 39, 113, 52, 189, -58, 192)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3ac47"]
 bg_color = Color(0.207843, 0.207843, 0.25098, 1)
 border_width_left = 3
@@ -680,7 +679,7 @@ script = ExtResource("1_iuwds")
 light_mask = 2
 position = Vector2(1, 0)
 scale = Vector2(3, 3)
-texture = ExtResource("2_mm60a")
+texture = ExtResource("2_hsdpf")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -721,7 +720,7 @@ local_coords = true
 draw_order = 0
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="."]
-occluder = SubResource("OccluderPolygon2D_hqvuq")
+occluder = ExtResource("5_t25wk")
 
 [node name="Control" type="Control" parent="."]
 light_mask = 4

@@ -1,20 +1,36 @@
-[gd_scene load_steps=8 format=3 uid="uid://cn44o3l7krv"]
+[gd_scene load_steps=10 format=3 uid="uid://cn44o3l7krv"]
 
 [ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
 [ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_3kwnt"]
 [ext_resource type="PackedScene" uid="uid://cip36jni5jcjx" path="res://Scenes/EnemyController.tscn" id="2_63inp"]
+[ext_resource type="Texture2D" uid="uid://6nhx6bjh1dd7" path="res://Sprites/ui/screens/moon.png" id="2_jjf3e"]
 [ext_resource type="PackedScene" uid="uid://cxj0poh31buc8" path="res://Scenes/Hand.tscn" id="3_lhgsg"]
 [ext_resource type="PackedScene" uid="uid://ddtkpa3ifuhnj" path="res://Scenes/ui/FightPlayerUI.tscn" id="4_b61bc"]
 [ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="6_mm88r"]
 [ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_3xgc3"]
+
+[sub_resource type="Environment" id="Environment_y1hls"]
+background_mode = 3
+glow_normalized = true
+glow_strength = 1.02
+glow_bloom = 0.05
+glow_blend_mode = 0
+glow_hdr_threshold = 1.42
 
 [node name="BattleController" type="Control"]
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_iqj2w")
 
+[node name="Moon" type="Sprite2D" parent="."]
+position = Vector2(1616, 110)
+scale = Vector2(2.133, 2.133)
+texture = ExtResource("2_jjf3e")
+
 [node name="Background" type="Sprite2D" parent="."]
-modulate = Color(0.61339, 0.61339, 0.61339, 1)
+modulate = Color(0.317786, 0.316477, 0.397563, 1)
+light_mask = 7
+visibility_layer = 7
 position = Vector2(959, 569)
 scale = Vector2(2.1335, 2.19115)
 texture = ExtResource("2_3kwnt")
@@ -61,38 +77,43 @@ layout_mode = 1
 mouse_filter = 2
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.633138, 0.632935, 0.721364, 1)
+color = Color(0.691668, 0.691745, 0.771134, 1)
 
 [node name="light" type="Node2D" parent="."]
-position = Vector2(904, 1111)
+position = Vector2(1610, 113)
 scale = Vector2(5.94433, 5.94433)
 
 [node name="SpriteLight" type="PointLight2D" parent="light"]
-position = Vector2(-9.58897, 19.6826)
+position = Vector2(-0.168238, 0.841135)
 color = Color(0.67451, 0.67451, 0.756863, 1)
-energy = 0.63
+energy = 1.03
 range_z_max = 7
 range_item_cull_mask = 2
 texture = ExtResource("6_mm88r")
-texture_scale = 2.51
+texture_scale = 1.15
 height = 30.0
 script = ExtResource("7_3xgc3")
 
 [node name="UILight" type="PointLight2D" parent="light"]
 position = Vector2(-1.02678e-05, -2.05356e-05)
-energy = 0.64
+energy = 0.76
 range_z_max = 1000
 range_item_cull_mask = 4
 texture = ExtResource("6_mm88r")
-texture_scale = 1.75
+texture_scale = 1.37
 script = ExtResource("7_3xgc3")
 
 [node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.00934, 0.336456)
 color = Color(0.67451, 0.67451, 0.756863, 1)
-energy = 0.2
+energy = 0.97
 range_z_max = 7
 shadow_enabled = true
+shadow_filter = 2
 texture = ExtResource("6_mm88r")
-texture_scale = 1.39
+texture_scale = 4.06
 height = 49.0
 script = ExtResource("7_3xgc3")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_y1hls")

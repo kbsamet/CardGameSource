@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ResourceGroup" load_steps=2 format=3 uid="uid://dho2njqx6l0rg"]
+
+[ext_resource type="Script" path="res://addons/godot_resource_groups/resource_group.gd" id="1_6nv1l"]
+
+[resource]
+script = ExtResource("1_6nv1l")
+base_folder = "res://Resources/relics"
+includes = Array[String](["*.tres"])
+excludes = Array[String]([])
+paths = Array[String](["res://Resources/relics/Blue Orb.tres", "res://Resources/relics/Holy Cross.tres", "res://Resources/relics/Iron Breastplate.tres", "res://Resources/relics/Minotaur's Horns.tres", "res://Resources/relics/Red Orb.tres"])

@@ -5,15 +5,19 @@ extends Node
 @onready var all_cards : ResourceGroup = preload("res://Resources/all_cards.tres")
 @onready var all_status_effects : ResourceGroup = preload("res://Resources/all_status_effects.tres")
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
+@onready var all_relics : ResourceGroup = preload("res://Resources/all_relics.tres")
 
 var cards : Array[CardData] 
 var status_effects : Array[StatusEffectData]
 var enemies : Array[EnemyData]
+var relics : Array[RelicData]
+
 func _ready():
 	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
 	all_cards.load_all_into(cards)
 	all_status_effects.load_all_into(status_effects)
 	all_enemies.load_all_into(enemies)
+	all_relics.load_all_into(relics)
 	var music = background_music.instantiate() as AudioStreamPlayer
 	add_child(music)
 	music.play()
@@ -29,17 +33,19 @@ signal turn_changed(new_turn)
 
 var player : Player = Player.new()
 var current_room : int = 1
+var current_turn = Turn.PlayerAction
+
+
 enum Turn {
 	PlayerAction,PlayerReaction, EnemyAction,EnemyReaction
 }
-var current_turn = Turn.PlayerAction
 
 enum CardType {
 	Action,Reaction
 } 
 
 enum CardEffect {
-	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte
+	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,Empower
 }
 
 enum EnemyAttack {
@@ -50,58 +56,36 @@ enum ItemEffect {
 	Heal,Drunk,Tipsy,Cost
 }
 
-var relics : Dictionary = {
-	"red_orb" : {
-		"name" : "red_orb",
-		"description" : "Red Orb:\nGain 1 action point",
-		"on_add" : func(p: Player): p.add_max_ap(1),
-		"on_remove": func(p: Player): p.add_max_ap(-1),
-		"cost": 40
-
-	},
-	"blue_orb" : {
-		"name" : "blue_orb",
-		"description" : "Blue Orb:\nGain 1 reaction point",
-		"on_add" : func(p: Player): p.add_max_rp(1),
-		"on_remove": func(p: Player): p.add_max_rp(-1),
-		"cost": 30
-		
-	},
-	"true_faith" : {
-		"name" : "true_faith",
-		"description" : "True Faith:\nRevive with half health when you would die. Breaks upon use.",
-		"on_add" : func(p: Player): p.add_player_status_effect("revive_half",1),
-		"on_remove": func(p: Player): p.add_player_status_effect("revive_half",-1),
-		"cost": 40
-		
-	},
-}
+const card_keywords = [
+	"block","dodge","daze","bleed","crushing","empowered"
+]
 
 const enemy_tooltips : Dictionary = {
-	db.EnemyAttack.Damage : "Damage: Deal _ damage.",
-	db.EnemyAttack.Bleed :  "Bleed: 1 damage per turn for _ turns.",
-	db.EnemyAttack.StaminaCost: "Cost: This attack will cost _ stamina.",
-	db.EnemyAttack.Daze : "Daze: You will be unable to attack for _ turns.",
-	db.EnemyAttack.ArmorUp: "Armor Up: This enemy will gain _ block.",
-	db.EnemyAttack.HealAll: "Heal All: This enemy will heal all enemies by _.",
-	db.EnemyAttack.Blind: "Blind: You will be unable to target enemies for _ turns.",
-	db.EnemyAttack.Burn: "Burn: You will discard a random card for _ turns.",
-	db.EnemyAttack.Unstoppable: "Unstoppable: This enemy cannot be stunned.",
-	db.EnemyAttack.Empower: "Empower: All enemies will do _ more damage."
+	db.EnemyAttack.Damage : "Damage:Deal _ damage.",
+	db.EnemyAttack.Bleed :  "Bleed:_ damage per turn for _ turns.",
+	db.EnemyAttack.StaminaCost: "Cost:This attack will cost _ stamina.",
+	db.EnemyAttack.Daze : "Daze:You will be unable to attack for _ turns.",
+	db.EnemyAttack.ArmorUp: "Armor Up:This enemy will gain _ block.",
+	db.EnemyAttack.HealAll: "Heal All:This enemy will heal all enemies by _.",
+	db.EnemyAttack.Blind: "Blind:You will be unable to target enemies for _ turns.",
+	db.EnemyAttack.Burn: "Burn:You will discard a random card for _ turns.",
+	db.EnemyAttack.Unstoppable: "Unstoppable:This enemy cannot be stunned.",
+	db.EnemyAttack.Empower: "Empower:All enemies will do _ more damage."
 }
 
 const card_tooltips : Dictionary = {
-	CardEffect.Block : "Block:\nBlock _ damage for this turn.",
-	CardEffect.Dodge : "Dodge:\nDodge the incoming attack.",
-	CardEffect.Daze : "Daze:\nThe enemy will be unable to attack for _ turns.",
-	CardEffect.Bleed : "Bleed:\nThe enemy will receive _ damage per turn.",
-	CardEffect.Crushing : "Crushing:\nDeal double damage to dazed enemies for _ turns"
+	CardEffect.Block : "Block:Block _ damage for this turn.",
+	CardEffect.Dodge : "Dodge:Dodge the incoming attack.",
+	CardEffect.Daze : "Daze:The enemy will be unable to attack for _ turns.",
+	CardEffect.Bleed : "Bleed:The enemy will receive _ damage per turn.",
+	CardEffect.Crushing : "Crushing:Deal double damage to dazed enemies for _ turns",
+	CardEffect.Empower : "Empower:Your attacks will do _ more damage"
 }
 
 const dialogue_tooltips : Dictionary = {
-	"beer" : "Beer:\nRestore 5 health. Lose 1 max ap for 1 fight.",
-	"wine" : "Wine:\nRestore 10 health. Lose 1 max ap for 2 fights.",
-	"whiskey" : "Whiskey:\nRestore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
+	"beer" : "Beer:Restore 5 health. Lose 1 max ap for 1 fight.",
+	"wine" : "Wine:Restore 10 health. Lose 1 max ap for 2 fights.",
+	"whiskey" : "Whiskey:Restore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
 }
 
 const items : Dictionary = {
@@ -157,12 +141,12 @@ const fight_rooms : Array[Dictionary] = [
 ]
 
 const rewards : Array[Dictionary] = [
-	{
-		"reward" : "gold",
-		"amount" : "10-15",
-		"tooltip" : "Gain gold after the next fight.",
-		"multiplier": 3
-	},
+	#{
+		#"reward" : "gold",
+		#"amount" : "10-15",
+		#"tooltip" : "Gain gold after the next fight.",
+		#"multiplier": 3
+	#},
 	{
 		"reward" : "key",
 		"amount" : 1,
@@ -257,6 +241,11 @@ func  reset_player():
 	
 func check_game_over():
 	if player.health <= 0:
+		if "revive_half" in player.status_effects:
+			player.health = player.max_health / 2
+			player.add_player_status_effect("revive_half",-1)
+			player_state_changed.emit()
+			return
 		get_tree().change_scene_to_packed(gameOverScreen)
 
 func increase_level():

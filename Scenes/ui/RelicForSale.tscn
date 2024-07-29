@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bdgpsvncw3e8e"]
 
-[ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/blue_orb.png" id="1_6awrg"]
+[ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/Blue Orb.png" id="1_6awrg"]
 [ext_resource type="Script" path="res://Scenes/ui/RelicForSale.gd" id="1_gpyhi"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="2_dn0mr"]
 [ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="4_02pvk"]

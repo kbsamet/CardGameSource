@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://g8skhyakph1e"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_m2ss5"]
+
+[resource]
+script = ExtResource("1_m2ss5")
+_name = "Blue Orb"
+description = "Blue Orb:\\nGain 2 reaction points but lose 1 action point."
+cost = 40

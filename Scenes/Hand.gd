@@ -7,8 +7,9 @@ var selected_card = -1
 var dragged_card_id = -1
 var selected_enemy_id = -1
 var random = RandomNumberGenerator.new()
-@export var discardPosition : Vector2
-@export var cardScene = preload("res://Scenes/Card.tscn")
+var discardPosition : Vector2
+var deckPosition : Vector2
+var cardScene = preload("res://Scenes/Card.tscn")
 @onready var arrow = $CardDragArrow
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
@@ -26,25 +27,7 @@ func _process(delta):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	pass
 
-func add_card(card : CardNode):
-	card.on_hold_signal.connect(_on_card_hold)
-	card.on_clicked_signal.connect(_on_card_clicked)
-	cards[id_count] = card
-	card.id = id_count
-	id_count += 1
-	add_child(card)
-	center_cards()
 
-func center_cards():
-	if cards.is_empty():
-		return
-	var card_sprite : Sprite2D = cards.values()[0].find_child("Sprite")
-	var card_width = card_sprite.texture.get_size().x
-	var card_count = cards.size()
-	var card_keys = cards.keys()
-	for i in range(card_keys.size()):
-		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
-		cards[card_keys[i]].position.x = (i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40)
 
 func turn_changed(new_turn):
 	if selected_card != -1:
@@ -110,6 +93,36 @@ func enemy_hovered(enemy_id : int,enemy_position: Variant):
 		selected_enemy_id = -1
 		#arrow.visible = true
 
+func center_cards():
+	if cards.is_empty():
+		return
+	var card_sprite : Sprite2D = cards.values()[0].find_child("Sprite")
+	var card_width = card_sprite.texture.get_size().x
+	var card_count = cards.size()
+	var card_keys = cards.keys()
+	var tween = create_tween().set_parallel()
+	for i in range(card_keys.size()):
+		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
+		tween.tween_property(cards[card_keys[i]],"position:x",(i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40),0.3)
+	
+		
+
+func add_card(card : CardNode,tween : Tween,empty_hand : bool = false):
+	card.on_hold_signal.connect(_on_card_hold)
+	card.on_clicked_signal.connect(_on_card_clicked)
+	cards[id_count] = card
+	card.id = id_count
+	id_count += 1
+	add_child(card)
+	card.global_position = deckPosition
+	card.scale = Vector2(0.3,0.3)
+	var i =  cards.size()-(db.player.hand_size / 2) if empty_hand else cards.size() - 1
+	var card_sprite : Sprite2D = cards.values()[0].find_child("Sprite")
+	var card_width = card_sprite.texture.get_size().x
+	tween.tween_property(card,"position:x",(i - ((cards.size() - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40),0.1)
+	tween.parallel().tween_property(card,"position:y",0,0.1)
+	tween.parallel().tween_property(card,"scale",Vector2(1,1),0.1)
+		
 func discard(id):
 	db.player.discardPile.push_back(cards[id].card_data)
 	if is_inside_tree():
@@ -135,7 +148,20 @@ func discard_all():
 	for card_id in cards.keys():
 		discard(card_id)
 
+func draw_card():
+	if db.player.deck.size() == 0:
+		db.shuffle_discard_to_deck()
+	var index = random.randi_range(0,db.player.deck.size() -1)
+	var card = db.player.deck[index]
+	var new_card = cardScene.instantiate()
+	new_card.card_data = card
+	var tween = create_tween()
+	add_card(new_card,tween)
+	tween.tween_callback(center_cards)
+	db.remove_from_deck(index)
+	
 func deal_hand():
+	var tween = create_tween()
 	while cards.size() < db.player.hand_size:
 		if db.player.deck.size() == 0:
 			db.shuffle_discard_to_deck()
@@ -143,5 +169,6 @@ func deal_hand():
 		var card = db.player.deck[index]
 		var new_card = cardScene.instantiate()
 		new_card.card_data = card
-		add_card(new_card)
+		add_card(new_card,tween,true)
 		db.remove_from_deck(index)
+	tween.tween_callback(center_cards)

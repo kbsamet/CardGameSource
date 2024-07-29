@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3nep0t7at7fd"]
+[gd_scene load_steps=10 format=3 uid="uid://d3nep0t7at7fd"]
 
 [ext_resource type="Script" path="res://Scenes/Card.gd" id="1_db5ta"]
 [ext_resource type="Texture2D" uid="uid://b66myg4i0q2fu" path="res://Sprites/cards/Block.png" id="2_5ghu6"]
@@ -17,11 +17,6 @@ outline_size = 2
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_jpt33"]
-font = ExtResource("3_cm64p")
-outline_size = 2
-outline_color = Color(0.207843, 0.207843, 0.25098, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_7vquw"]
 font = ExtResource("3_cm64p")
 outline_size = 2
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
@@ -134,29 +129,37 @@ layout_mode = 0
 offset_left = 41.0
 offset_top = 177.0
 offset_right = 113.0
-offset_bottom = 214.0
-text = "Shield Bash"
+offset_bottom = 218.0
+pivot_offset = Vector2(37, 20)
+text = "Overwhelming strike"
 label_settings = SubResource("LabelSettings_jpt33")
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="DescriptionLabel" type="Label" parent="Control"]
+[node name="DescriptionContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 0
+offset_left = 3.0
+offset_top = 214.0
+offset_right = 154.0
+offset_bottom = 313.0
+alignment = 1
+
+[node name="DescriptionLabel" type="RichTextLabel" parent="Control/DescriptionContainer"]
 texture_filter = 1
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.972
-anchor_bottom = 0.982
-offset_left = 2.66667
-offset_top = 208.333
-offset_right = 0.0626678
-offset_bottom = 0.057312
-text = "Block 5 damage"
-label_settings = SubResource("LabelSettings_7vquw")
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
-justification_flags = 131
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/line_separation = 0
+theme_override_constants/table_v_separation = 4
+theme_override_constants/outline_size = 2
+theme_override_fonts/normal_font = ExtResource("3_cm64p")
+theme_override_fonts/mono_font = ExtResource("3_cm64p")
+bbcode_enabled = true
+text = "[center][color=e8c65b]Block[/color] 5 damage[/center]"
+fit_content = true
+scroll_active = false
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Control"]
 layout_mode = 0

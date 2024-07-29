@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://dcfs2u2rbfdhl"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_t1bo1"]
+
+[resource]
+script = ExtResource("1_t1bo1")
+_name = "Iron Breastplate"
+description = "Iron Breastplate:\\nStart every fight with 5 block."
+cost = 25

@@ -38,6 +38,7 @@ grow_vertical = 2
 script = ExtResource("1_cmy5p")
 
 [node name="Card" type="Sprite2D" parent="."]
+light_mask = 6
 position = Vector2(128, 256)
 scale = Vector2(4, 4)
 texture = ExtResource("1_i4d54")

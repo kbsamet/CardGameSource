@@ -8,6 +8,14 @@ class_name CardData
 @export var targeted : bool
 @export var effects: Array[CardEffectData]
 
+func is_damage_card() -> bool:
+	for effect in effects:
+		if effect.effect == db.CardEffect.Damage \
+		or effect.effect == db.CardEffect.DamageAll \
+		or effect.effect == db.CardEffect.Riposte:
+			return true
+	return false
+	
 static func from_card(card : CardData):
 	var new_card = CardData.new()
 	new_card._name = card._name

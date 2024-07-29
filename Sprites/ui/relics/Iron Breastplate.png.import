@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bmj3l87s1fjov"
-path="res://.godot/imported/red_orb.png-d932d31172edabf6b6b3581fae5c2bcc.ctex"
+uid="uid://ct674k4cb6khj"
+path="res://.godot/imported/Iron Breastplate.png-3602ededf1a03dd92d1a2d639c2990b3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/ui/relics/red_orb.png"
-dest_files=["res://.godot/imported/red_orb.png-d932d31172edabf6b6b3581fae5c2bcc.ctex"]
+source_file="res://Sprites/ui/relics/Iron Breastplate.png"
+dest_files=["res://.godot/imported/Iron Breastplate.png-3602ededf1a03dd92d1a2d639c2990b3.ctex"]
 
 [params]
 
