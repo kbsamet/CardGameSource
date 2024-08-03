@@ -9,8 +9,13 @@ var selected_enemy_id = -1
 var random = RandomNumberGenerator.new()
 var discardPosition : Vector2
 var deckPosition : Vector2
-var cardScene = preload("res://Scenes/Card.tscn")
+@onready var cardScene = preload("res://Scenes/Card.tscn")
+@onready var flippedCardSprite = preload("res://Sprites/ui/deck.png")
 @onready var arrow = $CardDragArrow
+@onready var shufflePlayer = $shufflePlayer
+@onready var dealPlayer = $dealPlayer
+
+
 signal selected_card_state_changed(new_state)
 signal play_card(nil)
 # Called when the node enters the scene tree for the first time.
@@ -105,7 +110,7 @@ func center_cards():
 		# ortadaki kart 0 sol sağ +1 -1 diye gidiyo bunla sprite scale i çarpıyoruz
 		tween.tween_property(cards[card_keys[i]],"position:x",(i - ((card_count - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40),0.3)
 	
-		
+	return tween.finished
 
 func add_card(card : CardNode,tween : Tween,empty_hand : bool = false):
 	card.on_hold_signal.connect(_on_card_hold)
@@ -122,7 +127,8 @@ func add_card(card : CardNode,tween : Tween,empty_hand : bool = false):
 	tween.tween_property(card,"position:x",(i - ((cards.size() - 1)/2.0)) * (card_width * (card_sprite.transform.get_scale().x) - 40),0.1)
 	tween.parallel().tween_property(card,"position:y",0,0.1)
 	tween.parallel().tween_property(card,"scale",Vector2(1,1),0.1)
-		
+	tween.tween_callback(func(): dealPlayer.play())
+	return tween.finished
 func discard(id):
 	db.player.discardPile.push_back(cards[id].card_data)
 	if is_inside_tree():
@@ -148,9 +154,26 @@ func discard_all():
 	for card_id in cards.keys():
 		discard(card_id)
 
+func shuffle_discard_to_deck():
+	shufflePlayer.play()
+	for card in db.player.discardPile:
+		db.player.deck.append(card.duplicate(true))
+	
+	db.player.discardPile = []
+	db.player_state_changed.emit()
+	var tween = create_tween()
+	for i in range(db.player.discardPile.size()):
+		var card_sprite = Sprite2D.new()
+		add_child(card_sprite)
+		card_sprite.texture = flippedCardSprite
+		card_sprite.global_position = discardPosition
+		tween.tween_property(card_sprite,"global_position",deckPosition,0.1)
+		tween.tween_callback(func(): card_sprite.queue_free())
+	return tween.finished
+	
 func draw_card():
 	if db.player.deck.size() == 0:
-		db.shuffle_discard_to_deck()
+		await shuffle_discard_to_deck()
 	var index = random.randi_range(0,db.player.deck.size() -1)
 	var card = db.player.deck[index]
 	var new_card = cardScene.instantiate()
@@ -164,11 +187,43 @@ func deal_hand():
 	var tween = create_tween()
 	while cards.size() < db.player.hand_size:
 		if db.player.deck.size() == 0:
-			db.shuffle_discard_to_deck()
+			shuffle_discard_to_deck()
 		var index = random.randi_range(0,db.player.deck.size() -1)
 		var card = db.player.deck[index]
 		var new_card = cardScene.instantiate()
 		new_card.card_data = card
 		add_card(new_card,tween,true)
 		db.remove_from_deck(index)
-	tween.tween_callback(center_cards)
+	await tween.finished
+	await center_cards()
+	#if db.player.deck.size() < db.player.hand_size:
+		#var difference = db.player.hand_size - db.player.deck.size()
+		#for i in range(db.player.deck.size()):
+			#var index = random.randi_range(0,db.player.deck.size() -1)
+			#var card = db.player.deck[index]
+			#var new_card = cardScene.instantiate()
+			#new_card.card_data = card
+			#add_card(new_card,tween,true)
+			#db.remove_from_deck(index)
+		#await tween.finished
+		#await shuffle_discard_to_deck()
+		#for i in range(difference):
+			#var index = random.randi_range(0,db.player.deck.size() -1)
+			#var card = db.player.deck[index]
+			#var new_card = cardScene.instantiate()
+			#new_card.card_data = card
+			#add_card(new_card,tween,true)
+			#db.remove_from_deck(index)
+		#await tween.finished
+		#await center_cards()
+	#else:
+		#while cards.size() < db.player.hand_size:
+			#var index = random.randi_range(0,db.player.deck.size() -1)
+			#var card = db.player.deck[index]
+			#var new_card = cardScene.instantiate()
+			#new_card.card_data = card
+			#add_card(new_card,tween,true)
+			#db.remove_from_deck(index)
+		#await tween.finished
+		#await center_cards()
+	return tween.finished

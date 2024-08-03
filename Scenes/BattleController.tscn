@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://cn44o3l7krv"]
+[gd_scene load_steps=11 format=3 uid="uid://cn44o3l7krv"]
 
 [ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
 [ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_3kwnt"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ddtkpa3ifuhnj" path="res://Scenes/ui/FightPlayerUI.tscn" id="4_b61bc"]
 [ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="6_mm88r"]
 [ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_3xgc3"]
+[ext_resource type="AudioStream" uid="uid://hrbbh1n15ao1" path="res://Sounds/SFX/hit.wav" id="9_h6dhl"]
 
 [sub_resource type="Environment" id="Environment_y1hls"]
 background_mode = 3
@@ -117,3 +118,8 @@ script = ExtResource("7_3xgc3")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_y1hls")
+
+[node name="hitSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_h6dhl")
+volume_db = -25.051
+pitch_scale = 1.45

@@ -187,6 +187,7 @@ func _on_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released() && is_card_selected:
 			on_clicked_signal.emit(id)
+			db.clickPlayer.play()
 
 
 func heal(amount:int) -> void:

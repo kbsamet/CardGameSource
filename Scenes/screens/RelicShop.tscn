@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://cq55l6b5iivi5"]
+[gd_scene load_steps=8 format=3 uid="uid://cq55l6b5iivi5"]
 
 [ext_resource type="Script" path="res://Scenes/screens/RelicShop.gd" id="1_yqgap"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="2_ylxpe"]
 [ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="3_vdvwh"]
 [ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="4_h38vx"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="5_xxdwi"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="6_dqg7c"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_h2p5r"]
 
 [node name="RelicShop" type="Control"]
 layout_mode = 3
@@ -16,6 +18,8 @@ grow_vertical = 2
 script = ExtResource("1_yqgap")
 
 [node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color(0.509804, 0.509804, 0.607843, 1)
+light_mask = 6
 layout_mode = 0
 offset_right = 1923.0
 offset_bottom = 1083.0
@@ -57,5 +61,45 @@ text = "Leave"
 
 [node name="PlayerInfoUi" parent="." instance=ExtResource("5_xxdwi")]
 layout_mode = 1
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.690196, 0.690196, 0.772549, 1)
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1769, -57)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-23.3836, 2.52341)
+color = Color(0.985892, 0.847539, 0.628652, 1)
+energy = 0.29
+range_z_max = 7
+range_item_cull_mask = 2
+texture = ExtResource("6_dqg7c")
+texture_scale = 2.58
+height = 30.0
+script = ExtResource("7_h2p5r")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+color = Color(0.890196, 0.576471, 0.278431, 1)
+energy = 1.41
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("6_dqg7c")
+texture_scale = 2.94
+script = ExtResource("7_h2p5r")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+visible = false
+position = Vector2(1.00934, 0.336456)
+color = Color(0.890196, 0.576471, 0.278431, 1)
+energy = 0.53
+range_z_max = 7
+shadow_enabled = true
+texture = ExtResource("6_dqg7c")
+texture_scale = 2.94
+height = 49.0
+script = ExtResource("7_h2p5r")
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -32,12 +32,20 @@ func add_relic(relic : RelicData,purchased: bool = false):
 		"Iron Breastplate":
 			add_player_status_effect("permanent_block",5)
 		"Minotaur's Horns":
-			add_player_status_effect("permanent_empower",5)
+			add_player_status_effect("permanent_empower",3)
 	if purchased:
 		gold -= relic.cost
 	db.player_state_changed.emit()
 	relics_changed.emit()
-
+	
+func remove_relic(name : String):
+	var filtered_relics = relics.filter(func(relic): return relic._name == name)
+	assert(filtered_relics.size() > 0, name + " not found in relics!")
+	if name == "Holy Cross":
+		add_player_status_effect("revive_half",-1)
+	relics.erase(filtered_relics[0])
+	relics_changed.emit()
+	db.player_state_changed.emit()
 func add_player_items(item,amount):
 	if item == "gold":
 		gold += amount
@@ -51,7 +59,7 @@ func heal_player(amount):
 	db.player_state_changed.emit()
 
 func damage_player(amount):
-	if "block" in status_effects:
+	if "block" in status_effects and status_effects["block"].amount > 0:
 		if status_effects.block.amount > amount:
 			change_player_status_effect("block", status_effects.block.amount - amount)
 			return

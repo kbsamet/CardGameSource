@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="4_02pvk"]
 
 [node name="RelicForSale" type="Control"]
+light_mask = 6
 custom_minimum_size = Vector2(240, 342)
 layout_mode = 3
 anchors_preset = 15

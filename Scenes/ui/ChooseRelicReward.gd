@@ -31,12 +31,14 @@ func _process(delta):
 func _on_relic_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			db.player.add_relic(relics[0])
 			relic_chosen.emit()
 
 func _on_relic2_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			db.player.add_relic(relics[1])
 			relic_chosen.emit()
 
@@ -44,5 +46,6 @@ func _on_relic2_input(event):
 func _on_relic3_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			db.player.add_relic(relics[2])
 			relic_chosen.emit()

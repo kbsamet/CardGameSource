@@ -36,7 +36,6 @@ text = "3"
 label_settings = SubResource("LabelSettings_6ipjv")
 
 [node name="Tooltip" parent="." instance=ExtResource("4_gsofu")]
-light_mask = 4
 z_index = 5
 layout_mode = 1
 offset_left = 88.0

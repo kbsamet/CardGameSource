@@ -3,6 +3,7 @@ class_name BattleController
 @onready var hand : Hand  = $Control/CanvasLayer/Hand
 @onready var enemyController : EnemyController = $Control/EnemyController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
+@onready var hitSound = $hitSound
 var enemyScene = preload("res://Scenes/enemies/Enemy.tscn")
 var rewardScene = preload("res://Scenes/screens/RewardScreen.tscn")
 var reward : RewardData
@@ -67,6 +68,7 @@ func _use_card(enemy_id):
 					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
+				hitSound.play()
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.ShieldSlam:
 				var damage_amount = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
@@ -74,6 +76,7 @@ func _use_card(enemy_id):
 					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
+				hitSound.play()
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Riposte:
 				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null else effect.amount
@@ -81,6 +84,7 @@ func _use_card(enemy_id):
 					damage_amount += db.player.status_effects["empowered"].amount
 				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
 					damage_amount *= 2
+				hitSound.play()
 				enemyController.enemies[enemy_id].damage(damage_amount)
 			db.CardEffect.Block:
 				if "block" in db.player.status_effects:
@@ -155,7 +159,7 @@ func _enemy_turn_done():
 	db.set_turn(db.Turn.PlayerAction)
 	enemyController.attacking_enemy_id = -1
 	hand.discard_all()
-	hand.deal_hand()
+	await hand.deal_hand()
 	for enemy in enemyController.enemies.values():
 		enemy.process_status_effects()
 	if "blind" in db.player.status_effects:
@@ -165,7 +169,7 @@ func _enemy_turn_done():
 		db.player.add_player_status_effect("burn",-1)
 	if "crushing" in db.player.status_effects:
 		db.player.add_player_status_effect("crushing",-1)
-	if "empowered" in db.player.status_effects:
+	if "empowered" in db.player.status_effects and db.player.status_effects["empowered"].amount > 0:
 		db.player.add_player_status_effect("empowered",-1)
 	if "dazed" in db.player.status_effects:
 		db.player.add_player_status_effect("dazed", -1)
@@ -205,6 +209,6 @@ func create_deck():
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
 	db.player.deck.push_back(db.get_card("Daze"))
-	db.player.deck.push_back(db.get_card("Minotaur's Rage"))
+	db.player.deck.push_back(db.get_card("Strike"))
 	fightUI.update_ui_values()
 

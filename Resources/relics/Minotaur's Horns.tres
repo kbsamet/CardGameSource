@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_q2bfd")
 _name = "Minotaur's Horns"
-description = "Minotaur's Horns:\\nStart every fight with 5 empowered."
+description = "Minotaur's Horns:Start every fight with 3 empowered."
 cost = 25

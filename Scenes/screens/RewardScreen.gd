@@ -89,6 +89,7 @@ func get_chest_reward():
 func _on_reward_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			if reward_data.reward == "locked_chest":
 				get_chest_reward()
 				return

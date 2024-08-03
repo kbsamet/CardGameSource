@@ -14,7 +14,6 @@ var id
 var animating = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	tooltip.set_data("deneme 123")
 	pass # Replace with function body.
 
 func set_data(data: RelicData,relic_id:int):
@@ -39,6 +38,7 @@ func _on_mouse_exited():
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			if db.player.gold >= relic_data.cost:
 				relic_chosen.emit(id)
 			elif !animating:

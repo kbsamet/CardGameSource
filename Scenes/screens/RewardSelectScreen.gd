@@ -54,6 +54,7 @@ func _on_door2l_mouse_exited():
 func _on_doo1_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			var battle_controller_scene = battle_controller.instantiate() as BattleController
 			battle_controller_scene.reward = selected_reward1
 			get_tree().root.add_child(battle_controller_scene)
@@ -64,6 +65,7 @@ func _on_doo1_input(event):
 func _on_door2_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			var battle_controller_scene = battle_controller.instantiate() as BattleController
 			battle_controller_scene.reward = selected_reward2
 			get_tree().root.add_child(battle_controller_scene)

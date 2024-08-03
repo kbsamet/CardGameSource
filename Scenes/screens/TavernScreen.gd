@@ -1,5 +1,6 @@
 extends Control
 
+@onready var clickPlayer = $clickPlayer
 var chooseRewardScene = preload("res://Scenes/screens/RewardSelectScreen.tscn")
 var npcScene = preload("res://Scenes/ui/NpcScene.tscn")
 
@@ -32,7 +33,9 @@ func _on_gui_input(event):
 				for k in n.get_children():
 					if k is DialogueBalloon:
 						k._on_balloon_gui_input(event)
+						db.clickPlayer.play()
 
 
 func _on_button_pressed():
+	db.clickPlayer.play()
 	get_tree().change_scene_to_packed(chooseRewardScene)

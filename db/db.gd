@@ -1,7 +1,7 @@
 extends Node
 
 @onready var background_music = preload("res://Sounds/Music/backgroundMusic.tscn")
-
+@onready var clickPlayerScene = preload("res://Sounds/SFX/clickPlayer.tscn")
 @onready var all_cards : ResourceGroup = preload("res://Resources/all_cards.tres")
 @onready var all_status_effects : ResourceGroup = preload("res://Resources/all_status_effects.tres")
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
@@ -11,17 +11,24 @@ var cards : Array[CardData]
 var status_effects : Array[StatusEffectData]
 var enemies : Array[EnemyData]
 var relics : Array[RelicData]
-
+var clickPlayer : AudioStreamPlayer
+var run_time : float = 0.0
 func _ready():
 	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
 	all_cards.load_all_into(cards)
 	all_status_effects.load_all_into(status_effects)
 	all_enemies.load_all_into(enemies)
 	all_relics.load_all_into(relics)
+	var click = clickPlayerScene.instantiate()
+	add_child(click)
+	clickPlayer = click
 	var music = background_music.instantiate() as AudioStreamPlayer
 	add_child(music)
 	music.play()
+	
 func _process(delta):
+	if player.health > 0:
+		run_time += delta
 	pass
 	#print("FPS: " + str(Engine.get_frames_per_second()))
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
@@ -222,13 +229,7 @@ const npcs : Dictionary = {
 
 func remove_from_deck(card_index):
 	player.deck.remove_at(card_index)
-	player_state_changed.emit()
-
-func shuffle_discard_to_deck():
-	player.deck = player.discardPile.duplicate(true)
-	player.discardPile = []
-	player_state_changed.emit()
-	
+	player_state_changed.emit()	
 	
 func set_turn(newTurn : Turn):
 	current_turn = newTurn
@@ -243,9 +244,10 @@ func check_game_over():
 	if player.health <= 0:
 		if "revive_half" in player.status_effects:
 			player.health = player.max_health / 2
-			player.add_player_status_effect("revive_half",-1)
+			player.remove_relic("Holy Cross")
 			player_state_changed.emit()
 			return
+		
 		get_tree().change_scene_to_packed(gameOverScreen)
 
 func increase_level():

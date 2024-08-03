@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_m2ss5")
 _name = "Blue Orb"
-description = "Blue Orb:\\nGain 2 reaction points but lose 1 action point."
+description = "Blue Orb:Gain 2 reaction points but lose 1 action point."
 cost = 40

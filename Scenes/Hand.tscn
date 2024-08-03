@@ -1,10 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://cxj0poh31buc8"]
+[gd_scene load_steps=5 format=3 uid="uid://cxj0poh31buc8"]
 
 [ext_resource type="Script" path="res://Scenes/Hand.gd" id="1_usoam"]
 [ext_resource type="PackedScene" uid="uid://btuxupg24xjn" path="res://Scenes/ui/CardDragArrow.tscn" id="2_78v2s"]
+[ext_resource type="AudioStream" uid="uid://j87ob6v6t2d7" path="res://Sounds/SFX/shuffle.wav" id="3_5hwf3"]
+[ext_resource type="AudioStream" uid="uid://qin7o5ak2ix3" path="res://Sounds/SFX/deal1.wav" id="4_bgrpr"]
 
 [node name="Hand" type="Container"]
 script = ExtResource("1_usoam")
 
 [node name="CardDragArrow" parent="." instance=ExtResource("2_78v2s")]
 visible = false
+
+[node name="shufflePlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_5hwf3")
+volume_db = -28.152
+pitch_scale = 1.33
+
+[node name="dealPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_bgrpr")
+volume_db = -20.496

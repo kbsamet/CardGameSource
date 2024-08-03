@@ -7,7 +7,7 @@ var tooltipScene = preload("res://Scenes/ui/Tooltip.tscn")
 @onready var manaLabel = $ManaLabel
 @onready var typeLabel = $TypeLabel
 @onready var nameLabel = $NameLabel
-@onready var descriptionLabel = $DescriptionLabel
+@onready var descriptionLabel = $VBoxContainer2/DescriptionLabel
 @onready var tooltipContainer = $VBoxContainer
 var id : int
 var card_data : CardData
@@ -50,6 +50,7 @@ func _on_mouse_exited():
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			card_chosen.emit(id)
 	
 func remove_info():

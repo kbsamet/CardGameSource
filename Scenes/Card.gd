@@ -18,6 +18,7 @@ var original_text = ""
 @onready var animationPlayer = $AnimationPlayer
 @onready var control = $Control
 @onready var tooltipContainer = $Control/VBoxContainer
+@onready var hoverPlayer = $hoverPlayer
 
 @onready var outlineShader = preload("res://Shaders/outline.tres")
 @onready var outlineBlueShader = preload("res://Shaders/outline_blue.tres")
@@ -159,6 +160,7 @@ func _on_input(event : InputEvent):
 			on_hold_signal.emit(id)
 			if !disabled:
 				dragged = true
+				hoverPlayer.play()
 		if event.is_released():
 			on_hold_signal.emit(-1)
 			dragged = false

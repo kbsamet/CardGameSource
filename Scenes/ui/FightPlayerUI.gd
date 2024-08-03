@@ -16,7 +16,9 @@ var disabled_material = preload("res://Shaders/gray_tint.tres")
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	db.turn_changed.connect(turn_changed)
+	db.player_state_changed.connect(update_ui_values)
 	update_ui_values()
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
@@ -45,9 +47,11 @@ func turn_changed(new_turn):
 func _input(event):
 	if event.is_action_pressed("ui_press_button"):
 		end_turn_clicked.emit()
+		db.clickPlayer.play()
 		
 func _on_button_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.clickPlayer.play()
 			end_turn_clicked.emit()
 			

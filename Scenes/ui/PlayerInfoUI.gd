@@ -17,6 +17,8 @@ var relicIcon = preload("res://Scenes/ui/RelicIcon.tscn")
 @onready var keyLabel = $KeyLabel
 @onready var relicContainer = $RelicsContainer
 @onready var levelLabel = $CurrentLevelLabel
+@onready var timeLabel = $TimeLabel
+
 
 var health_bar_full_width
 # Called when the node enters the scene tree for the first time.
@@ -90,4 +92,8 @@ func status_effect_changed():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	var minutes = db.run_time / 60
+	var seconds = fmod(db.run_time, 60)
+	var milliseconds = fmod(db.run_time, 1) * 100
+	var time_string = "%02d:%02d:%02d" % [minutes, seconds, milliseconds]
+	timeLabel.text = time_string

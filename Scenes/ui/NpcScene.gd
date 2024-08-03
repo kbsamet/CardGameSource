@@ -34,6 +34,7 @@ func _on_mouse_exited():
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.is_released() and dialogue_free:
+			db.clickPlayer.play()
 			var balloon = DialogueManager.show_dialogue_balloon(self,dialogue,"start")
 			balloon.dialogue_ended.connect(func(): dialogue_ended.emit())
 			balloon.get_child(0).global_position = global_position + data.dialogue_offset

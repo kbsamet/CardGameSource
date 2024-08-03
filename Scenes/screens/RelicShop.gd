@@ -35,4 +35,5 @@ func _process(delta):
 
 
 func _on_button_pressed():
+	db.clickPlayer.play()
 	get_tree().change_scene_to_packed(tavernScene)

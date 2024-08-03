@@ -98,18 +98,18 @@ func end_enemy_attack():
 		single_attack = single_attack as EnemySingleAttackData
 		match single_attack.attack_type:
 			db.EnemyAttack.Damage:
-				if !("dodge" in db.player.status_effects.keys()):
+				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					db.player.damage_player(single_attack.amount)
 			db.EnemyAttack.StaminaCost:
 				attacking_enemy.change_stamina(-single_attack.amount)
 			db.EnemyAttack.Bleed:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					db.player.add_player_status_effect("bleed",single_attack.amount)
 			db.EnemyAttack.Daze:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					db.player.add_player_status_effect("dazed",single_attack.amount)
 			db.EnemyAttack.Blind:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					db.player.add_player_status_effect("blind",single_attack.amount)
 			db.EnemyAttack.ArmorUp:
 				attacking_enemy.add_status_effect("block",single_attack.amount)
@@ -117,12 +117,12 @@ func end_enemy_attack():
 				for enemy in enemies.values():
 					enemy.heal(single_attack.amount)
 			db.EnemyAttack.Burn:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys()):
+				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					db.player.add_player_status_effect("burn",single_attack.amount)
 			db.EnemyAttack.Empower:
 				for enemy in enemies.values():
 					enemy.add_status_effect("empowered",single_attack.amount)
-	if "dodge" in db.player.status_effects.keys():
+	if "dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0:
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()
 
