@@ -7,6 +7,7 @@ class_name CardData
 @export var cost : int
 @export var targeted : bool
 @export var effects: Array[CardEffectData]
+@export var is_rare : bool
 
 func is_damage_card() -> bool:
 	for effect in effects:

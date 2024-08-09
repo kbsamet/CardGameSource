@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3nep0t7at7fd"]
+[gd_scene load_steps=12 format=3 uid="uid://d3nep0t7at7fd"]
 
 [ext_resource type="Script" path="res://Scenes/Card.gd" id="1_db5ta"]
 [ext_resource type="Texture2D" uid="uid://b66myg4i0q2fu" path="res://Sprites/cards/Block.png" id="2_5ghu6"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="3_cm64p"]
 [ext_resource type="AudioStream" uid="uid://20enyfdskwu5" path="res://Sounds/SFX/deal3.wav" id="4_qgncp"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hxxoy"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_jatbe"]
 font = ExtResource("3_cm64p")
@@ -89,6 +91,7 @@ z_index = 8
 script = ExtResource("1_db5ta")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_hxxoy")
 scale = Vector2(2.5, 2.5)
 texture = ExtResource("2_5ghu6")
 

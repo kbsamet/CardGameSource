@@ -6,10 +6,11 @@ class_name EnemyData
 @export var max_health : int
 @export var stamina : int
 @export var max_stamina : int
+@export var difficulty : int
+
 @export var attacks : Array[EnemyAttackData]
 @export var status_effects : Array[StatusEffectData]
 @export var occluder : OccluderPolygon2D
-
 
 func get_status_effect_data(effect : String) -> StatusEffectData:
 	var filtered_status_effects = status_effects.filter(func(e) : return e._name == effect)

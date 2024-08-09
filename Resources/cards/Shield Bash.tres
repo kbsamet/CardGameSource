@@ -21,3 +21,4 @@ description = "Deal /damage damage. Daze the enemy."
 cost = 2
 targeted = true
 effects = Array[ExtResource("1_vlfq0")]([SubResource("Resource_6w00h"), SubResource("Resource_pt1kc")])
+is_rare = false

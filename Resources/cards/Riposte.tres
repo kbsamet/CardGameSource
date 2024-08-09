@@ -16,3 +16,4 @@ description = "Deal /riposte damage if the enemy is not attacking."
 cost = 1
 targeted = true
 effects = Array[ExtResource("1_uycqi")]([SubResource("Resource_6w00h")])
+is_rare = false

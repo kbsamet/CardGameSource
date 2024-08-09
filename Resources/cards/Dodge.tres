@@ -16,3 +16,4 @@ description = "Gain 2 dodge."
 cost = 3
 targeted = false
 effects = Array[ExtResource("1_67wp4")]([SubResource("Resource_6w00h")])
+is_rare = true

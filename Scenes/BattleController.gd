@@ -39,12 +39,56 @@ func spawn_enemy(enemy_name : String):
 	var new_enemy = enemyScene.instantiate() 
 	new_enemy.enemy_data = db.get_enemy(enemy_name)
 	enemyController.add_enemy(new_enemy)
+	return new_enemy
 
+func spawn_boss(boss_name : String):
+	var new_enemy = load("res://Scenes/enemies/minibosses/"+boss_name+"Scene.tscn").instantiate() 
+	enemyController.add_boss(new_enemy)
+	return new_enemy
+	
 func spawn_enemies():
-	var room = db.fight_rooms.pick_random() as Dictionary
-	for key in room.keys():
-		for value in room[key]:
+	if db.current_room == 5:
+		var vampire = spawn_boss("Vampire")
+		vampire.phase = 1
+		fightUI.set_boss_data(vampire.enemy.enemy_data)
+		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
+		vampire.boss_phase_changed.connect(boss_phase_changed)
+		return
+	if db.current_room == 10:
+		var vampire = spawn_boss("Vampire")
+		fightUI.set_boss_data(vampire.enemy.enemy_data)
+		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
+		vampire.boss_phase_changed.connect(boss_phase_changed)
+		return
+	var diff_cap = 4 + (db.current_room / 2)
+	var current_difficulty = 0
+	var enemies = {}
+	while current_difficulty < diff_cap:
+		var new_enemy = db.enemies.pick_random() as EnemyData
+		if new_enemy.difficulty > diff_cap / 2:
+			continue
+		if new_enemy.difficulty + current_difficulty > diff_cap:
+			break
+		if new_enemy._name in enemies:
+			if enemies[new_enemy._name] > 1:
+				continue
+			enemies[new_enemy._name] += 1
+			current_difficulty += new_enemy.difficulty
+		else:
+			enemies[new_enemy._name] = 1
+			current_difficulty += new_enemy.difficulty
+	for key in enemies.keys():
+		for value in enemies[key]:
 			spawn_enemy(key)
+	#var room_pool_key = "1-0" if db.current_room < 5 else "1-1"
+	#var room = db.fight_rooms[room_pool_key].pick_random() as Dictionary
+	#for key in room.keys():
+		#for value in room[key]:
+			#spawn_enemy(key)
+
+func boss_phase_changed(new_data):
+	fightUI.set_boss_data(new_data)
+	fightUI.update_health_bar_ui()
 
 func _use_card(enemy_id):
 	if "blind" in db.player.status_effects:
@@ -111,12 +155,10 @@ func _use_card(enemy_id):
 					enemy.damage(damage_amount)
 			db.CardEffect.ConvertAllAp:
 				db.player.rp += db.player.ap
-				db.player.rp = min(db.player.rp, db.player.max_rp)
 				db.player.ap = 0
 				db.player_state_changed.emit()
 			db.CardEffect.ConvertAllRp:
 				db.player.ap += db.player.rp
-				db.player.ap = min(db.player.ap, db.player.max_ap)
 				db.player.rp = 0
 				db.player_state_changed.emit()
 			db.CardEffect.Crushing:
@@ -169,6 +211,10 @@ func _enemy_turn_done():
 		db.player.add_player_status_effect("burn",-1)
 	if "crushing" in db.player.status_effects:
 		db.player.add_player_status_effect("crushing",-1)
+	if "drainAp" in db.player.status_effects:
+		db.player.add_player_status_effect("drainAp",-1)
+	if "drainRp" in db.player.status_effects:
+		db.player.add_player_status_effect("drainRp",-1)
 	if "empowered" in db.player.status_effects and db.player.status_effects["empowered"].amount > 0:
 		db.player.add_player_status_effect("empowered",-1)
 	if "dazed" in db.player.status_effects:
@@ -189,6 +235,7 @@ func _fight_over():
 	hand.discard_all()
 	var reward_scene = rewardScene.instantiate() as RewardScreen
 	reward_scene.reward_data = reward
+	fightUI.remove_boss_data()
 	db.increase_level()
 	get_tree().root.add_child(reward_scene)
 	get_tree().current_scene = reward_scene

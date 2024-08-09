@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://evn2otb0whax"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_v8f1r"]
+
+[resource]
+script = ExtResource("1_v8f1r")
+_name = "drainRp"
+amount = 0
+tooltip = "Drained Rp:You have -1 reaction point for _ turns."
+hidden = false

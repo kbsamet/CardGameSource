@@ -16,7 +16,10 @@ var selected_reward2 : RewardData
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var reward_pool = []
-	for reward_data in db.rewards:
+	var rewards_dict = db.rewards
+	if db.current_room % 5 == 0:
+		rewards_dict = db.boss_rewards
+	for reward_data in rewards_dict:
 		var reward = RewardData.fromDict(reward_data)
 		for i in range(reward.multiplier):
 			reward_pool.append(reward)
@@ -29,6 +32,9 @@ func _ready():
 	reward2Icon.texture = load("res://Sprites/ui/rewardIcons/"+selected_reward2.reward+".png")
 	reward1Label.text = selected_reward1.tooltip
 	reward2Label.text = selected_reward2.tooltip
+	if rewards_dict == db.boss_rewards:
+		reward1Label.modulate = Color("ffd240")
+		reward2Label.modulate = Color("ffd240")
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

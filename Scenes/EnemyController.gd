@@ -10,10 +10,28 @@ var attacking_enemy_id = -1
 var enemies : Dictionary = {}
 var id_count = 0
 var enemy_generator 
+
+var enemies_reordered = []
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
+func add_boss(boss):
+	add_child(boss)
+	enemies[id_count] = boss.enemy
+	boss.enemy.id = id_count
+	id_count += 1
+	boss.enemy.on_clicked_signal.connect(_on_enemy_clicked)
+	boss.enemy.attack_rise_done.connect(_enemy_attack_rise_done)
+	boss.enemy.attack_end_done.connect(_enemy_attack_end_done)
+	boss.enemy.enemy_dead.connect(_enemy_dead)
+	boss.enemy.enemy_hovered.connect(_on_enemy_hovered)
+	boss.enemy.enemy_hovered_end.connect(_on_enemy_hovered_end)
+	
+	
+	
+	center_enemies()
+	
 func add_enemy(enemy : EnemyNode):
 	enemies[id_count] = enemy
 	enemy.id = id_count
@@ -24,7 +42,6 @@ func add_enemy(enemy : EnemyNode):
 	enemy.enemy_dead.connect(_enemy_dead)
 	enemy.enemy_hovered.connect(_on_enemy_hovered)
 	enemy.enemy_hovered_end.connect(_on_enemy_hovered_end)
-	
 	
 	add_child(enemy)
 	center_enemies()
@@ -41,12 +58,22 @@ func _on_enemy_hovered_end(enemy_id):
 func center_enemies():
 	if enemies.is_empty():
 		return
-	var enemy_sprite : Sprite2D = enemies.values()[0].find_child("Sprite")
-	var enemy_width = enemy_sprite.texture.get_size().x
 	var enemy_count = enemies.keys().size()
 	var tween = create_tween()
+	var enemies_reordered = []
+	var boss_key = -1
+	for enemy_id in enemies.keys(): 
+		if enemies[enemy_id].is_boss:
+			boss_key = enemy_id
+		else:
+			enemies_reordered.append(enemy_id)
+	if boss_key != -1:
+		enemies_reordered.insert(enemy_count/2,boss_key)
 	for i in range(enemy_count):
-		tween.tween_property(enemies[enemies.keys()[i]],"position",Vector2((i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),enemies[enemies.keys()[i]].position.y),0.2)
+		if enemies_reordered[i] in enemies:
+			var enemy_sprite : Sprite2D = enemies.values()[0].find_child("Sprite")
+			var enemy_width = enemy_sprite.texture.get_size().x
+			tween.tween_property(enemies[enemies_reordered[i]],"position:x",(i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),0.2)
 
 func set_card_selected(new_state):
 	for enemy in enemies.values():
@@ -94,34 +121,52 @@ func end_enemy_attack():
 	if attack == null:
 		attacking_enemy.start_attack_end_animation()
 		return
+	var unblockable = true if attack.get_value_of_type(db.EnemyAttack.Unblockable) != -1 else false
 	for single_attack in attack.attacks:
 		single_attack = single_attack as EnemySingleAttackData
 		match single_attack.attack_type:
 			db.EnemyAttack.Damage:
 				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-					db.player.damage_player(single_attack.amount)
+					db.player.damage_player(single_attack.amount,unblockable)
 			db.EnemyAttack.StaminaCost:
 				attacking_enemy.change_stamina(-single_attack.amount)
 			db.EnemyAttack.Bleed:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-					db.player.add_player_status_effect("bleed",single_attack.amount)
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("bleed",single_attack.amount)
 			db.EnemyAttack.Daze:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-					db.player.add_player_status_effect("dazed",single_attack.amount)
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("dazed",single_attack.amount)
 			db.EnemyAttack.Blind:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-					db.player.add_player_status_effect("blind",single_attack.amount)
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("blind",single_attack.amount)
 			db.EnemyAttack.ArmorUp:
 				attacking_enemy.add_status_effect("block",single_attack.amount)
 			db.EnemyAttack.HealAll:
 				for enemy in enemies.values():
 					enemy.heal(single_attack.amount)
 			db.EnemyAttack.Burn:
-				if !("block" in db.player.status_effects.keys()) and !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-					db.player.add_player_status_effect("burn",single_attack.amount)
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("burn",single_attack.amount)
 			db.EnemyAttack.Empower:
 				for enemy in enemies.values():
 					enemy.add_status_effect("empowered",single_attack.amount)
+			db.EnemyAttack.Lifesteal:
+				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+					db.player.damage_player(single_attack.amount,unblockable)
+					attacking_enemy.heal(single_attack.amount)
+			db.EnemyAttack.DrainAp:
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("drainAp",single_attack.amount)
+			db.EnemyAttack.DrainRp:
+				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+						db.player.add_player_status_effect("drainRp",single_attack.amount)
+					
 	if "dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0:
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()

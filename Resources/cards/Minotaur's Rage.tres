@@ -16,3 +16,4 @@ description = "Gain 3 empowered."
 cost = 2
 targeted = false
 effects = Array[ExtResource("1_ctsq2")]([SubResource("Resource_6w00h")])
+is_rare = false

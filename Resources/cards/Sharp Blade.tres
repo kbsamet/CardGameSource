@@ -16,3 +16,4 @@ description = "Inflict 4 bleed to an enemy."
 cost = 2
 targeted = true
 effects = Array[ExtResource("1_5kyvl")]([SubResource("Resource_6w00h")])
+is_rare = false

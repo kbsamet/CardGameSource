@@ -58,8 +58,8 @@ func heal_player(amount):
 	health = min(max_health,health)
 	db.player_state_changed.emit()
 
-func damage_player(amount):
-	if "block" in status_effects and status_effects["block"].amount > 0:
+func damage_player(amount,unblockable = false):
+	if !unblockable and ( "block" in status_effects and status_effects["block"].amount > 0):
 		if status_effects.block.amount > amount:
 			change_player_status_effect("block", status_effects.block.amount - amount)
 			return
@@ -77,8 +77,10 @@ func add_player_status_effect(effect : String,amount: int):
 			if effect == "drunk":
 				add_max_ap(-1)
 				add_max_rp(1)
-			if effect == "tipsy":
+			if effect == "tipsy" or effect == "drainAp":
 				add_max_ap(1)
+			if effect == "drainRp":
+				add_max_rp(1)
 			status_effects.erase(effect)
 		else:
 			status_effects[effect].amount += amount
@@ -86,8 +88,11 @@ func add_player_status_effect(effect : String,amount: int):
 		if effect == "drunk":
 			add_max_ap(1)
 			add_max_rp(-1)
-		if effect == "tipsy":
+		if effect == "tipsy" or effect == "drainAp":
 			add_max_ap(-1)
+		if effect == "drainRp":
+			add_max_rp(-1)
+			
 		status_effects[effect] = db.get_status_effect(effect,amount)
 	if effect == "block":
 		db.player_state_changed.emit()
@@ -107,6 +112,7 @@ func change_player_status_effect(effect:String,new_stat:int):
 	
 func end_turn_process_player_status_effects():
 	change_player_status_effect("block",0)
+	change_player_status_effect("dodge",0)
 	if "bleed" in status_effects:
 		damage_player(status_effects["bleed"].amount)
 		add_player_status_effect("bleed",-1)

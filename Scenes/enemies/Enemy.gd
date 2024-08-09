@@ -1,6 +1,6 @@
 extends Node2D
 class_name EnemyNode
-var enemy_data : EnemyData
+@export var enemy_data : EnemyData
 var is_card_selected = false
 var id : int
 var hit_animation_playing = false
@@ -11,6 +11,8 @@ signal attack_end_done(id)
 signal enemy_dead(id)
 signal enemy_hovered(id)
 signal enemy_hovered_end(id)
+signal enemy_state_changed
+signal boss_dead
 @onready var sprite = $Sprite
 @onready var blockSprite = $Control/HealthBar/BlockIcon
 @onready var blockAmountLabel = $Control/HealthBar/BlockIcon/Label
@@ -36,6 +38,7 @@ signal enemy_hovered_end(id)
 var particle_color_red = Color("ca5954")
 var particle_color_blue = Color("5c699f")
 
+@export var is_boss = false
 var stamina_bar_full_width
 var health_bar_full_width
 var selected_attack : EnemyAttackData = null
@@ -48,9 +51,19 @@ func _ready():
 	stamina_bar_full_width = staminaBarRect.size.x
 	var new_material = deathParticles.process_material.duplicate(true)
 	new_material.set_shader_parameter("sprite",sprite.texture)
-	new_material.set_shader_parameter("emission_box_extents",Vector3(30,60 if sprite.texture.get_height() > 100 else 30,1))
+	if sprite.texture.get_height() > 100:
+		var new_box = Vector3(30,60,1)
+		if sprite.texture.get_height() > 200:
+			new_box = Vector3(60,120,1)
+		new_material.set_shader_parameter("emission_box_extents",new_box)
 	deathParticles.process_material = new_material
 	lightOccluder.occluder = enemy_data.occluder
+	if is_boss:
+		healthBarSprite.visible = false
+		healthBarRect.visible = false
+		$Control/StaminaBar.visible = false
+		staminaBarRect.visible = false
+		staminaLabel.visible = false
 	set_status_effect_info()
 	update_health_bar_ui()
 		
@@ -65,11 +78,13 @@ func change_stamina(amount:int) -> void:
 	enemy_data.stamina += amount
 	tween.tween_property(staminaBarRect,"size:x", (float(enemy_data.stamina) / float(enemy_data.max_stamina)) * float(stamina_bar_full_width),0.2)
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
+	enemy_state_changed.emit()
 	if enemy_data.stamina == 0:
 		add_status_effect("dazed",1)
 
 
 func update_health_bar_ui():
+	enemy_state_changed.emit()
 	var tween =  create_tween()
 	var max_health_bar_amount = float(enemy_data.max_health)
 	var block_amount = enemy_data.get_status_effect("block")
@@ -133,6 +148,9 @@ func damage(amount):
 		tween.tween_callback(func(): hit_animation_playing = false)
 	update_health_bar_ui()
 	if enemy_data.health <= 0:
+		if is_boss:
+			boss_dead.emit()
+			return
 		die()
 	
 func _on_hover():
@@ -268,7 +286,7 @@ func add_status_effect(effect : String,amount: int) -> void:
 	else:
 		if effect == "dazed":
 			if selected_attack != null and selected_attack.get_value_of_type(db.EnemyAttack.Unstoppable) != -1:
-				pass
+				return
 			else:
 				selected_attack = null
 				remove_attack_info()

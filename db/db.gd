@@ -29,7 +29,6 @@ func _ready():
 func _process(delta):
 	if player.health > 0:
 		run_time += delta
-	pass
 	#print("FPS: " + str(Engine.get_frames_per_second()))
 const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
 
@@ -56,7 +55,7 @@ enum CardEffect {
 }
 
 enum EnemyAttack {
-	Bleed,Damage,StaminaCost,Daze,Blind,ArmorUp,HealAll,Unstoppable,Burn,Empower
+	Bleed,Damage,StaminaCost,Daze,Blind,ArmorUp,HealAll,Unstoppable,Burn,Empower,Lifesteal,Unblockable,DrainAp,DrainRp,GainStamina
 }
 
 enum ItemEffect {
@@ -77,7 +76,12 @@ const enemy_tooltips : Dictionary = {
 	db.EnemyAttack.Blind: "Blind:You will be unable to target enemies for _ turns.",
 	db.EnemyAttack.Burn: "Burn:You will discard a random card for _ turns.",
 	db.EnemyAttack.Unstoppable: "Unstoppable:This enemy cannot be stunned.",
-	db.EnemyAttack.Empower: "Empower:All enemies will do _ more damage."
+	db.EnemyAttack.Empower: "Empower:All enemies will do _ more damage.",
+	db.EnemyAttack.Lifesteal: "Lifesteal:Deal _ damage. Heal _ health.",
+	db.EnemyAttack.Unblockable: "Unblockable:This attack cannot be blocked.",
+	db.EnemyAttack.DrainAp: "Drain AP:Lose 1 ap for _ turns.",
+	db.EnemyAttack.DrainRp: "Drain RP:Lose 1 rp for _ turns.",
+	db.EnemyAttack.GainStamina : "Gain Stamina:This enemy will recover _ stamina"
 }
 
 const card_tooltips : Dictionary = {
@@ -113,39 +117,64 @@ const items : Dictionary = {
 	}
 }
 
-const fight_rooms : Array[Dictionary] = [
+const fight_rooms : Dictionary = {
+	"1-0" : [
 	{
-		"Zombie" : 1,
+		"Zombie" : 2,
 		"Bat"  : 2
 	},
 	{
-		"Zombie" : 1,
-		"Fallen Priest": 1,
-		"Fire Seeker": 1
-	},
-	{
-		"Fallen Priest" : 1,
-		"Fire Seeker": 1
-	},
-	{
-		"Zombie" : 1,
-		"Minotaur": 1
+		"Zombie" : 3,
 	},
 	{
 		"Bat" : 2,
-		"Minotaur": 1
 	},
 	{
-		"Minotaur" : 1,
-		"Fallen Priest": 1
+		"Bat" : 1,
+		"Fire Seeker": 1
 	},
 	{
-		"Fire Seeker" : 1,
-		"Minotaur" : 1,
-		"Fallen Priest": 1
+		"Fire Seeker": 2,
+	},
+	{
+		"Bat" : 1,
+		"Zombie" : 2
+	},
+	{
+		"Fire Seeker": 2,
+		"Zombie" : 1
 	}
+],
+	"1-1" : [
+		{
+			"Minotaur": 2,
+			"Zombie" : 2
+		},
+		{
+			"Fire Seeker" : 2,
+			"Fallen Priest" : 1,
+			"Bat" : 1
+		},
+		{
+			"Zombie" : 2,
+			"Fallen Priest" : 1,
+			"Fire Seeker" : 1
+		},
+		{
+			"Minotaur" : 1,
+			"Fallen Priest" : 1,
+			"Fire Seeker" : 1
+		},
+		{
+			"Minotaur" : 3,
+		},
+		{
+			"Fallen Priest" : 2,
+			"Fire Seeker" : 2
+		},
+	]
 	
-]
+}
 
 const rewards : Array[Dictionary] = [
 	#{
@@ -158,7 +187,7 @@ const rewards : Array[Dictionary] = [
 		"reward" : "key",
 		"amount" : 1,
 		"tooltip" : "Gain a key after the next fight.",
-		"multiplier": 3
+		"multiplier": 1
 	},
 	{
 		"reward" : "locked_chest",
@@ -184,9 +213,32 @@ const rewards : Array[Dictionary] = [
 		"reward" : "tavern",
 		"amount" : 1,
 		"tooltip" : "There is a tavern after the next fight.",
+		"multiplier": 0
+		
+	},
+]
+
+const boss_rewards: Array[Dictionary] = [
+	{
+		"reward" : "choose_rare_card",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 rare cards after the next fight.",
 		"multiplier": 1
 		
 	},
+	#{
+		#"reward" : "gain_blessing",
+		#"amount" : 1,
+		#"tooltip" : "Gain a blessing after the next fight.",
+		#"multiplier": 1
+		#
+	#},
+	{
+		"reward" : "choose_relic",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 relics after the next fight.",
+		"multiplier": 1
+	}
 ]
 
 const locked_chest_rewards : Array[Dictionary] = [

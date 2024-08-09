@@ -40,6 +40,14 @@ func get_attack_name(attack : db.EnemyAttack) -> String:
 			return "healAll"
 		db.EnemyAttack.StaminaCost:
 			return "staminaCost"
+		db.EnemyAttack.Lifesteal:
+			return "lifesteal"
+		db.EnemyAttack.DrainAp:
+			return "drainAp"
+		db.EnemyAttack.DrainRp:
+			return "drainRp"
+		db.EnemyAttack.Unblockable:
+			return "unblockable"
 	return ""
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

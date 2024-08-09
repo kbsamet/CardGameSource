@@ -105,7 +105,7 @@ texture_scale = 1.37
 script = ExtResource("7_3xgc3")
 
 [node name="ShadowLight" type="PointLight2D" parent="light"]
-position = Vector2(1.00934, 0.336456)
+position = Vector2(-0.504686, 0.504683)
 color = Color(0.67451, 0.67451, 0.756863, 1)
 energy = 0.97
 range_z_max = 7

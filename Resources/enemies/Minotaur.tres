@@ -59,6 +59,7 @@ health = 32
 max_health = 32
 stamina = 8
 max_stamina = 8
+difficulty = 6
 attacks = Array[ExtResource("2_mbh5h")]([SubResource("Resource_s6p36"), SubResource("Resource_n0ifx"), SubResource("Resource_6mk0v")])
 status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
 occluder = ExtResource("3_4f3da")

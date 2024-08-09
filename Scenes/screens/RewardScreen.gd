@@ -1,6 +1,6 @@
 extends Control
 class_name RewardScreen
-var reward_data : RewardData = RewardData.fromDict(db.rewards[2])
+var reward_data : RewardData = RewardData.fromDict(db.rewards[3])
 var rng  = RandomNumberGenerator.new()
 @onready var reward = $Reward/RewardSprite
 @onready var rewardText = $Reward/RewardText
@@ -8,13 +8,14 @@ var select_reward_screen = preload("res://Scenes/screens/RewardSelectScreen.tscn
 var outline_material = preload("res://Shaders/outline.tres")
 var choose_card_scene = preload("res://Scenes/ui/ChooseCardReward.tscn")
 var choose_relic_scene = preload("res://Scenes/ui/ChooseRelicreward.tscn")
-var tavern_scene = preload("res://Scenes/screens/TavernScreen.tscn")
+var tavern_scene = preload("res://Scenes/screens/TavernOutsideScreen.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	if reward_data.reward == "choose_card":
+	if reward_data.reward == "choose_card" or reward_data.reward == "choose_rare_card" :
 		reward.visible = false
 		reward.queue_free()
 		var card_scene = choose_card_scene.instantiate()
+		card_scene.rare_only = reward_data.reward == "choose_rare_card"
 		card_scene.card_chosen.connect(_go_to_select_reward)
 		add_child(card_scene)
 	elif reward_data.reward == "choose_relic":
@@ -23,6 +24,8 @@ func _ready():
 		var relic_scene = choose_relic_scene.instantiate() as ChooseRelicRewardScene
 		relic_scene.relic_chosen.connect(_go_to_select_reward)
 		add_child(relic_scene)
+	elif reward_data.reward == "tavern":
+		get_tree().change_scene_to_packed(tavern_scene)
 	reward.texture = load("res://Sprites/ui/rewardIcons/"+reward_data.reward+".png")
 
 
@@ -32,6 +35,9 @@ func _process(delta):
 
 
 func _go_to_select_reward():
+	if db.current_room % 5 == 0:
+		get_tree().change_scene_to_packed(tavern_scene)
+		return
 	get_tree().change_scene_to_packed(select_reward_screen)
 
 func _on_reward_mouse_entered():
@@ -55,6 +61,9 @@ func get_regular_reward(reward_name,reward_amount):
 	rewardText.text = "Gained " + str(amount) + " " + reward_name
 	reward.visible = false
 	await get_tree().create_timer(1.0).timeout 
+	if db.current_room % 5 == 0:
+		get_tree().change_scene_to_packed(tavern_scene)
+		return
 	get_tree().change_scene_to_packed(select_reward_screen)
 
 func get_chest_reward():
@@ -62,6 +71,9 @@ func get_chest_reward():
 		rewardText.text = "You couldn't open the chest"
 		reward.visible = false
 		await get_tree().create_timer(1.0).timeout
+		if db.current_room % 5 == 0:
+			get_tree().change_scene_to_packed(tavern_scene)
+			return
 		get_tree().change_scene_to_packed(select_reward_screen)
 		return
 	db.player.keys -= 1
@@ -92,8 +104,5 @@ func _on_reward_gui_input(event):
 			db.clickPlayer.play()
 			if reward_data.reward == "locked_chest":
 				get_chest_reward()
-				return
-			elif reward_data.reward == "tavern":
-				get_tree().change_scene_to_packed(tavern_scene)
 				return
 			get_regular_reward(reward_data.reward,reward_data.amount)

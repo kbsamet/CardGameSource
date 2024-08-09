@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://dl4dnm1hcdwq6"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_nv6rg"]
+
+[resource]
+script = ExtResource("1_nv6rg")
+_name = "drainAp"
+amount = 0
+tooltip = "Drained Ap:You have -1 action point for _ turns."
+hidden = false

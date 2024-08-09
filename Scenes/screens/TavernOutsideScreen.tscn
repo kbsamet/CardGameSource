@@ -1,0 +1,77 @@
+[gd_scene load_steps=6 format=3 uid="uid://c7qgeibnsgrpu"]
+
+[ext_resource type="Texture2D" uid="uid://uskx5xwmsw7r" path="res://Sprites/ui/screens/tavern_outside.png" id="1_1f4yl"]
+[ext_resource type="Script" path="res://Scenes/screens/TavernOutsideScreen.gd" id="1_mf35m"]
+[ext_resource type="Texture2D" uid="uid://bqw0mudk6x04p" path="res://Sprites/ui/screens/tavern_outside_tavern.png" id="2_yot8p"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="3_vbkaw"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="4_7nkkr"]
+
+[node name="TavernOutsideScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_mf35m")
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.509804, 0.509804, 0.607843, 1)
+light_mask = 7
+position = Vector2(957.5, 640)
+scale = Vector2(2.13, 2.13)
+texture = ExtResource("1_1f4yl")
+
+[node name="Control" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 1256.0
+offset_top = 181.0
+offset_right = 1915.0
+offset_bottom = 745.0
+
+[node name="Tavern" type="Sprite2D" parent="Control"]
+position = Vector2(349, 223)
+scale = Vector2(2.13, 2.13)
+texture = ExtResource("2_yot8p")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.690196, 0.690196, 0.772549, 1)
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1612, 179)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.3
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_vbkaw")
+texture_scale = 2.94
+height = 30.0
+script = ExtResource("4_7nkkr")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.15
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_vbkaw")
+texture_scale = 1.37
+script = ExtResource("4_7nkkr")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.00934, 0.336456)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+texture = ExtResource("3_vbkaw")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("4_7nkkr")
+
+[connection signal="gui_input" from="Control" to="." method="_on_control_gui_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_control_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_control_mouse_exited"]

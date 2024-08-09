@@ -1,11 +1,42 @@
-[gd_scene load_steps=7 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=15 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_2gp3d"]
 [ext_resource type="Texture2D" uid="uid://bi387adpaice3" path="res://Sprites/ui/end_action.png" id="6_apsm4"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="6_rgsw4"]
 [ext_resource type="Texture2D" uid="uid://dyqwdmwipxqar" path="res://Sprites/ui/deck.png" id="7_gocp1"]
+[ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="8_5kpcc"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="9_77xup"]
+[ext_resource type="Material" uid="uid://bgbyd7angtuq8" path="res://Shaders/crt_mat.tres" id="9_efegy"]
 [ext_resource type="Texture2D" uid="uid://c205fbxp1o6vy" path="res://Sprites/ui/discard_pile.png" id="11_2b7bs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmp2n"]
+bg_color = Color(0.388235, 0.380392, 0.403922, 0.301961)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.156863, 0.156863, 0.188235, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7nmxo"]
+bg_color = Color(0.662745, 0.286275, 0.286275, 1)
+border_color = Color(0.156863, 0.156863, 0.188235, 1)
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6144c"]
+bg_color = Color(0.309804, 0.392157, 0.721569, 1)
+border_color = Color(0.117647, 0.117647, 0.141176, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nm8gx"]
+bg_color = Color(0.333333, 0.490196, 0.333333, 1)
+border_color = Color(0.117647, 0.117647, 0.141176, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_yapfh"]
+font = ExtResource("9_77xup")
+font_size = 64
+font_color = Color(0.792157, 0.34902, 0.329412, 1)
+outline_size = 2
+outline_color = Color(0.117647, 0.117647, 0.141176, 1)
 
 [node name="FightPlayerUi" type="Control"]
 layout_mode = 3
@@ -86,5 +117,172 @@ offset_bottom = -1.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer"]
 color = Color(0.758191, 0.758192, 0.758192, 1)
+
+[node name="BossControl" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -43.0
+offset_top = -33.0
+offset_right = -3.0
+offset_bottom = 7.0
+
+[node name="HealthBar" type="Control" parent="CanvasLayer/BossControl"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = 0
+offset_left = 858.0
+offset_top = 256.0
+offset_right = 858.0
+offset_bottom = 256.0
+
+[node name="HealthBorder" type="Panel" parent="CanvasLayer/BossControl/HealthBar"]
+custom_minimum_size = Vector2(800, 20)
+layout_mode = 0
+offset_left = -253.0
+offset_top = -10.0
+offset_right = 551.0
+offset_bottom = 24.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vmp2n")
+
+[node name="HealthBarRect" type="Panel" parent="CanvasLayer/BossControl/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+layout_direction = 1
+layout_mode = 2
+offset_left = -250.583
+offset_top = -8.0
+offset_right = 549.417
+offset_bottom = 22.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_7nmxo")
+metadata/_edit_use_anchors_ = true
+
+[node name="BlockBarRect" type="Panel" parent="CanvasLayer/BossControl/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+layout_mode = 2
+anchor_left = 0.850313
+anchor_top = 0.062
+anchor_right = 1.01438
+anchor_bottom = 0.8745
+offset_left = 449.417
+offset_top = -8.00001
+offset_right = 549.417
+offset_bottom = 22.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_6144c")
+metadata/_edit_use_anchors_ = true
+
+[node name="BlockIcon" type="Sprite2D" parent="CanvasLayer/BossControl/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+position = Vector2(-272.583, 10)
+scale = Vector2(1.08854, 1.08854)
+texture = ExtResource("8_5kpcc")
+
+[node name="Label" type="Label" parent="CanvasLayer/BossControl/HealthBar/BlockIcon"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = -1
+anchor_right = 1.031
+anchor_bottom = 1.094
+offset_left = -16.0
+offset_top = -15.0
+offset_right = -15.992
+offset_bottom = -16.008
+text = "3"
+label_settings = ExtResource("2_2gp3d")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="HealthLabel" type="Label" parent="CanvasLayer/BossControl/HealthBar"]
+light_mask = 4
+visibility_layer = 4
+custom_minimum_size = Vector2(800, 30)
+layout_mode = 2
+anchor_left = -1.46875
+anchor_top = 0.1875
+anchor_right = 4.625
+anchor_bottom = 0.46875
+offset_left = -250.0
+offset_top = -8.0
+offset_right = 550.0
+offset_bottom = 22.0
+text = "10/10
+"
+label_settings = ExtResource("2_2gp3d")
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="StaminaBar" type="Control" parent="CanvasLayer/BossControl"]
+light_mask = 4
+visibility_layer = 4
+anchors_preset = 0
+offset_left = 858.0
+offset_top = 292.0
+offset_right = 858.0
+offset_bottom = 292.0
+
+[node name="StaminaBorder" type="Panel" parent="CanvasLayer/BossControl/StaminaBar"]
+custom_minimum_size = Vector2(800, 20)
+layout_mode = 0
+offset_left = -252.0
+offset_top = -6.0
+offset_right = 552.0
+offset_bottom = 28.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vmp2n")
+
+[node name="StaminaBarRect" type="Panel" parent="CanvasLayer/BossControl/StaminaBar"]
+light_mask = 4
+visibility_layer = 4
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -250.0
+offset_top = -4.0
+offset_right = 550.0
+offset_bottom = 26.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nm8gx")
+
+[node name="StaminaLabel" type="Label" parent="CanvasLayer/BossControl/StaminaBar"]
+light_mask = 4
+visibility_layer = 4
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.969
+offset_left = -250.0
+offset_top = 4.0
+offset_right = 446.0
+offset_bottom = 20.0
+text = "3/3
+"
+label_settings = ExtResource("2_2gp3d")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="CanvasLayer/BossControl"]
+layout_mode = 0
+offset_left = 607.0
+offset_top = 174.0
+offset_right = 1423.0
+offset_bottom = 238.0
+text = "Soul Eater"
+label_settings = SubResource("LabelSettings_yapfh")
+horizontal_alignment = 1
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+visible = false
+light_mask = 7
+z_index = 4096
+material = ExtResource("9_efegy")
+offset_right = 1934.0
+offset_bottom = 1080.0
+mouse_filter = 2
 
 [connection signal="gui_input" from="CanvasLayer/Container" to="." method="_on_button_input"]

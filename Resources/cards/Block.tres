@@ -16,3 +16,4 @@ description = "Block 3 damage."
 cost = 1
 targeted = false
 effects = Array[ExtResource("1_c8f7s")]([SubResource("Resource_6w00h")])
+is_rare = false
