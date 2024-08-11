@@ -47,11 +47,13 @@ enum Turn {
 }
 
 enum CardType {
-	Action,Reaction
+	Action,Reaction,Neutral
 } 
 
 enum CardEffect {
-	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,Empower
+	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
+	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
+	BarbedArmor
 }
 
 enum EnemyAttack {
@@ -63,7 +65,7 @@ enum ItemEffect {
 }
 
 const card_keywords = [
-	"block","dodge","daze","bleed","crushing","empowered"
+	"block","dodge","daze","bleed","crushing","empowered","overcharged","barbed armor"
 ]
 
 const enemy_tooltips : Dictionary = {
@@ -75,7 +77,7 @@ const enemy_tooltips : Dictionary = {
 	db.EnemyAttack.HealAll: "Heal All:This enemy will heal all enemies by _.",
 	db.EnemyAttack.Blind: "Blind:You will be unable to target enemies for _ turns.",
 	db.EnemyAttack.Burn: "Burn:You will discard a random card for _ turns.",
-	db.EnemyAttack.Unstoppable: "Unstoppable:This enemy cannot be stunned.",
+	db.EnemyAttack.Unstoppable: "Unstoppable:This enemy will be unable to be stunned for _ turns.",
 	db.EnemyAttack.Empower: "Empower:All enemies will do _ more damage.",
 	db.EnemyAttack.Lifesteal: "Lifesteal:Deal _ damage. Heal _ health.",
 	db.EnemyAttack.Unblockable: "Unblockable:This attack cannot be blocked.",
@@ -89,8 +91,12 @@ const card_tooltips : Dictionary = {
 	CardEffect.Dodge : "Dodge:Dodge the incoming attack.",
 	CardEffect.Daze : "Daze:The enemy will be unable to attack for _ turns.",
 	CardEffect.Bleed : "Bleed:The enemy will receive _ damage per turn.",
-	CardEffect.Crushing : "Crushing:Deal double damage to dazed enemies for _ turns",
-	CardEffect.Empower : "Empower:Your attacks will do _ more damage"
+	CardEffect.Crushing : "Crushing:Deal double damage to dazed enemies for _ turns.",
+	CardEffect.Empower : "Empower:Your attacks will do _ more damage.",
+	CardEffect.NoManaNextTurn : "Overcharged:You will lose all your reaction or action points next turn.",
+	CardEffect.BarbedArmor : "Barbed Armor:Bleed is inflicted on attacking enemies equal to the damage you blocked.",
+	CardEffect.BleedAll : "Bleed:The enemy will receive _ damage per turn."
+	
 }
 
 const dialogue_tooltips : Dictionary = {
@@ -117,64 +123,6 @@ const items : Dictionary = {
 	}
 }
 
-const fight_rooms : Dictionary = {
-	"1-0" : [
-	{
-		"Zombie" : 2,
-		"Bat"  : 2
-	},
-	{
-		"Zombie" : 3,
-	},
-	{
-		"Bat" : 2,
-	},
-	{
-		"Bat" : 1,
-		"Fire Seeker": 1
-	},
-	{
-		"Fire Seeker": 2,
-	},
-	{
-		"Bat" : 1,
-		"Zombie" : 2
-	},
-	{
-		"Fire Seeker": 2,
-		"Zombie" : 1
-	}
-],
-	"1-1" : [
-		{
-			"Minotaur": 2,
-			"Zombie" : 2
-		},
-		{
-			"Fire Seeker" : 2,
-			"Fallen Priest" : 1,
-			"Bat" : 1
-		},
-		{
-			"Zombie" : 2,
-			"Fallen Priest" : 1,
-			"Fire Seeker" : 1
-		},
-		{
-			"Minotaur" : 1,
-			"Fallen Priest" : 1,
-			"Fire Seeker" : 1
-		},
-		{
-			"Minotaur" : 3,
-		},
-		{
-			"Fallen Priest" : 2,
-			"Fire Seeker" : 2
-		},
-	]
-	
-}
 
 const rewards : Array[Dictionary] = [
 	#{

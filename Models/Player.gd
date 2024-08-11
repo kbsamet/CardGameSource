@@ -1,8 +1,8 @@
 extends Resource
 class_name Player
 
-var max_health : int = 20
-var health : int = 20
+var max_health : int = 25
+var health : int = 25
 var max_ap : int = 3
 var ap : int = 3
 var rp : int = 3
@@ -15,6 +15,8 @@ var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
 var gold : int = 0
 var keys : int = 1
+
+var next_turn_effects : Array[CardEffectData] = []
 
 signal relics_changed
 
@@ -53,6 +55,9 @@ func add_player_items(item,amount):
 		keys += amount
 	db.player_state_changed.emit()
 
+func add_effect_next_turn(effect: CardEffectData):
+	next_turn_effects.append(effect)
+
 func heal_player(amount):
 	health += amount
 	health = min(max_health,health)
@@ -73,7 +78,7 @@ func damage_player(amount,unblockable = false):
 func add_player_status_effect(effect : String,amount: int):
 	print("status effect: " + effect + " amount: " + str(amount))
 	if effect in status_effects:
-		if status_effects[effect].amount == -amount:
+		if status_effects[effect].amount <= -amount:
 			if effect == "drunk":
 				add_max_ap(-1)
 				add_max_rp(1)
@@ -85,6 +90,8 @@ func add_player_status_effect(effect : String,amount: int):
 		else:
 			status_effects[effect].amount += amount
 	else:
+		if amount < 0:
+			return
 		if effect == "drunk":
 			add_max_ap(1)
 			add_max_rp(-1)
@@ -97,7 +104,13 @@ func add_player_status_effect(effect : String,amount: int):
 	if effect == "block":
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
-	
+
+func swap_points():
+	var prev_ap = ap
+	ap = rp
+	rp = prev_ap
+	db.player_state_changed.emit()
+
 func change_player_status_effect(effect:String,new_stat:int):
 	if effect in status_effects:
 		if new_stat == 0:
@@ -105,7 +118,8 @@ func change_player_status_effect(effect:String,new_stat:int):
 		else:
 			status_effects[effect].amount = new_stat
 	else:
-		status_effects[effect] =  db.get_status_effect(effect,new_stat)
+		if new_stat != 0:
+			status_effects[effect] =  db.get_status_effect(effect,new_stat)
 	if effect == "block":
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
@@ -116,7 +130,11 @@ func end_turn_process_player_status_effects():
 	if "bleed" in status_effects:
 		damage_player(status_effects["bleed"].amount)
 		add_player_status_effect("bleed",-1)
-
+	for effect in next_turn_effects:
+		match effect.effect:
+			db.CardEffect.Block:
+				add_player_status_effect("block",effect.amount)
+	next_turn_effects = []
 func end_fight_process_player_status_effects():
 	if "drunk" in db.player.status_effects:
 		db.player.add_player_status_effect("drunk",-1)
@@ -126,7 +144,8 @@ func end_fight_process_player_status_effects():
 	change_player_status_effect("block",0)
 	change_player_status_effect("empowered",0)
 	change_player_status_effect("dodge",0)
-	
+	change_player_status_effect("overcharged",0)
+	change_player_status_effect("doubledamage",0)
 func add_to_deck(card : CardData):
 	deck.push_back(card)
 	deck_size += 1

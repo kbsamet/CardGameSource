@@ -7,13 +7,14 @@
 script = ExtResource("1_5kyvl")
 effect = 4
 amount = 4
+next_turn = false
 
 [resource]
 script = ExtResource("2_jw0hd")
 _name = "Sharp Blade"
 type = 0
-description = "Inflict 4 bleed to an enemy."
-cost = 2
+description = "Inflict 5 bleed to an enemy."
+cost = 1
 targeted = true
 effects = Array[ExtResource("1_5kyvl")]([SubResource("Resource_6w00h")])
 is_rare = false

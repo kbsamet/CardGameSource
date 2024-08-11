@@ -22,7 +22,7 @@ signal boss_dead
 @onready var blockBarRect = $Control/HealthBar/BlockBarRect
 @onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
 @onready var staminaLabel = $Control/StaminaBar/StaminaLabel
-@onready var animationPlayer = $AnimationPlayer
+@onready var animationPlayer = $AnimationPlayer as AnimationPlayer
 @onready var statusEffectContainer = $Control/StatusEffectContainer
 @onready var hitShader = preload("res://Shaders/hit_shader.tres").duplicate()
 @onready var outlineShader = preload("res://Shaders/outline_red.tres")
@@ -135,9 +135,10 @@ func damage(amount):
 		
 	hitAmountLabel.text = str(amount)
 	if amount > 0:
-		animationPlayer.queue("hit")
-		hitParticles.color = particle_color_red
-		hitParticles.emitting = true
+		if !animationPlayer.is_playing():
+			animationPlayer.play("hit")
+			hitParticles.color = particle_color_red
+			hitParticles.emitting = true
 
 
 	enemy_data.health -= amount
@@ -216,6 +217,7 @@ func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
 		attack_rise_done.emit(id)
 		set_attack_info()
+		
 	elif anim_name == "attack_end":
 		attack_end_done.emit()
 		remove_attack_info()
@@ -229,7 +231,10 @@ func process_status_effects():
 		if effect._name == "bleed":
 			damage(effect.amount)
 			add_status_effect("bleed",-1)
-			
+		if effect._name == "unstoppable":
+			add_status_effect("unstoppable",-1)
+		if effect._name == "empowered":
+			add_status_effect("empowered",-1)
 
 func start_attack_animation() -> void:
 	z_index = 6
@@ -285,7 +290,7 @@ func add_status_effect(effect : String,amount: int) -> void:
 		enemy_data.remove_status_effect(effect)
 	else:
 		if effect == "dazed":
-			if selected_attack != null and selected_attack.get_value_of_type(db.EnemyAttack.Unstoppable) != -1:
+			if enemy_data.stamina > 0 and enemy_data.get_status_effect("unstoppable") != -1:
 				return
 			else:
 				selected_attack = null

@@ -7,11 +7,13 @@
 script = ExtResource("1_08ccw")
 effect = 1
 amount = 3
+next_turn = false
 
 [sub_resource type="Resource" id="Resource_do7ng"]
 script = ExtResource("1_08ccw")
 effect = 12
 amount = 1
+next_turn = false
 
 [resource]
 script = ExtResource("2_plk6t")

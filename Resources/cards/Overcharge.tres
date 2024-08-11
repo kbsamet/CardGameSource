@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=6 format=3 uid="uid://bc76hs7dxg5ke"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_2agbd"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_0yrfd"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_2agbd")
+effect = 15
+amount = 2
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_hovdo"]
+script = ExtResource("1_2agbd")
+effect = 16
+amount = 2
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_1ojpk"]
+script = ExtResource("1_2agbd")
+effect = 17
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_0yrfd")
+_name = "Overcharge"
+type = 2
+description = "Gain 2 Ap and 2 Rp. Gain 1 overcharged."
+cost = 0
+targeted = false
+effects = Array[ExtResource("1_2agbd")]([SubResource("Resource_6w00h"), SubResource("Resource_hovdo"), SubResource("Resource_1ojpk")])
+is_rare = false

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://biw7stga3xucq"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_7jhin"]
+
+[resource]
+script = ExtResource("1_7jhin")
+_name = "overcharged"
+amount = 0
+tooltip = "Overcharged:You will have no action/reaction points for your next _ turns."
+hidden = false

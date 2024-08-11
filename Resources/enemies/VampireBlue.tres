@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=30 format=3 uid="uid://cdsq3hgyr4wac"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=33 format=3 uid="uid://cdsq3hgyr4wac"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_k1lp0"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_f36ds"]
-[ext_resource type="OccluderPolygon2D" uid="uid://dnkbba0246ygr" path="res://Resources/enemies/occluders/Zombie Occluder.tres" id="3_5wk20"]
+[ext_resource type="OccluderPolygon2D" uid="uid://0kadogfnuoug" path="res://Resources/enemies/occluders/Vampire.tres" id="3_35ylk"]
 [ext_resource type="Script" path="res://Models/EnemyData.gd" id="4_8hxm1"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_deso6"]
 
 [sub_resource type="Resource" id="Resource_jdtej"]
 script = ExtResource("1_k1lp0")
@@ -37,7 +38,12 @@ attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_jdtej"), SubResou
 [sub_resource type="Resource" id="Resource_sonho"]
 script = ExtResource("1_k1lp0")
 attack_type = 1
-amount = 5
+amount = 8
+
+[sub_resource type="Resource" id="Resource_lrjee"]
+script = ExtResource("1_k1lp0")
+attack_type = 3
+amount = 1
 
 [sub_resource type="Resource" id="Resource_n4i1u"]
 script = ExtResource("1_k1lp0")
@@ -61,7 +67,7 @@ amount = 3
 
 [sub_resource type="Resource" id="Resource_scari"]
 script = ExtResource("2_f36ds")
-attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_sonho"), SubResource("Resource_n4i1u"), SubResource("Resource_eneiu"), SubResource("Resource_4dp0u"), SubResource("Resource_5miyo")])
+attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_sonho"), SubResource("Resource_lrjee"), SubResource("Resource_n4i1u"), SubResource("Resource_eneiu"), SubResource("Resource_4dp0u"), SubResource("Resource_5miyo")])
 
 [sub_resource type="Resource" id="Resource_xqv53"]
 script = ExtResource("1_k1lp0")
@@ -114,7 +120,7 @@ attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_pp7pi"), SubResou
 [sub_resource type="Resource" id="Resource_h882q"]
 script = ExtResource("1_k1lp0")
 attack_type = 1
-amount = 3
+amount = 8
 
 [sub_resource type="Resource" id="Resource_y7vcf"]
 script = ExtResource("1_k1lp0")
@@ -125,14 +131,21 @@ amount = 1
 script = ExtResource("2_f36ds")
 attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_h882q"), SubResource("Resource_y7vcf")])
 
+[sub_resource type="Resource" id="Resource_lcjnn"]
+script = ExtResource("5_deso6")
+_name = "unstoppable"
+amount = 3
+tooltip = "Unstoppable:Can't be dazed for _ turns."
+hidden = false
+
 [resource]
 script = ExtResource("4_8hxm1")
 _name = "VampireBlue"
-health = 60
-max_health = 60
-stamina = 10
-max_stamina = 10
+health = 80
+max_health = 80
+stamina = 20
+max_stamina = 20
 difficulty = 9999999999
 attacks = Array[ExtResource("2_f36ds")]([SubResource("Resource_bdakw"), SubResource("Resource_scari"), SubResource("Resource_dpbcd"), SubResource("Resource_vd5cq"), SubResource("Resource_rj28c")])
-status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
-occluder = ExtResource("3_5wk20")
+status_effects = Array[ExtResource("5_deso6")]([SubResource("Resource_lcjnn")])
+occluder = ExtResource("3_35ylk")

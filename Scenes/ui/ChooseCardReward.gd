@@ -9,7 +9,7 @@ var rare_only = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var cards_copy : Array[CardData] = db.cards.duplicate(true)
-	cards_copy = cards_copy.filter(func(card) : return card._name != "Strike" and card._name != "Block")
+	cards_copy = cards_copy.filter(func(card) : return card._name != "Strike" and card._name != "Block" and card.type != db.CardType.Neutral)
 	if rare_only:
 		cards_copy = cards_copy.filter(func(card) : return card.is_rare)
 	for i in range(3):
@@ -28,4 +28,9 @@ func _ready():
 
 func _card_chosen(id):
 	db.player.add_to_deck(cards[id])
+	card_chosen.emit()
+
+
+func _on_button_pressed():
+	db.clickPlayer.play()
 	card_chosen.emit()

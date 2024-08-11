@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://xvnv3bvwkwcp"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_gdeat"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_jp48e"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_gdeat")
+effect = 1
+amount = 15
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_qpocd"]
+script = ExtResource("1_gdeat")
+effect = 17
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_jp48e")
+_name = "Hibernation"
+type = 1
+description = "Gain 15 block. Gain 1 overcharged."
+cost = 2
+targeted = false
+effects = Array[ExtResource("1_gdeat")]([SubResource("Resource_6w00h"), SubResource("Resource_qpocd")])
+is_rare = false

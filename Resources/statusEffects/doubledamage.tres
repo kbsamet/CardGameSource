@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://bxoxn54qq21ui"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_8r6br"]
+
+[resource]
+script = ExtResource("1_8r6br")
+_name = "doubledamage"
+amount = 0
+tooltip = "Double Damage:You will do double damage for _ turns."
+hidden = false

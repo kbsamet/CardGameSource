@@ -35,7 +35,7 @@ func _ready():
 	db.player_status_effect_changed.connect(_player_status_effect_changed)
 	_turn_changed(db.current_turn)
 	manaLabel.text = str(card_data.cost)
-	typeLabel.text = "A" if (card_data.type == db.CardType.Action) else "R"
+	typeLabel.text = "A" if (card_data.type == db.CardType.Action) else "R" if card_data.type == db.CardType.Reaction else "N"
 	nameLabel.text = card_data._name
 	descriptionLabel.text = "[center]" + card_data.description
 	add_description_colors()
@@ -85,7 +85,15 @@ func _player_status_effect_changed():
 		add_damage_color()
 		
 func _player_state_changed():
-	if (card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
+	if card_data.type == db.CardType.Neutral:
+		if (db.current_turn == db.Turn.PlayerAction and db.player.ap >= card_data.cost) or \
+		 (db.current_turn == db.Turn.PlayerReaction and db.player.rp >= card_data.cost):
+			disabled = false
+			sprite.material = null
+		elif db.current_turn == db.Turn.PlayerAction or db.Turn.PlayerReaction:
+			sprite.material = disabledShader
+			disabled = true
+	elif (card_data.type == db.CardType.Action && db.player.ap < card_data.cost) ||\
 		(card_data.type == db.CardType.Reaction && db.player.rp < card_data.cost):
 		sprite.material = disabledShader
 		disabled = true
@@ -121,24 +129,24 @@ func _process(delta):
 	
 
 func _on_hover():
-	if disabled or selected or dragged:
+	if selected or dragged:
 		remove_info()
 		return
 	animationPlayer.stop()
 	animationPlayer.play("hover")
-	sprite.material = outlineShader
+	#sprite.material = outlineShader
 	show_info()
 	hovered = true
 	z_index = 10
 
 func _on_hover_over():
 	remove_info()
-	if disabled or selected or dragged:
+	if selected or dragged:
 		return
 	if !selected:
 		animationPlayer.stop()
 		animationPlayer.play("restore")
-		sprite.material = null
+		#sprite.material = null
 		hovered = false
 		
 		z_index = 8

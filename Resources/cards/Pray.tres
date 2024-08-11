@@ -7,6 +7,7 @@
 script = ExtResource("1_lh3c8")
 effect = 5
 amount = 2
+next_turn = false
 
 [resource]
 script = ExtResource("2_pibde")

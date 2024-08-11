@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=15 format=3 uid="uid://b1q4fd4bv13rw"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=21 format=3 uid="uid://b1q4fd4bv13rw"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_3ui8q"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_mbh5h"]
@@ -10,6 +10,11 @@ script = ExtResource("1_3ui8q")
 attack_type = 1
 amount = 6
 
+[sub_resource type="Resource" id="Resource_se0eh"]
+script = ExtResource("1_3ui8q")
+attack_type = 11
+amount = 1
+
 [sub_resource type="Resource" id="Resource_l5xid"]
 script = ExtResource("1_3ui8q")
 attack_type = 2
@@ -17,7 +22,7 @@ amount = 3
 
 [sub_resource type="Resource" id="Resource_s6p36"]
 script = ExtResource("2_mbh5h")
-attacks = Array[ExtResource("1_3ui8q")]([SubResource("Resource_xivf7"), SubResource("Resource_l5xid")])
+attacks = Array[ExtResource("1_3ui8q")]([SubResource("Resource_xivf7"), SubResource("Resource_se0eh"), SubResource("Resource_l5xid")])
 
 [sub_resource type="Resource" id="Resource_jxnmh"]
 script = ExtResource("1_3ui8q")
@@ -29,6 +34,11 @@ script = ExtResource("1_3ui8q")
 attack_type = 5
 amount = 5
 
+[sub_resource type="Resource" id="Resource_il1ar"]
+script = ExtResource("1_3ui8q")
+attack_type = 7
+amount = 1
+
 [sub_resource type="Resource" id="Resource_3e2hi"]
 script = ExtResource("1_3ui8q")
 attack_type = 2
@@ -36,7 +46,26 @@ amount = 3
 
 [sub_resource type="Resource" id="Resource_n0ifx"]
 script = ExtResource("2_mbh5h")
-attacks = Array[ExtResource("1_3ui8q")]([SubResource("Resource_jxnmh"), SubResource("Resource_ucsu3"), SubResource("Resource_3e2hi")])
+attacks = Array[ExtResource("1_3ui8q")]([SubResource("Resource_jxnmh"), SubResource("Resource_ucsu3"), SubResource("Resource_il1ar"), SubResource("Resource_3e2hi")])
+
+[sub_resource type="Resource" id="Resource_e35ch"]
+script = ExtResource("1_3ui8q")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_eqkor"]
+script = ExtResource("1_3ui8q")
+attack_type = 4
+amount = 3
+
+[sub_resource type="Resource" id="Resource_vji1x"]
+script = ExtResource("1_3ui8q")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_nrdjp"]
+script = ExtResource("2_mbh5h")
+attacks = Array[ExtResource("1_3ui8q")]([SubResource("Resource_e35ch"), SubResource("Resource_eqkor"), SubResource("Resource_vji1x")])
 
 [sub_resource type="Resource" id="Resource_4pvdt"]
 script = ExtResource("1_3ui8q")
@@ -59,7 +88,7 @@ health = 32
 max_health = 32
 stamina = 8
 max_stamina = 8
-difficulty = 6
-attacks = Array[ExtResource("2_mbh5h")]([SubResource("Resource_s6p36"), SubResource("Resource_n0ifx"), SubResource("Resource_6mk0v")])
+difficulty = 4
+attacks = Array[ExtResource("2_mbh5h")]([SubResource("Resource_s6p36"), SubResource("Resource_n0ifx"), SubResource("Resource_nrdjp"), SubResource("Resource_6mk0v")])
 status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
 occluder = ExtResource("3_4f3da")

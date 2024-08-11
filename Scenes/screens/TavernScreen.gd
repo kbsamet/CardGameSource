@@ -1,6 +1,5 @@
 extends Control
 
-@onready var clickPlayer = $clickPlayer
 var chooseRewardScene = preload("res://Scenes/screens/RewardSelectScreen.tscn")
 var npcScene = preload("res://Scenes/ui/NpcScene.tscn")
 

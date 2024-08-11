@@ -42,7 +42,7 @@ func spawn_enemy(enemy_name : String):
 	return new_enemy
 
 func spawn_boss(boss_name : String):
-	var new_enemy = load("res://Scenes/enemies/minibosses/"+boss_name+"Scene.tscn").instantiate() 
+	var new_enemy = load("res://Scenes/enemies/minibosses/"+boss_name+"Scene.tscn").duplicate(true).instantiate() 
 	enemyController.add_boss(new_enemy)
 	return new_enemy
 	
@@ -60,23 +60,22 @@ func spawn_enemies():
 		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
 		vampire.boss_phase_changed.connect(boss_phase_changed)
 		return
-	var diff_cap = 4 + (db.current_room / 2)
+	var diff_cap = 2 + (db.current_room*3/2)
 	var current_difficulty = 0
 	var enemies = {}
 	while current_difficulty < diff_cap:
 		var new_enemy = db.enemies.pick_random() as EnemyData
-		if new_enemy.difficulty > diff_cap / 2:
+		if new_enemy.difficulty > diff_cap * 6/7:
 			continue
 		if new_enemy.difficulty + current_difficulty > diff_cap:
-			break
-		if new_enemy._name in enemies:
-			if enemies[new_enemy._name] > 1:
 				continue
+		if new_enemy._name in enemies:
 			enemies[new_enemy._name] += 1
 			current_difficulty += new_enemy.difficulty
 		else:
 			enemies[new_enemy._name] = 1
 			current_difficulty += new_enemy.difficulty
+	print("diff cap : " +str(diff_cap) + "\ncurrent difficulty: " + str(current_difficulty) )
 	for key in enemies.keys():
 		for value in enemies[key]:
 			spawn_enemy(key)
@@ -105,87 +104,108 @@ func _use_card(enemy_id):
 	if (selected_card.type == db.CardType.Action && db.current_turn == db.Turn.PlayerReaction) || (selected_card.type == db.CardType.Reaction && db.current_turn == db.Turn.PlayerAction):
 		return
 	for effect in card_effects:
-		match effect.effect:
-			db.CardEffect.Damage:
-				var damage_amount = effect.amount
-				if "empowered" in db.player.status_effects:
-					damage_amount += db.player.status_effects["empowered"].amount
-				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
-					damage_amount *= 2
-				hitSound.play()
-				enemyController.enemies[enemy_id].damage(damage_amount)
-			db.CardEffect.ShieldSlam:
-				var damage_amount = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
-				if "empowered" in db.player.status_effects:
-					damage_amount += db.player.status_effects["empowered"].amount
-				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
-					damage_amount *= 2
-				hitSound.play()
-				enemyController.enemies[enemy_id].damage(damage_amount)
-			db.CardEffect.Riposte:
-				var damage_amount = 0 if enemyController.enemies[enemy_id].selected_attack != null else effect.amount
-				if "empowered" in db.player.status_effects:
-					damage_amount += db.player.status_effects["empowered"].amount
-				if "crushing" in db.player.status_effects && enemyController.enemies[enemy_id].get_status_effect("dazed") != null:
-					damage_amount *= 2
-				hitSound.play()
-				enemyController.enemies[enemy_id].damage(damage_amount)
-			db.CardEffect.Block:
-				if "block" in db.player.status_effects:
-					db.player.change_player_status_effect("block", db.player.status_effects.block.amount + effect.amount)
-				else:
-					db.player.change_player_status_effect("block", effect.amount)
-			db.CardEffect.Daze:
-				if enemy_id in enemyController.enemies:
-					enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
-			db.CardEffect.Bleed:
-				if enemy_id in enemyController.enemies:
-					enemyController.enemies[enemy_id].add_status_effect("bleed", effect.amount)
-			db.CardEffect.Heal:
-				db.player.heal_player(effect.amount)
-			db.CardEffect.Dodge:
-				db.player.add_player_status_effect("dodge",effect.amount)
-			db.CardEffect.DamageAll:
-				for enemy in enemyController.enemies.values():
-					var damage_amount = effect.amount
-					if "empowered" in db.player.status_effects:
-						damage_amount += db.player.status_effects["empowered"].amount
-					if "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != null:
-						damage_amount *= 2
-					enemy.damage(damage_amount)
-			db.CardEffect.ConvertAllAp:
-				db.player.rp += db.player.ap
-				db.player.ap = 0
-				db.player_state_changed.emit()
-			db.CardEffect.ConvertAllRp:
-				db.player.ap += db.player.rp
-				db.player.rp = 0
-				db.player_state_changed.emit()
-			db.CardEffect.Crushing:
-				db.player.add_player_status_effect("crushing",effect.amount)
-			db.CardEffect.Draw:
-				for i in range(effect.amount):
-					hand.draw_card()
-			db.CardEffect.Empower:
-				db.player.add_player_status_effect("empowered",effect.amount)
-				
-	if selected_card.type == db.CardType.Action:
+		if effect.next_turn:
+			db.player.add_effect_next_turn(effect)
+		else:
+			match effect.effect:
+				db.CardEffect.Damage:
+					var base = effect.amount
+					hitSound.play()
+					enemyController.enemies[enemy_id].damage(calculate_damage(base,enemyController.enemies[enemy_id].enemy_data))
+				db.CardEffect.ShieldSlam:
+					var base = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
+					hitSound.play()
+					enemyController.enemies[enemy_id].damage(calculate_damage(base,enemyController.enemies[enemy_id].enemy_data))
+				db.CardEffect.Riposte:
+					var base = 0 if enemyController.enemies[enemy_id].selected_attack != null else effect.amount
+					hitSound.play()
+					enemyController.enemies[enemy_id].damage(calculate_damage(base, enemyController.enemies[enemy_id].enemy_data))
+				db.CardEffect.Block:
+					if "block" in db.player.status_effects:
+						db.player.change_player_status_effect("block", db.player.status_effects.block.amount + effect.amount)
+					else:
+						db.player.change_player_status_effect("block", effect.amount)
+				db.CardEffect.Daze:
+					if enemy_id in enemyController.enemies:
+						enemyController.enemies[enemy_id].add_status_effect("dazed", 1)
+				db.CardEffect.Bleed:
+					if enemy_id in enemyController.enemies:
+						enemyController.enemies[enemy_id].add_status_effect("bleed", effect.amount)
+				db.CardEffect.Heal:
+					db.player.heal_player(effect.amount)
+				db.CardEffect.Dodge:
+					db.player.add_player_status_effect("dodge",effect.amount)
+				db.CardEffect.DamageAll:
+					for enemy in enemyController.enemies.values():
+						enemy.damage(calculate_damage(effect.amount,enemy.enemy_data))
+				db.CardEffect.ConvertAllAp:
+					db.player.rp += db.player.ap
+					db.player.ap = 0
+					db.player_state_changed.emit()
+				db.CardEffect.ConvertAllRp:
+					db.player.ap += db.player.rp
+					db.player.rp = 0
+					db.player_state_changed.emit()
+				db.CardEffect.Crushing:
+					db.player.add_player_status_effect("crushing",effect.amount)
+				db.CardEffect.Draw:
+					for i in range(effect.amount):
+						hand.draw_card()
+				db.CardEffect.Empower:
+					db.player.add_player_status_effect("empowered",effect.amount)
+				db.CardEffect.DiscardRandom:
+					var hand_copy = hand.cards.keys().duplicate()
+					hand_copy.erase(card_id)
+					hand.discard(hand_copy.pick_random())
+				db.CardEffect.SwapActionReaction:
+					db.player.swap_points()
+				db.CardEffect.GainAp:
+					db.player.ap += effect.amount
+					db.player_state_changed.emit()
+				db.CardEffect.GainRp:
+					db.player.rp += effect.amount
+					db.player_state_changed.emit()
+				db.CardEffect.NoManaNextTurn:
+					db.player.add_player_status_effect("overcharged",effect.amount)
+				db.CardEffect.DoubleDamageTurn:
+					db.player.add_player_status_effect("doubledamage",effect.amount)
+				db.CardEffect.BleedAll:
+					for enemy in enemyController.enemies.values():
+						enemy.add_status_effect("bleed", effect.amount)
+				db.CardEffect.BarbedArmor:
+					db.player.add_player_status_effect("barbedshield",effect.amount)
+					
+	if db.current_turn == db.Turn.PlayerAction:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
-	else:
+	elif db.current_turn == db.Turn.PlayerReaction:
 		db.player.rp = db.player.rp - selected_card.cost
 		db.player_state_changed.emit()
 	hand.discard(card_id)
 
-
+func calculate_damage(base:int , enemy: EnemyData) -> int:
+	var damage_amount = base
+	if "empowered" in db.player.status_effects:
+		damage_amount += db.player.status_effects["empowered"].amount
+	if "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != -1:
+		damage_amount *= 2
+	if "doubledamage" in db.player.status_effects:
+		damage_amount *= 2
+	return damage_amount
 func _end_turn_clicked():
 	for enemy in enemyController.enemies.values():
 		enemy = enemy as EnemyNode
+		if enemy.animationPlayer.is_playing():
+			return
 		if enemy.death_animation_playing:
 			return
 	if db.current_turn == db.Turn.EnemyAction || db.current_turn == db.Turn.EnemyReaction:
 		return
 	if db.current_turn == db.Turn.PlayerAction:
+		if "overcharged" in db.player.status_effects:
+			db.player.rp = 0
+			db.player.add_player_status_effect("overcharged",-1)
+			db.player_state_changed.emit()
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.start_turn()
 	else:
@@ -202,8 +222,6 @@ func _enemy_turn_done():
 	enemyController.attacking_enemy_id = -1
 	hand.discard_all()
 	await hand.deal_hand()
-	for enemy in enemyController.enemies.values():
-		enemy.process_status_effects()
 	if "blind" in db.player.status_effects:
 		db.player.add_player_status_effect("blind",-1)
 	if "burn" in db.player.status_effects:
@@ -215,12 +233,20 @@ func _enemy_turn_done():
 		db.player.add_player_status_effect("drainAp",-1)
 	if "drainRp" in db.player.status_effects:
 		db.player.add_player_status_effect("drainRp",-1)
+	if "doubledamage" in db.player.status_effects:
+		db.player.add_player_status_effect("doubledamage",-1)
+	if "barbedshield" in db.player.status_effects:
+		db.player.add_player_status_effect("barbedshield",-1)
 	if "empowered" in db.player.status_effects and db.player.status_effects["empowered"].amount > 0:
 		db.player.add_player_status_effect("empowered",-1)
 	if "dazed" in db.player.status_effects:
 		db.player.add_player_status_effect("dazed", -1)
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.start_turn()
+	if "overcharged" in db.player.status_effects:
+		db.player.ap = 0
+		db.player.add_player_status_effect("overcharged",-1)
+		db.player_state_changed.emit()
 		
 func _fight_over():
 	db.player.ap = db.player.max_ap
@@ -255,7 +281,7 @@ func create_deck():
 	for i in range(4):
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
-	db.player.deck.push_back(db.get_card("Daze"))
 	db.player.deck.push_back(db.get_card("Strike"))
+	db.player.deck.push_back(db.get_card("Daze"))
 	fightUI.update_ui_values()
 

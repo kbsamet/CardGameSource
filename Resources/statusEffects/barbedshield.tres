@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://dxmkq5td0t5yq"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_6kxd2"]
+
+[resource]
+script = ExtResource("1_6kxd2")
+_name = "barbedshield"
+amount = 0
+tooltip = "Barbed Armor:Bleed is inflicted on attacking enemies equal to the damage you blocked."
+hidden = false

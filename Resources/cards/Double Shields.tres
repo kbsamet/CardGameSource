@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://d1l0ivqs8kaj5"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_6n62l"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_bnrf0"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_6n62l")
+effect = 1
+amount = 6
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_h6tkp"]
+script = ExtResource("1_6n62l")
+effect = 1
+amount = 5
+next_turn = true
+
+[resource]
+script = ExtResource("2_bnrf0")
+_name = "Double Shields"
+type = 1
+description = "Gain 6 block. Then gain 5 more next turn."
+cost = 2
+targeted = false
+effects = Array[ExtResource("1_6n62l")]([SubResource("Resource_6w00h"), SubResource("Resource_h6tkp")])
+is_rare = true

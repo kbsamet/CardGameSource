@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://c47mtucbo8m7d"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_rfqvf"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_16p81"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_rfqvf")
+effect = 17
+amount = 1
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_du25h"]
+script = ExtResource("1_rfqvf")
+effect = 19
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_16p81")
+_name = "Draining Strike"
+type = 0
+description = "Deal double damage this turn. Gain 1 overcharged."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_rfqvf")]([SubResource("Resource_6w00h"), SubResource("Resource_du25h")])
+is_rare = false

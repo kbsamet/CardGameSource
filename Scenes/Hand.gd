@@ -129,6 +129,7 @@ func add_card(card : CardNode,tween : Tween,empty_hand : bool = false):
 	tween.parallel().tween_property(card,"scale",Vector2(1,1),0.1)
 	tween.tween_callback(func(): dealPlayer.play())
 	return tween.finished
+	
 func discard(id):
 	db.player.discardPile.push_back(cards[id].card_data)
 	if is_inside_tree():

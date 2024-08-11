@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://drow3rneh8dxy"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_61myn"]
+
+[resource]
+script = ExtResource("1_61myn")
+_name = "unstoppable"
+amount = 0
+tooltip = "Unstoppable:Can't be dazed for _ turns."
+hidden = false

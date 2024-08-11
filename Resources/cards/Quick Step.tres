@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://doalb4tlptpnr"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_bbwwn"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_v601q"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_bbwwn")
+effect = 12
+amount = 2
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_6otwh"]
+script = ExtResource("1_bbwwn")
+effect = 14
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_v601q")
+_name = "Quick Step"
+type = 2
+description = "Draw 2 cards. Discard a random card."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_bbwwn")]([SubResource("Resource_6w00h"), SubResource("Resource_6otwh")])
+is_rare = false

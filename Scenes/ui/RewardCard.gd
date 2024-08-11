@@ -11,16 +11,18 @@ var tooltipScene = preload("res://Scenes/ui/Tooltip.tscn")
 @onready var tooltipContainer = $VBoxContainer
 var id : int
 var card_data : CardData
+var no_outline = false
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
 
-func set_data(data:CardData,_id : int):
+func set_data(data:CardData,_id : int,no_outline=false):
+	self.no_outline = no_outline
 	id = _id
 	card_data = data
 	sprite.texture = load("res://Sprites/cards/"+data._name+".png")
 	manaLabel.text = str(data.cost)
-	typeLabel.text = "A" if data.type == db.CardType.Action else "R"
+	typeLabel.text = "A" if data.type == db.CardType.Action else "R" if data.type == db.CardType.Reaction else "N"
 	nameLabel.text = data._name
 	descriptionLabel.text = "[center]" + data.description
 	if data.is_damage_card():
@@ -39,12 +41,14 @@ func _process(delta):
 
 
 func _on_mouse_entered():
-	sprite.material = outlineShader
+	if !no_outline:
+		sprite.material = outlineShader
 	show_info()
 
 
 func _on_mouse_exited():
-	sprite.material = null
+	if !no_outline:
+		sprite.material = null
 	remove_info()
 
 func _on_gui_input(event):

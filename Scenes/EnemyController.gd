@@ -24,7 +24,7 @@ func add_boss(boss):
 	boss.enemy.on_clicked_signal.connect(_on_enemy_clicked)
 	boss.enemy.attack_rise_done.connect(_enemy_attack_rise_done)
 	boss.enemy.attack_end_done.connect(_enemy_attack_end_done)
-	boss.enemy.enemy_dead.connect(_enemy_dead)
+	boss.enemy.enemy_dead.connect(_boss_dead)
 	boss.enemy.enemy_hovered.connect(_on_enemy_hovered)
 	boss.enemy.enemy_hovered_end.connect(_on_enemy_hovered_end)
 	
@@ -71,9 +71,10 @@ func center_enemies():
 		enemies_reordered.insert(enemy_count/2,boss_key)
 	for i in range(enemy_count):
 		if enemies_reordered[i] in enemies:
+			var new_count = enemy_count + 1 if boss_key != -1 and enemy_count % 2 == 0 else enemy_count
 			var enemy_sprite : Sprite2D = enemies.values()[0].find_child("Sprite")
 			var enemy_width = enemy_sprite.texture.get_size().x
-			tween.tween_property(enemies[enemies_reordered[i]],"position:x",(i - ((enemy_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),0.2)
+			tween.tween_property(enemies[enemies_reordered[i]],"position:x",(i - ((new_count - 1)/2.0)) * (enemy_width * (enemy_sprite.transform.get_scale().x) + 150),0.2)
 
 func set_card_selected(new_state):
 	for enemy in enemies.values():
@@ -83,6 +84,8 @@ func _process(delta):
 	pass
 
 func start_turn():
+	for enemy in enemies.values():
+		enemy.process_status_effects()
 	var gen = ArrayIterator.Iterator.new(enemies.keys())
 	enemy_generator = gen
 	play_turn(gen)
@@ -98,6 +101,7 @@ func play_turn(gen:ArrayIterator.Iterator):
 			enemy_turn_done.emit()
 			return
 		id = gen.next()
+	print(str(id) + " animation started")
 	enemies[id].start_attack_animation()
 	attacking_enemy_id = id
 	
@@ -106,6 +110,7 @@ func _enemy_attack_rise_done(enemy_id):
 	var enemy = enemies[enemy_id]
 	enemy.get_attack()
 	enemy_action_done.emit(enemy_id)
+	print("enemy rise done")
 
 func end_enemy_attack():
 	if !(attacking_enemy_id in enemies):
@@ -127,7 +132,10 @@ func end_enemy_attack():
 		match single_attack.attack_type:
 			db.EnemyAttack.Damage:
 				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+					if "block" in db.player.status_effects and "barbedshield" in db.player.status_effects:
+						attacking_enemy.add_status_effect("bleed",min(single_attack.amount,db.player.status_effects["block"].amount))
 					db.player.damage_player(single_attack.amount,unblockable)
+					
 			db.EnemyAttack.StaminaCost:
 				attacking_enemy.change_stamina(-single_attack.amount)
 			db.EnemyAttack.Bleed:
@@ -166,6 +174,8 @@ func end_enemy_attack():
 				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
 					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 						db.player.add_player_status_effect("drainRp",single_attack.amount)
+			db.EnemyAttack.Unstoppable:
+				attacking_enemy.add_status_effect("unstoppable",single_attack.amount)
 					
 	if "dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0:
 		db.player.add_player_status_effect("dodge",-1)
@@ -174,7 +184,15 @@ func end_enemy_attack():
 func _enemy_attack_end_done():
 	center_enemies()
 	play_turn(enemy_generator)
-	
+
+func _boss_dead(enemy_id):
+	var boss = enemies[enemy_id].get_parent()
+	remove_child(boss)
+	boss.queue_free()
+	enemies.erase(enemy_id)
+	if enemies.is_empty():
+		enemies_empty.emit()
+	center_enemies()
 func _enemy_dead(enemy_id):
 	remove_child(enemies[enemy_id])
 	enemies[enemy_id].queue_free()
