@@ -100,20 +100,19 @@ const card_tooltips : Dictionary = {
 }
 
 const dialogue_tooltips : Dictionary = {
-	"beer" : "Beer:Restore 5 health. Lose 1 max ap for 1 fight.",
-	"wine" : "Wine:Restore 10 health. Lose 1 max ap for 2 fights.",
+	"beer" : "Beer:Restore 5 health.",
+	"wine" : "Wine:Restore 10 health. Lose 1 max ap for 1 fights.",
 	"whiskey" : "Whiskey:Restore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
 }
 
 const items : Dictionary = {
 	"beer" : {
 		ItemEffect.Heal : 5,
-		ItemEffect.Tipsy : 1,
 		ItemEffect.Cost : 10
 	},
 	"wine" : {
-		ItemEffect.Heal : 10,
-		ItemEffect.Tipsy : 2,
+		ItemEffect.Heal : 15,
+		ItemEffect.Tipsy : 1,
 		ItemEffect.Cost : 20
 	},
 	"whiskey" : {
@@ -196,7 +195,7 @@ const locked_chest_rewards : Array[Dictionary] = [
 		"multiplier" : 3
 	},
 	{
-		"reward": "choose_card",
+		"reward": "choose_rare_card",
 		"amount": 3,
 		"multiplier" : 2
 	},

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=27 format=3 uid="uid://fdw2etl0iacu"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=28 format=3 uid="uid://fdw2etl0iacu"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_ouotu"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_fa463"]
@@ -78,6 +78,11 @@ script = ExtResource("1_ouotu")
 attack_type = 11
 amount = 1
 
+[sub_resource type="Resource" id="Resource_nb1h6"]
+script = ExtResource("1_ouotu")
+attack_type = 7
+amount = 3
+
 [sub_resource type="Resource" id="Resource_4dd06"]
 script = ExtResource("1_ouotu")
 attack_type = 2
@@ -85,7 +90,7 @@ amount = 5
 
 [sub_resource type="Resource" id="Resource_gtbfd"]
 script = ExtResource("2_fa463")
-attacks = Array[ExtResource("1_ouotu")]([SubResource("Resource_pipt3"), SubResource("Resource_5mga3"), SubResource("Resource_a20pj"), SubResource("Resource_c8cic"), SubResource("Resource_4dd06")])
+attacks = Array[ExtResource("1_ouotu")]([SubResource("Resource_pipt3"), SubResource("Resource_5mga3"), SubResource("Resource_a20pj"), SubResource("Resource_c8cic"), SubResource("Resource_nb1h6"), SubResource("Resource_4dd06")])
 
 [sub_resource type="Resource" id="Resource_dk2yj"]
 script = ExtResource("1_ouotu")

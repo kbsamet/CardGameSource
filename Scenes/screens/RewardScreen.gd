@@ -83,7 +83,7 @@ func get_chest_reward():
 			reward_pool.append(reward.duplicate(true))
 	
 	var random_reward = reward_pool.pick_random()
-	if random_reward.reward == "choose_card":
+	if random_reward.reward == "choose_rare_card":
 		reward.visible = false
 		reward.queue_free()
 		var card_scene = choose_card_scene.instantiate()

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://cwav5swy6hlwu"]
+[gd_scene load_steps=31 format=3 uid="uid://cwav5swy6hlwu"]
 
 [ext_resource type="PackedScene" uid="uid://bjrjps2akf3w2" path="res://Scenes/enemies/Enemy.tscn" id="1_dcyhw"]
 [ext_resource type="Script" path="res://Scenes/enemies/minibosses/VampireScene.gd" id="1_o2r1e"]
@@ -25,7 +25,7 @@ attacks = Array[ExtResource("3_26ywy")]([SubResource("Resource_25l78"), SubResou
 [sub_resource type="Resource" id="Resource_h2pvs"]
 script = ExtResource("3_26ywy")
 attack_type = 1
-amount = 6
+amount = 8
 
 [sub_resource type="Resource" id="Resource_i5s0t"]
 script = ExtResource("3_26ywy")
@@ -44,7 +44,7 @@ attacks = Array[ExtResource("3_26ywy")]([SubResource("Resource_h2pvs"), SubResou
 [sub_resource type="Resource" id="Resource_wc847"]
 script = ExtResource("3_26ywy")
 attack_type = 1
-amount = 5
+amount = 9
 
 [sub_resource type="Resource" id="Resource_au7ae"]
 script = ExtResource("3_26ywy")
@@ -80,14 +80,19 @@ script = ExtResource("3_26ywy")
 attack_type = 11
 amount = 1
 
+[sub_resource type="Resource" id="Resource_nb1h6"]
+script = ExtResource("3_26ywy")
+attack_type = 7
+amount = 3
+
 [sub_resource type="Resource" id="Resource_4dd06"]
 script = ExtResource("3_26ywy")
 attack_type = 2
-amount = 5
+amount = 10
 
 [sub_resource type="Resource" id="Resource_gtbfd"]
 script = ExtResource("4_rkvht")
-attacks = Array[ExtResource("3_26ywy")]([SubResource("Resource_pipt3"), SubResource("Resource_5mga3"), SubResource("Resource_a20pj"), SubResource("Resource_c8cic"), SubResource("Resource_4dd06")])
+attacks = Array[ExtResource("3_26ywy")]([SubResource("Resource_pipt3"), SubResource("Resource_5mga3"), SubResource("Resource_a20pj"), SubResource("Resource_c8cic"), SubResource("Resource_nb1h6"), SubResource("Resource_4dd06")])
 
 [sub_resource type="Resource" id="Resource_dk2yj"]
 script = ExtResource("3_26ywy")
@@ -110,7 +115,7 @@ amount = 3
 tooltip = "Unstoppable:Can't be dazed for _ turns."
 hidden = false
 
-[sub_resource type="Resource" id="Resource_pakyl"]
+[sub_resource type="Resource" id="Resource_ajfcs"]
 script = ExtResource("6_3ckqc")
 _name = "Vampire"
 health = 80
@@ -127,5 +132,5 @@ scale = Vector2(0.8, 0.8)
 script = ExtResource("1_o2r1e")
 
 [node name="Enemy" parent="." instance=ExtResource("1_dcyhw")]
-enemy_data = SubResource("Resource_pakyl")
+enemy_data = SubResource("Resource_ajfcs")
 is_boss = true

@@ -60,16 +60,20 @@ func spawn_enemies():
 		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
 		vampire.boss_phase_changed.connect(boss_phase_changed)
 		return
-	var diff_cap = 2 + (db.current_room*3/2)
+	var diff_cap = floor(2 + (db.current_room*1.1))
 	var current_difficulty = 0
 	var enemies = {}
 	while current_difficulty < diff_cap:
 		var new_enemy = db.enemies.pick_random() as EnemyData
-		if new_enemy.difficulty > diff_cap * 6/7:
+		if new_enemy.difficulty > diff_cap * 3/4:
 			continue
 		if new_enemy.difficulty + current_difficulty > diff_cap:
 				continue
 		if new_enemy._name in enemies:
+			if enemies[new_enemy._name] > 1:
+				current_difficulty -= new_enemy.difficulty * enemies[new_enemy._name]
+				enemies.erase(new_enemy._name)
+				continue
 			enemies[new_enemy._name] += 1
 			current_difficulty += new_enemy.difficulty
 		else:

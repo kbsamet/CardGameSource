@@ -8,7 +8,7 @@
 [sub_resource type="Resource" id="Resource_xivf7"]
 script = ExtResource("1_3ui8q")
 attack_type = 1
-amount = 6
+amount = 3
 
 [sub_resource type="Resource" id="Resource_se0eh"]
 script = ExtResource("1_3ui8q")

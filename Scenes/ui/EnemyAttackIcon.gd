@@ -48,6 +48,9 @@ func get_attack_name(attack : db.EnemyAttack) -> String:
 			return "drainRp"
 		db.EnemyAttack.Unblockable:
 			return "unblockable"
+		db.EnemyAttack.GainStamina:
+			return "staminaGain"
+	assert(false, "Attack name not found!")
 	return ""
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=15 format=3 uid="uid://c0msawqgetwsh"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=20 format=3 uid="uid://c0msawqgetwsh"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_waudl"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_vff7a"]
@@ -38,6 +38,30 @@ amount = 2
 script = ExtResource("2_vff7a")
 attacks = Array[ExtResource("1_waudl")]([SubResource("Resource_p7glq"), SubResource("Resource_8j0vn")])
 
+[sub_resource type="Resource" id="Resource_tuyqf"]
+script = ExtResource("1_waudl")
+attack_type = 12
+amount = 3
+
+[sub_resource type="Resource" id="Resource_bot0d"]
+script = ExtResource("1_waudl")
+attack_type = 3
+amount = 1
+
+[sub_resource type="Resource" id="Resource_02vrc"]
+script = ExtResource("1_waudl")
+attack_type = 11
+amount = 1
+
+[sub_resource type="Resource" id="Resource_34i1k"]
+script = ExtResource("1_waudl")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_ugy33"]
+script = ExtResource("2_vff7a")
+attacks = Array[ExtResource("1_waudl")]([SubResource("Resource_tuyqf"), SubResource("Resource_bot0d"), SubResource("Resource_02vrc"), SubResource("Resource_34i1k")])
+
 [sub_resource type="Resource" id="Resource_pki26"]
 script = ExtResource("1_waudl")
 attack_type = 1
@@ -60,6 +84,6 @@ max_health = 23
 stamina = 5
 max_stamina = 5
 difficulty = 3
-attacks = Array[ExtResource("2_vff7a")]([SubResource("Resource_5ycc3"), SubResource("Resource_nxy5c"), SubResource("Resource_vteey")])
+attacks = Array[ExtResource("2_vff7a")]([SubResource("Resource_5ycc3"), SubResource("Resource_nxy5c"), SubResource("Resource_ugy33"), SubResource("Resource_vteey")])
 status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
 occluder = ExtResource("3_egybk")

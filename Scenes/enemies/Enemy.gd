@@ -176,6 +176,8 @@ func get_attack() -> EnemyAttackData:
 		selected_attack = null
 		return null
 	var available_attacks = enemy_data.attacks.filter(func(attack : EnemyAttackData): return attack.get_stamina_cost() <= enemy_data.stamina)
+	if enemy_data.stamina > 1:
+		available_attacks = available_attacks.filter(func(attack: EnemyAttackData) : return attack.get_stamina_cost() != 1)
 	if available_attacks.is_empty():
 		print("no available attacks on enemy "+ str(id))
 		selected_attack = null
@@ -186,15 +188,15 @@ func get_attack() -> EnemyAttackData:
 	#selected_attack = available_attacks[0]
 	
 	#get random attack
-	#selected_attack = available_attacks.pick_random()
+	selected_attack = available_attacks.pick_random()
 	
 	#get weighted random attack based on cost
-	var weighted_list = []
-	for attack in available_attacks:
-		attack = attack as EnemyAttackData
-		for i in range(attack.get_stamina_cost()):
-			weighted_list.append(attack)
-	selected_attack = weighted_list.pick_random().duplicate() as EnemyAttackData
+	#var weighted_list = []
+	#for attack in available_attacks:
+		#attack = attack as EnemyAttackData
+		#for i in range(attack.get_stamina_cost()):
+			#weighted_list.append(attack)
+	#selected_attack = weighted_list.pick_random().duplicate() as EnemyAttackData
 	var damage_amount = selected_attack.get_value_of_type(db.EnemyAttack.Damage)
 	var empowered_amount = enemy_data.get_status_effect("empowered")
 	if empowered_amount != -1 and damage_amount != -1:

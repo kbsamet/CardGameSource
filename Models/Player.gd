@@ -1,8 +1,8 @@
 extends Resource
 class_name Player
 
-var max_health : int = 25
-var health : int = 25
+var max_health : int = 30
+var health : int = 30
 var max_ap : int = 3
 var ap : int = 3
 var rp : int = 3
@@ -13,7 +13,7 @@ var status_effects : Dictionary = {}
 var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
-var gold : int = 0
+var gold : int = 10
 var keys : int = 1
 
 var next_turn_effects : Array[CardEffectData] = []
@@ -173,12 +173,14 @@ func start_fight_effects():
 	
 func reset():
 	health = max_health
+	max_ap = 3
+	max_rp = 3
 	ap = max_ap
 	rp = max_rp
 	status_effects = {}
 	deck = []
 	discardPile = []
-	gold = 0
+	gold = 10
 	keys = 1
 	relics = []
 	

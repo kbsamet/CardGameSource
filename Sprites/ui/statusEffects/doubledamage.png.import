@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bw5332p0pvdt0"
-path="res://.godot/imported/Vampire.png-fcc8d470e1041b937030a7835dd7473b.ctex"
+uid="uid://dc8j0te1oxl2c"
+path="res://.godot/imported/doubledamage.png-a63fe02683235f5bf3daa344a0ca925a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/enemies/Vampire.png"
-dest_files=["res://.godot/imported/Vampire.png-fcc8d470e1041b937030a7835dd7473b.ctex"]
+source_file="res://Sprites/ui/statusEffects/doubledamage.png"
+dest_files=["res://.godot/imported/doubledamage.png-a63fe02683235f5bf3daa344a0ca925a.ctex"]
 
 [params]
 

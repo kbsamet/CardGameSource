@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=33 format=3 uid="uid://cdsq3hgyr4wac"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=35 format=3 uid="uid://cdsq3hgyr4wac"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_k1lp0"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_f36ds"]
@@ -84,6 +84,16 @@ script = ExtResource("1_k1lp0")
 attack_type = 14
 amount = 10
 
+[sub_resource type="Resource" id="Resource_rige8"]
+script = ExtResource("1_k1lp0")
+attack_type = 7
+amount = 3
+
+[sub_resource type="Resource" id="Resource_8cudd"]
+script = ExtResource("1_k1lp0")
+attack_type = 11
+amount = 1
+
 [sub_resource type="Resource" id="Resource_kcc42"]
 script = ExtResource("1_k1lp0")
 attack_type = 2
@@ -91,7 +101,7 @@ amount = 0
 
 [sub_resource type="Resource" id="Resource_dpbcd"]
 script = ExtResource("2_f36ds")
-attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_xqv53"), SubResource("Resource_0flrk"), SubResource("Resource_sm55d"), SubResource("Resource_kcc42")])
+attacks = Array[ExtResource("1_k1lp0")]([SubResource("Resource_xqv53"), SubResource("Resource_0flrk"), SubResource("Resource_sm55d"), SubResource("Resource_rige8"), SubResource("Resource_8cudd"), SubResource("Resource_kcc42")])
 
 [sub_resource type="Resource" id="Resource_pp7pi"]
 script = ExtResource("1_k1lp0")
@@ -106,7 +116,7 @@ amount = 3
 [sub_resource type="Resource" id="Resource_m84ix"]
 script = ExtResource("1_k1lp0")
 attack_type = 7
-amount = 1
+amount = 3
 
 [sub_resource type="Resource" id="Resource_q0k1b"]
 script = ExtResource("1_k1lp0")
