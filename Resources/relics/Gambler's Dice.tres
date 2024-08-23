@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://dpow6gmwiuq8o"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_o34tb"]
+
+[resource]
+script = ExtResource("1_o34tb")
+_name = "Gambler's Dice"
+description = "Gambler's Dice:Gain a %20 chance to dodge the enemy attack. There is also a %5 chance for the attack to do double damage."
+cost = 25

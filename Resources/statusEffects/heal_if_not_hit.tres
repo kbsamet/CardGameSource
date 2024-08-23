@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://2c3uw2mvrosm"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_l8sqd"]
+
+[resource]
+script = ExtResource("1_l8sqd")
+_name = "heal_if_not_hit"
+amount = 0
+tooltip = ""
+hidden = true

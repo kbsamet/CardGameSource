@@ -17,8 +17,8 @@ func is_damage_card() -> bool:
 			return true
 	return false
 	
-static func from_card(card : CardData):
-	var new_card = CardData.new()
+static func from_card(card : CardData) -> CardData:
+	var new_card : CardData = CardData.new()
 	new_card._name = card._name
 	new_card.type = card.type
 	new_card.description = card.description

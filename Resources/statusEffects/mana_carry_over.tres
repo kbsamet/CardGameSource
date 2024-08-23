@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://dns3ou1uv5gdc"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_3bq18"]
+
+[resource]
+script = ExtResource("1_3bq18")
+_name = "mana_carry_over"
+amount = 0
+tooltip = ""
+hidden = true

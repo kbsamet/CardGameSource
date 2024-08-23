@@ -54,37 +54,37 @@ layout_mode = 2
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = -625.0
+offset_left = -556.0
 offset_top = -125.0
-offset_right = -561.0
-offset_bottom = -63.0
+offset_right = -492.0
+offset_bottom = -61.0
 grow_horizontal = 1
 grow_vertical = 1
-scale = Vector2(4, 4)
+scale = Vector2(2, 2)
 
 [node name="Relic2Icon" parent="Control" instance=ExtResource("2_fa1p2")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = -125.0
+offset_left = -56.0
 offset_top = -125.0
-offset_right = -59.0
+offset_right = 10.0
 offset_bottom = -61.0
 grow_horizontal = 1
 grow_vertical = 1
-scale = Vector2(4, 4)
+scale = Vector2(2, 2)
 
 [node name="Relic3Icon" parent="Control" instance=ExtResource("2_fa1p2")]
 anchors_preset = 0
 anchor_right = 0.0
 anchor_bottom = 0.0
-offset_left = 425.0
+offset_left = 494.0
 offset_top = -125.0
-offset_right = 492.0
+offset_right = 561.0
 offset_bottom = -61.0
 grow_horizontal = 1
 grow_vertical = 1
-scale = Vector2(4, 4)
+scale = Vector2(2, 2)
 
 [connection signal="gui_input" from="Control/RelicIcon" to="." method="_on_relic_input"]
 [connection signal="gui_input" from="Control/Relic2Icon" to="." method="_on_relic2_input"]

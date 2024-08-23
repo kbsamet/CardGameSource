@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://phnr8tg64jdp"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_efge4"]
+
+[resource]
+script = ExtResource("1_efge4")
+_name = "empowered_overcharged"
+amount = 0
+tooltip = ""
+hidden = true

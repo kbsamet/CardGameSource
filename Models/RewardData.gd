@@ -5,7 +5,7 @@ var reward : String
 var amount : Variant
 var tooltip : String
 var multiplier : int
-static func fromDict(reward_data : Dictionary):
+static func fromDict(reward_data : Dictionary) -> RewardData:
 	var new_reward : RewardData = RewardData.new()
 	new_reward.reward = reward_data["reward"]
 	new_reward.amount = reward_data["amount"]

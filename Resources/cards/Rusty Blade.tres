@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://ct4xdp5dckimf"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_q1w6v"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_45cve"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_q1w6v")
+effect = 0
+amount = 3
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_l6q7v"]
+script = ExtResource("1_q1w6v")
+effect = 23
+amount = 5
+next_turn = false
+
+[resource]
+script = ExtResource("2_45cve")
+_name = "Rusty Blade"
+type = 0
+description = "Deal 3 damage. Deal 5 more damage if the enemy is bleeding."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_q1w6v")]([SubResource("Resource_6w00h"), SubResource("Resource_l6q7v")])
+is_rare = false

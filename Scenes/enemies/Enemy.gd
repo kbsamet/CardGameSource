@@ -1,58 +1,59 @@
 extends Node2D
 class_name EnemyNode
 @export var enemy_data : EnemyData
-var is_card_selected = false
+var is_card_selected : bool = false
 var id : int
-var hit_animation_playing = false
-var death_animation_playing = false
-signal on_clicked_signal(id)
-signal attack_rise_done(id)
-signal attack_end_done(id)
-signal enemy_dead(id)
-signal enemy_hovered(id)
-signal enemy_hovered_end(id)
+var hit_animation_playing: bool = false
+var death_animation_playing : bool= false
+signal on_clicked_signal(id: int)
+signal attack_rise_done(id: int)
+signal attack_end_done(id: int)
+signal enemy_dead(id: int)
+signal enemy_hovered(id: int)
+signal enemy_hovered_end(id: int)
 signal enemy_state_changed
 signal boss_dead
-@onready var sprite = $Sprite
-@onready var blockSprite = $Control/HealthBar/BlockIcon
-@onready var blockAmountLabel = $Control/HealthBar/BlockIcon/Label
-@onready var healthBarSprite = $Control/HealthBar
-@onready var healthBarRect = $Control/HealthBar/HealthBarRect
-@onready var healthLabel = $Control/HealthBar/HealthLabel
-@onready var blockBarRect = $Control/HealthBar/BlockBarRect
-@onready var staminaBarRect = $Control/StaminaBar/StaminaBarRect
-@onready var staminaLabel = $Control/StaminaBar/StaminaLabel
-@onready var animationPlayer = $AnimationPlayer as AnimationPlayer
-@onready var statusEffectContainer = $Control/StatusEffectContainer
-@onready var hitShader = preload("res://Shaders/hit_shader.tres").duplicate()
-@onready var outlineShader = preload("res://Shaders/outline_red.tres")
-@onready var attackIcon = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
-@onready var statusEffectIcon = preload("res://Scenes/ui/StatusEffectIcon.tscn")
-@onready var infoPopup = $Control/InfoPopup
-@onready var infoBox = $Control/InfoBox
-@onready var hitAmountLabel = $Control/HitAmount
-@onready var blockHitAmountLabel = $Control/BlockAmount
-@onready var hitParticles = $HitParticles
-@onready var deathParticles = $DeathParticles
-@onready var lightOccluder = $LightOccluder2D
-var particle_color_red = Color("ca5954")
-var particle_color_blue = Color("5c699f")
+@onready var sprite : Sprite2D = $Sprite
+@onready var blockSprite : Sprite2D = $Control/HealthBar/BlockIcon
+@onready var blockAmountLabel : Label= $Control/HealthBar/BlockIcon/Label
+@onready var healthBarSprite : Sprite2D = $Control/HealthBar
+@onready var healthBarRect : ColorRect = $Control/HealthBar/HealthBarRect
+@onready var healthLabel : Label = $Control/HealthBar/HealthLabel
+@onready var blockBarRect : ColorRect = $Control/HealthBar/BlockBarRect
+@onready var staminaBarRect : ColorRect = $Control/StaminaBar/StaminaBarRect
+@onready var staminaLabel : Label = $Control/StaminaBar/StaminaLabel
+@onready var animationPlayer : AnimationPlayer = $AnimationPlayer
+@onready var statusEffectContainer : HBoxContainer = $Control/StatusEffectContainer
+@onready var hitShader : ShaderMaterial = preload("res://Shaders/hit_shader.tres").duplicate()
+@onready var outlineShader: ShaderMaterial = preload("res://Shaders/outline_red.tres")
+@onready var attackIcon: PackedScene = preload("res://Scenes/ui/EnemyAttackIcon.tscn")
+@onready var statusEffectIcon : PackedScene= preload("res://Scenes/ui/StatusEffectIcon.tscn")
+@onready var infoPopup : VBoxContainer = $Control/InfoPopup
+@onready var infoBox : Panel = $Control/InfoBox
+@onready var hitAmountLabel : Label = $Control/HitAmount
+@onready var blockHitAmountLabel : Label = $Control/BlockAmount
+@onready var hitParticles : CPUParticles2D = $HitParticles
+@onready var deathParticles : GPUParticles2D = $DeathParticles
+@onready var lightOccluder : LightOccluder2D = $LightOccluder2D
+var particle_color_red : Color = Color("ca5954")
+var particle_color_blue: Color  = Color("5c699f")
 
-@export var is_boss = false
-var stamina_bar_full_width
-var health_bar_full_width
+@export var is_boss : bool = false
+var stamina_bar_full_width : float
+var health_bar_full_width : float
 var selected_attack : EnemyAttackData = null
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	sprite.texture = load("res://Sprites/enemies/"+enemy_data._name+".png")
+	sprite.material = sprite.material.duplicate()
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
 	health_bar_full_width = healthBarRect.size.x
 	stamina_bar_full_width = staminaBarRect.size.x
-	var new_material = deathParticles.process_material.duplicate(true)
+	var new_material : Material = deathParticles.process_material.duplicate(true)
 	new_material.set_shader_parameter("sprite",sprite.texture)
 	if sprite.texture.get_height() > 100:
-		var new_box = Vector3(30,60,1)
+		var new_box : Vector3 = Vector3(30,60,1)
 		if sprite.texture.get_height() > 200:
 			new_box = Vector3(60,120,1)
 		new_material.set_shader_parameter("emission_box_extents",new_box)
@@ -69,12 +70,8 @@ func _ready():
 		
 		#lightOccluder.visible = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
 func change_stamina(amount:int) -> void:
-	var tween =  create_tween()
+	var tween : Tween =  create_tween()
 	enemy_data.stamina += amount
 	tween.tween_property(staminaBarRect,"size:x", (float(enemy_data.stamina) / float(enemy_data.max_stamina)) * float(stamina_bar_full_width),0.2)
 	staminaLabel.text = str(enemy_data.stamina) + "/" + str(enemy_data.max_stamina)
@@ -83,16 +80,16 @@ func change_stamina(amount:int) -> void:
 		add_status_effect("dazed",1)
 
 
-func update_health_bar_ui():
+func update_health_bar_ui() -> void:
 	enemy_state_changed.emit()
-	var tween =  create_tween()
-	var max_health_bar_amount = float(enemy_data.max_health)
-	var block_amount = enemy_data.get_status_effect("block")
+	var tween :Tween =  create_tween()
+	var max_health_bar_amount: float= float(enemy_data.max_health)
+	var block_amount : int = enemy_data.get_status_effect("block")
 	if block_amount != -1:
 		blockSprite.visible = true
 		blockAmountLabel.text = str(block_amount)
-		var block_bar_width = (float(block_amount) / (max_health_bar_amount + float(block_amount))) * health_bar_full_width
-		var missing_health_width = (float(max_health_bar_amount - enemy_data.health) /max_health_bar_amount) * health_bar_full_width
+		var block_bar_width : float = (float(block_amount) / (max_health_bar_amount + float(block_amount))) * health_bar_full_width
+		var missing_health_width : float = (float(max_health_bar_amount - enemy_data.health) /max_health_bar_amount) * health_bar_full_width
 		tween.tween_property(blockBarRect,"position:x",healthBarRect.position.x + health_bar_full_width - max(block_bar_width,missing_health_width),0.1)
 		tween.tween_property(blockBarRect,"size:x",block_bar_width,0.1)
 		#max_health_bar_amount += block_bar_width
@@ -104,19 +101,19 @@ func update_health_bar_ui():
 	tween.tween_property(healthBarRect,"size:x", (float(enemy_data.health) / float(enemy_data.max_health)) * float(health_bar_full_width),0.2)
 	healthLabel.text = str(enemy_data.health) + "/" + str(enemy_data.max_health)
 
-func die():
+func die() -> void:
 	death_animation_playing = true
 	$Control.visible = false
 	deathParticles.emitting = true
-	var tween = create_tween()
+	var tween : Tween = create_tween()
 	tween.tween_property(sprite,"modulate:a",0,0.1)
 	
 
-func damage(amount):
+func damage(amount : int) -> void:
 	if !is_inside_tree():
 		return
-	var tween = create_tween()
-	var block_amount = enemy_data.get_status_effect("block")
+	var tween : Tween = create_tween()
+	var block_amount : int = enemy_data.get_status_effect("block")
 	if block_amount != -1:
 		if block_amount > amount:
 			blockHitAmountLabel.text = str(amount)
@@ -144,9 +141,10 @@ func damage(amount):
 	enemy_data.health -= amount
 	if !hit_animation_playing:
 		hit_animation_playing = true
-		sprite.material = hitShader
-		tween.tween_method(func(value): sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
-		tween.tween_callback(func(): hit_animation_playing = false)
+		sprite.material.set_shader_parameter("hit",true)
+		tween.tween_method(func(value : float) -> void: sprite.material.set_shader_parameter("time", value),0.0,1.0,0.4).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+		tween.tween_callback(func() -> void: hit_animation_playing = false)
+		tween.tween_callback(func() -> void: sprite.material.set_shader_parameter("hit",false))
 	update_health_bar_ui()
 	if enemy_data.health <= 0:
 		if is_boss:
@@ -154,30 +152,25 @@ func damage(amount):
 			return
 		die()
 	
-func _on_hover():
+func _on_hover() -> void:
 	enemy_hovered.emit(id)
 	if is_card_selected:
-		sprite.material = outlineShader
+		sprite.material.set_shader_parameter("outline",true)
 
 
 func _on_hover_end() -> void:
-	if !hit_animation_playing:
-		sprite.material = null
+	sprite.material.set_shader_parameter("outline",false)
 	enemy_hovered_end.emit(id)
 
 func get_attack() -> EnemyAttackData:
-	var dazed = get_status_effect("dazed")
-	var dazed_amount = null if dazed == null else dazed.amount
+	var dazed : StatusEffectData = get_status_effect("dazed")
+	var dazed_amount : Variant = null if dazed == null else dazed.amount
 	if dazed_amount != null:
-		if dazed_amount == 1:
-			add_status_effect("dazed",-1)
-			if enemy_data.stamina == 0:
-				change_stamina(enemy_data.max_stamina)
 		selected_attack = null
 		return null
-	var available_attacks = enemy_data.attacks.filter(func(attack : EnemyAttackData): return attack.get_stamina_cost() <= enemy_data.stamina)
+	var available_attacks : Array[EnemyAttackData] = enemy_data.attacks.filter(func(attack : EnemyAttackData) -> bool: return attack.get_stamina_cost() <= enemy_data.stamina)
 	if enemy_data.stamina > 1:
-		available_attacks = available_attacks.filter(func(attack: EnemyAttackData) : return attack.get_stamina_cost() != 1)
+		available_attacks = available_attacks.filter(func(attack: EnemyAttackData) -> bool: return attack.get_stamina_cost() != 1)
 	if available_attacks.is_empty():
 		print("no available attacks on enemy "+ str(id))
 		selected_attack = null
@@ -197,14 +190,14 @@ func get_attack() -> EnemyAttackData:
 		#for i in range(attack.get_stamina_cost()):
 			#weighted_list.append(attack)
 	#selected_attack = weighted_list.pick_random().duplicate() as EnemyAttackData
-	var damage_amount = selected_attack.get_value_of_type(db.EnemyAttack.Damage)
-	var empowered_amount = enemy_data.get_status_effect("empowered")
+	var damage_amount : int = selected_attack.get_value_of_type(db.EnemyAttack.Damage)
+	var empowered_amount : int= enemy_data.get_status_effect("empowered")
 	if empowered_amount != -1 and damage_amount != -1:
 		selected_attack.set_value_of_type(db.EnemyAttack.Damage, damage_amount + empowered_amount)
 	assert(selected_attack != null, "Couldn't get attack!")
 	return selected_attack
 
-func _on_input(event):
+func _on_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.is_released() && is_card_selected:
 			on_clicked_signal.emit(id)
@@ -227,9 +220,8 @@ func _on_animation_finished(anim_name : String)-> void:
 		set_status_effect_info()
 		z_index = 5
 
-func process_status_effects():
-	for effect in enemy_data.status_effects:
-		effect = effect as StatusEffectData
+func process_status_effects() -> void:
+	for effect : StatusEffectData in enemy_data.status_effects:
 		if effect._name == "bleed":
 			damage(effect.amount)
 			add_status_effect("bleed",-1)
@@ -257,7 +249,7 @@ func set_attack_info() -> void:
 		return
 	for attack in selected_attack.attacks:
 		attack = attack as EnemySingleAttackData
-		var icon = attackIcon.instantiate()
+		var icon : AttackIcon = attackIcon.instantiate()
 		icon.add_to_group("attack_icon")
 		infoPopup.add_child(icon)
 		icon.set_data(attack,enemy_data.get_status_effect("empowered") != -1)
@@ -265,10 +257,9 @@ func set_attack_info() -> void:
 		infoBox.visible = true
 
 func set_status_effect_info() -> void:
-	for effect in enemy_data.status_effects:
-		effect = effect as StatusEffectData
+	for effect : StatusEffectData in enemy_data.status_effects:
 		if effect.amount > 0 and !effect.hidden:
-			var icon = statusEffectIcon.instantiate()
+			var icon : StatusEffectIcon = statusEffectIcon.instantiate()
 			statusEffectContainer.add_child(icon)
 			icon.set_data(effect,Vector2(2,2))
 			icon.add_to_group("status_effect")
@@ -287,14 +278,17 @@ func remove_attack_info() -> void:
 	infoBox.visible = false
 
 func add_status_effect(effect : String,amount: int) -> void:
-	var past_effect_amount = enemy_data.get_status_effect(effect)
+	var past_effect_amount : int = enemy_data.get_status_effect(effect)
 	if past_effect_amount != -1 and past_effect_amount <= -amount:
+		if effect == "dazed":
+			sprite.material.set_shader_parameter("dazed",false)
 		enemy_data.remove_status_effect(effect)
 	else:
 		if effect == "dazed":
 			if enemy_data.stamina > 0 and enemy_data.get_status_effect("unstoppable") != -1:
 				return
 			else:
+				sprite.material.set_shader_parameter("dazed",true)
 				selected_attack = null
 				remove_attack_info()
 				set_attack_info()
@@ -309,5 +303,5 @@ func get_status_effect(effect : String) -> StatusEffectData:
 	return enemy_data.get_status_effect_data(effect)
 
 
-func _on_death_particles_finished():
+func _on_death_particles_finished() -> void:
 	enemy_dead.emit(id)

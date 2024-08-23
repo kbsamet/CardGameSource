@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=16 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_2gp3d"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dnuaeetyyjit8" path="res://Sprites/ui/statusEffects/block.png" id="8_5kpcc"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="9_77xup"]
 [ext_resource type="Material" uid="uid://bgbyd7angtuq8" path="res://Shaders/crt_mat.tres" id="9_efegy"]
+[ext_resource type="PackedScene" uid="uid://osa3kgcnjs2t" path="res://Scenes/ui/CardPileScreen.tscn" id="10_2n451"]
 [ext_resource type="Texture2D" uid="uid://c205fbxp1o6vy" path="res://Sprites/ui/discard_pile.png" id="11_2b7bs"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmp2n"]
@@ -39,6 +40,7 @@ outline_size = 2
 outline_color = Color(0.117647, 0.117647, 0.141176, 1)
 
 [node name="FightPlayerUi" type="Control"]
+light_mask = 0
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,15 +53,14 @@ mouse_filter = 1
 script = ExtResource("1_cpms0")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-layer = 8
 
 [node name="Container" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
 offset_left = 1606.0
-offset_top = 203.0
+offset_top = 202.0
 offset_right = 1860.0
-offset_bottom = 265.0
+offset_bottom = 264.0
 
 [node name="EndTurnButton" type="Sprite2D" parent="CanvasLayer/Container"]
 position = Vector2(126, 32)
@@ -79,13 +80,21 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Deck" type="Sprite2D" parent="CanvasLayer"]
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 1724.0
+offset_top = 749.0
+offset_right = 1827.0
+offset_bottom = 946.0
+
+[node name="Deck" type="Sprite2D" parent="CanvasLayer/Control"]
 z_index = 15
-position = Vector2(1776, 848)
+position = Vector2(52, 98)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("7_gocp1")
 
-[node name="DeckCountLabel" type="Label" parent="CanvasLayer/Deck"]
+[node name="DeckCountLabel" type="Label" parent="CanvasLayer/Control/Deck"]
 offset_left = -29.2
 offset_top = -89.2
 offset_right = 29.8
@@ -95,13 +104,21 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DiscardPile" type="Sprite2D" parent="CanvasLayer"]
+[node name="Control2" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 85.0
+offset_top = 749.0
+offset_right = 183.0
+offset_bottom = 944.0
+
+[node name="DiscardPile" type="Sprite2D" parent="CanvasLayer/Control2"]
 z_index = 15
-position = Vector2(134, 848)
+position = Vector2(49, 98)
 scale = Vector2(1.5, 1.5)
 texture = ExtResource("11_2b7bs")
 
-[node name="DiscardPileCountLabel" type="Label" parent="CanvasLayer/DiscardPile"]
+[node name="DiscardPileCountLabel" type="Label" parent="CanvasLayer/Control2/DiscardPile"]
 offset_left = -29.2
 offset_top = -89.2
 offset_right = 29.8
@@ -112,20 +129,22 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PlayerInfoUi" parent="CanvasLayer" instance=ExtResource("6_rgsw4")]
-offset_top = -1.0
-offset_bottom = -1.0
+light_mask = 0
+offset_top = -2.0
+offset_bottom = -2.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer"]
-color = Color(0.758191, 0.758192, 0.758192, 1)
+position = Vector2(0, -1)
+color = Color(0.631373, 0.690196, 0.772549, 1)
 
 [node name="BossControl" type="Control" parent="CanvasLayer"]
 visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = -43.0
-offset_top = -33.0
+offset_top = -34.0
 offset_right = -3.0
-offset_bottom = 7.0
+offset_bottom = 6.0
 
 [node name="HealthBar" type="Control" parent="CanvasLayer/BossControl"]
 light_mask = 4
@@ -281,8 +300,22 @@ visible = false
 light_mask = 7
 z_index = 4096
 material = ExtResource("9_efegy")
+offset_top = -1.0
 offset_right = 1934.0
-offset_bottom = 1080.0
+offset_bottom = 1079.0
 mouse_filter = 2
 
+[node name="CardPileScreen" parent="CanvasLayer" instance=ExtResource("10_2n451")]
+visible = false
+z_index = 100
+offset_top = -1.0
+offset_bottom = -1.0
+mouse_filter = 0
+
 [connection signal="gui_input" from="CanvasLayer/Container" to="." method="_on_button_input"]
+[connection signal="gui_input" from="CanvasLayer/Control" to="." method="_on_deck_gui_input"]
+[connection signal="mouse_entered" from="CanvasLayer/Control" to="." method="_on_deck_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control" to="." method="_on_deck_mouse_exited"]
+[connection signal="gui_input" from="CanvasLayer/Control2" to="." method="_on_discard_pile_gui_input"]
+[connection signal="mouse_entered" from="CanvasLayer/Control2" to="." method="_on_discard_pile_mouse_entered"]
+[connection signal="mouse_exited" from="CanvasLayer/Control2" to="." method="_on_discard_pile_mouse_exited"]

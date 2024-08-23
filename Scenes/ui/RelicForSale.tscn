@@ -23,12 +23,14 @@ position = Vector2(127, 131)
 scale = Vector2(6, 6)
 texture = ExtResource("1_6awrg")
 
-[node name="CostLabel" type="RichTextLabel" parent="Sprite"]
+[node name="CostLabel" type="RichTextLabel" parent="."]
 clip_contents = false
-offset_left = -21.0
-offset_top = 19.0
-offset_right = 21.0
-offset_bottom = 37.0
+layout_mode = 0
+offset_left = 1.0
+offset_top = 245.0
+offset_right = 43.0
+offset_bottom = 263.0
+scale = Vector2(6, 6)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 2
 theme_override_fonts/normal_font = ExtResource("2_dn0mr")

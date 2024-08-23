@@ -4,16 +4,16 @@ class Iterator:
 	var _array: Array
 	var _index: int
 
-	func _init(arr: Array):
+	func _init(arr: Array) -> void:
 		_array = arr
 		_index = 0
 
 	func has_next() -> bool:
 		return _index < _array.size()
 
-	func next():
+	func next() -> Variant:
 		if has_next():
-			var element = _array[_index]
+			var element : Variant = _array[_index]
 			_index += 1
 			return element
 		else:

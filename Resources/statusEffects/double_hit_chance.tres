@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://chvwms5j7ua62"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_hhnmi"]
+
+[resource]
+script = ExtResource("1_hhnmi")
+_name = "double_hit_chance"
+amount = 0
+tooltip = ""
+hidden = true

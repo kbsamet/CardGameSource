@@ -1,17 +1,13 @@
 extends Control
+class_name AttackIcon
+@onready var sprite : Sprite2D = $Node2D/Sprite
+@onready var amountLabel : Label = $Node2D/AmountLabel
+@onready var tooltip : TooltipNode = $Tooltip 
 
-@onready var sprite = $Node2D/Sprite
-@onready var amountLabel = $Node2D/AmountLabel
-@onready var tooltip = $Tooltip as TooltipNode
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
-
-
-func set_data(attack: EnemySingleAttackData,empowered : bool):
+func set_data(attack: EnemySingleAttackData,empowered : bool) -> void:
 	sprite.texture = load("res://Sprites/ui/enemyAttacks/"+get_attack_name(attack.attack_type)+".png")
 	amountLabel.text = str(attack.amount)
-	var tooltip_text_ = db.enemy_tooltips[attack.attack_type]
+	var tooltip_text_ : String = db.enemy_tooltips[attack.attack_type]
 	tooltip_text_ = tooltip_text_.replace("_", str(attack.amount))
 	tooltip.set_data(tooltip_text_)
 	if attack.attack_type == db.EnemyAttack.Damage and empowered:
@@ -52,14 +48,11 @@ func get_attack_name(attack : db.EnemyAttack) -> String:
 			return "staminaGain"
 	assert(false, "Attack name not found!")
 	return ""
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
 
 
-func _on_mouse_entered():
+func _on_mouse_entered() -> void:
 	tooltip.visible = true
 
 
-func _on_mouse_exited():
+func _on_mouse_exited() -> void:
 	tooltip.visible = false

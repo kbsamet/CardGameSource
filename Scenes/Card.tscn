@@ -37,7 +37,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 0.0507659),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.5, 1.5)]
+"values": [Vector2(1, 1), Vector2(1.3, 1.3)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -49,7 +49,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 0.0563284),
 "update": 0,
-"values": [0.0, -150.0]
+"values": [0.0, -125.0]
 }
 
 [sub_resource type="Animation" id="Animation_rmwds"]
@@ -65,7 +65,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1),
 "transitions": PackedFloat32Array(1, 8),
 "update": 0,
-"values": [Vector2(1.5, 1.5), Vector2(1, 1)]
+"values": [Vector2(1.3, 1.3), Vector2(1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -102,6 +102,8 @@ offset_left = -78.0
 offset_top = -159.0
 offset_right = 79.0
 offset_bottom = 159.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
 
 [node name="ManaLabel" type="Label" parent="Control"]
 texture_filter = 1
@@ -155,9 +157,9 @@ clip_contents = false
 layout_mode = 2
 size_flags_vertical = 6
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/line_separation = 0
 theme_override_constants/table_v_separation = 4
 theme_override_constants/outline_size = 2
+theme_override_constants/line_separation = 0
 theme_override_fonts/normal_font = ExtResource("3_cm64p")
 theme_override_fonts/mono_font = ExtResource("3_cm64p")
 bbcode_enabled = true
@@ -165,12 +167,20 @@ text = "[center][color=e8c65b]Block[/color] 5 damage[/center]"
 fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+[node name="Control2" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -75.0
+offset_top = 154.0
+offset_right = 76.0
+offset_bottom = 154.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control2"]
 layout_mode = 0
-offset_left = 175.0
-offset_top = 1.0
-offset_right = 385.0
-offset_bottom = 320.0
+offset_left = 172.0
+offset_top = -312.0
+offset_right = 382.0
+offset_bottom = 7.0
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {

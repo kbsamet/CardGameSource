@@ -85,6 +85,7 @@ vertical_alignment = 1
 
 [node name="BlockIcon" type="Sprite2D" parent="HealthBar"]
 visible = false
+light_mask = 0
 position = Vector2(-150, 1.19209e-06)
 scale = Vector2(1.23958, 1.23958)
 texture = ExtResource("3_voieg")

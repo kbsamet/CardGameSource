@@ -1,18 +1,10 @@
 extends Control
 class_name TooltipNode
-@onready var InfoBox = $InfoBox
-@onready var descriptionLabel = $InfoBox/InfoLabel
-var text = ""
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+@onready var InfoBox : Panel = $InfoBox
+@onready var descriptionLabel : RichTextLabel = $InfoBox/InfoLabel
+var text : String = ""
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
-func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)):
+func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)) -> void:
 	text = tooltip
 	descriptionLabel.text = add_colors_to_text(text)
 	scale = _scale
@@ -26,6 +18,6 @@ func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)):
 	InfoBox.custom_minimum_size = InfoBox.size
 
 func add_colors_to_text(text : String) -> String:
-	var strs = text.split(":")
+	var strs : PackedStringArray = text.split(":")
 	strs[0] = "[color=e8c65b]"+ strs[0] + "[/color]"
 	return strs[0] + ":\n" + strs[1]

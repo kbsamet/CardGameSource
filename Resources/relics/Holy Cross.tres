@@ -6,4 +6,4 @@
 script = ExtResource("1_y3i7p")
 _name = "Holy Cross"
 description = "True Faith:Revive with half health when you would die. Breaks upon use."
-cost = 30
+cost = 35

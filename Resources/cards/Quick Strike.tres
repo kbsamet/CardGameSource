@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://dhcmdii8s5ha5"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_6phy5"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_gf58g"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_6phy5")
+effect = 0
+amount = 3
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_48f2q"]
+script = ExtResource("1_6phy5")
+effect = 12
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_gf58g")
+_name = "Quick Strike"
+type = 0
+description = "Deal 3 damage. Draw a card."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_6phy5")]([SubResource("Resource_6w00h"), SubResource("Resource_48f2q")])
+is_rare = false

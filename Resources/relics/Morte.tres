@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://bo2pqollwutlr"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_dti1v"]
+
+[resource]
+script = ExtResource("1_dti1v")
+_name = "Morte"
+description = "Morte:Deal 5 more damage with every attack if you are overcharged."
+cost = 25

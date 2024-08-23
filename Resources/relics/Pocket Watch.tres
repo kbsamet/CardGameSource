@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://bsnor8fky6yp3"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_srmfj"]
+
+[resource]
+script = ExtResource("1_srmfj")
+_name = "Pocket Watch"
+description = "Pocket Watch:1 unspent action or reaction point can be carried over to the next turn."
+cost = 40

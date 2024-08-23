@@ -6,4 +6,4 @@
 script = ExtResource("1_t1bo1")
 _name = "Iron Breastplate"
 description = "Iron Breastplate:Start every fight with 5 block."
-cost = 25
+cost = 30

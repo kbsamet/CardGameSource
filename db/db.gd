@@ -1,7 +1,7 @@
 extends Node
 
-@onready var background_music = preload("res://Sounds/Music/backgroundMusic.tscn")
-@onready var clickPlayerScene = preload("res://Sounds/SFX/clickPlayer.tscn")
+@onready var background_music : PackedScene = preload("res://Sounds/Music/backgroundMusic.tscn")
+@onready var clickPlayerScene : PackedScene = preload("res://Sounds/SFX/clickPlayer.tscn")
 @onready var all_cards : ResourceGroup = preload("res://Resources/all_cards.tres")
 @onready var all_status_effects : ResourceGroup = preload("res://Resources/all_status_effects.tres")
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
@@ -13,33 +13,34 @@ var enemies : Array[EnemyData]
 var relics : Array[RelicData]
 var clickPlayer : AudioStreamPlayer
 var run_time : float = 0.0
-func _ready():
+func _ready() -> void:
 	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
 	all_cards.load_all_into(cards)
 	all_status_effects.load_all_into(status_effects)
 	all_enemies.load_all_into(enemies)
 	all_relics.load_all_into(relics)
-	var click = clickPlayerScene.instantiate()
+	var click : AudioStreamPlayer = clickPlayerScene.instantiate()
 	add_child(click)
 	clickPlayer = click
-	var music = background_music.instantiate() as AudioStreamPlayer
+	var music : AudioStreamPlayer = background_music.instantiate() 
 	add_child(music)
 	music.play()
 	
-func _process(delta):
+func _process(delta : float) -> void:
 	if player.health > 0:
 		run_time += delta
 	#print("FPS: " + str(Engine.get_frames_per_second()))
-const gameOverScreen = preload("res://Scenes/screens/GameOverScreen.tscn")
+const gameOverScreen : PackedScene = preload("res://Scenes/screens/GameOverScreen.tscn")
 
 signal level_changed
 signal player_state_changed
 signal player_status_effect_changed
-signal turn_changed(new_turn)
+signal screen_effect(effect : String)
+signal turn_changed(new_turn : Turn)
 
 var player : Player = Player.new()
 var current_room : int = 1
-var current_turn = Turn.PlayerAction
+var current_turn : Turn = Turn.PlayerAction
 
 
 enum Turn {
@@ -53,7 +54,7 @@ enum CardType {
 enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
 	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
-	BarbedArmor
+	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding
 }
 
 enum EnemyAttack {
@@ -226,20 +227,21 @@ const npcs : Dictionary = {
 	}
 }
 
-func remove_from_deck(card_index):
+func remove_from_deck(card_index : int) -> void:
 	player.deck.remove_at(card_index)
-	player_state_changed.emit()	
+	player_state_changed.emit()
 	
-func set_turn(newTurn : Turn):
+func set_turn(newTurn : Turn) -> void:
 	current_turn = newTurn
 	turn_changed.emit(newTurn)
 
-func  reset_player():
+func  reset_player() -> void:
 	current_room = 1
+	current_turn = Turn.PlayerAction
 	player.reset()
 	level_changed.emit()
 	
-func check_game_over():
+func check_game_over() -> void:
 	if player.health <= 0:
 		if "revive_half" in player.status_effects:
 			player.health = player.max_health / 2
@@ -249,27 +251,26 @@ func check_game_over():
 		
 		get_tree().change_scene_to_packed(gameOverScreen)
 
-func increase_level():
+func increase_level() -> void:
 	current_room += 1
 	level_changed.emit()
 
 func get_card(card_name : String) -> CardData:
-	var filtered_cards = cards.filter(func(card : CardData) : return card._name == card_name)
+	var filtered_cards : Array[CardData] = cards.filter(func(card : CardData) -> bool : return card._name == card_name)
 	assert(filtered_cards.size() != 0, card_name + " not found !")
 	assert(filtered_cards.size() < 2, "multiple cards with the name " + card_name + " found !")
 	return filtered_cards[0].duplicate(true)
 	
 func get_enemy(enemy_name : String) -> EnemyData:
-	var filtered_enemies = enemies.filter(func(enemy : EnemyData) : return enemy._name == enemy_name)
+	var filtered_enemies: Array[EnemyData] = enemies.filter(func(enemy : EnemyData) -> bool: return enemy._name == enemy_name)
 	assert(filtered_enemies.size() != 0, enemy_name + " not found !")
 	assert(filtered_enemies.size() < 2, "multiple enemies with the name " + enemy_name + " found !")
 	return filtered_enemies[0].duplicate(true)
 	
-func get_status_effect(status_effect_name : String,amount) -> StatusEffectData:
-	var filtered_status_effects = status_effects.filter(func(effect : StatusEffectData) : return effect._name == status_effect_name)
+func get_status_effect(status_effect_name : String,amount:int) -> StatusEffectData:
+	var filtered_status_effects : Array[StatusEffectData] = status_effects.filter(func(effect : StatusEffectData) -> bool : return effect._name == status_effect_name)
 	assert(filtered_status_effects.size() != 0, status_effect_name + " not found !")
 	assert(filtered_status_effects.size() < 2, "multiple effects with the name " + status_effect_name + " found !")
-	var new_effect = filtered_status_effects[0].duplicate(true)
+	var new_effect : StatusEffectData = filtered_status_effects[0].duplicate(true)
 	new_effect.amount = amount
 	return new_effect
-

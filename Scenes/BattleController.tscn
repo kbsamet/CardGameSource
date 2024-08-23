@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://cn44o3l7krv"]
+[gd_scene load_steps=19 format=3 uid="uid://cn44o3l7krv"]
 
 [ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
 [ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_3kwnt"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://ddtkpa3ifuhnj" path="res://Scenes/ui/FightPlayerUI.tscn" id="4_b61bc"]
 [ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="6_mm88r"]
 [ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_3xgc3"]
+[ext_resource type="Shader" path="res://Scenes/BattleScreenEffectShader.gdshader" id="7_r6ita"]
 [ext_resource type="AudioStream" uid="uid://hrbbh1n15ao1" path="res://Sounds/SFX/hit.wav" id="9_h6dhl"]
 
 [sub_resource type="Environment" id="Environment_y1hls"]
@@ -17,6 +18,283 @@ glow_strength = 1.02
 glow_bloom = 0.05
 glow_blend_mode = 0
 glow_hdr_threshold = 1.42
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o0vlb"]
+shader = ExtResource("7_r6ita")
+shader_parameter/t = 0.111
+shader_parameter/border_color = Color(0.521569, 0.12549, 0.12549, 1)
+shader_parameter/screen_shake = false
+shader_parameter/border_color_effect = false
+
+[sub_resource type="Animation" id="Animation_t5o40"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:material:shader_parameter/t")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.111]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:material:shader_parameter/border_color_effect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/border_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.521569, 0.12549, 0.12549, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_uvl7m"]
+resource_name = "blocked"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:material:shader_parameter/border_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.74902, 0.721569, 0.705882, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:material:shader_parameter/t")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.18, 0.38),
+"transitions": PackedFloat32Array(1, 5.09824, 0.0743254),
+"update": 0,
+"values": [0.401, 0.242, 0.401]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/border_color_effect")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_psykj"]
+resource_name = "damaged"
+length = 0.4
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.39),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:material:shader_parameter/t")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.19, 0.39),
+"transitions": PackedFloat32Array(1, 4.75683, 0.0490365),
+"update": 0,
+"values": [0.401, 0.242, 0.401]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:material:shader_parameter/border_color_effect")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.39),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/border_color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.521569, 0.12549, 0.12549, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_t5y0l"]
+resource_name = "dodged"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:material:shader_parameter/t")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0001, 0.2, 0.366667),
+"transitions": PackedFloat32Array(1, 1, 4.5948, 0.0796601),
+"update": 0,
+"values": [0.401, 0.111, 0.242, 0.401]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:material:shader_parameter/border_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.333333, 0.490196, 0.333333, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/border_color_effect")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_2t4k0"]
+resource_name = "gained_block"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect:material:shader_parameter/t")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 4.43828, 0.189465),
+"update": 0,
+"values": [0.401, 0.242, 0.401]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("ColorRect:material:shader_parameter/border_color")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.360784, 0.411765, 0.623529, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:material:shader_parameter/border_color_effect")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_myi7s"]
+_data = {
+"RESET": SubResource("Animation_t5o40"),
+"blocked": SubResource("Animation_uvl7m"),
+"damaged": SubResource("Animation_psykj"),
+"dodged": SubResource("Animation_t5y0l"),
+"gained_block": SubResource("Animation_2t4k0")
+}
 
 [node name="BattleController" type="Control"]
 layout_mode = 3
@@ -53,32 +331,27 @@ offset_top = 577.0
 offset_bottom = 577.0
 grow_horizontal = 2
 
-[node name="CanvasLayer" type="CanvasLayer" parent="Control"]
-layer = 8
-
-[node name="Hand" parent="Control/CanvasLayer" instance=ExtResource("3_lhgsg")]
+[node name="Hand" parent="Control" instance=ExtResource("3_lhgsg")]
 light_mask = 8
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 3.0
-offset_top = 460.0
-offset_right = 3.0
-offset_bottom = 460.0
+offset_left = 2.0
+offset_top = 458.5
+offset_right = 2.0
+offset_bottom = 458.5
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="CanvasModulate" type="CanvasModulate" parent="Control/CanvasLayer"]
-color = Color(0.864675, 0.864675, 0.864675, 1)
 
 [node name="FightPlayerUI" parent="Control" instance=ExtResource("4_b61bc")]
 layout_mode = 1
 mouse_filter = 2
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(0.691668, 0.691745, 0.771134, 1)
+color = Color(0.631373, 0.690196, 0.772549, 1)
 
 [node name="light" type="Node2D" parent="."]
 position = Vector2(1610, 113)
@@ -123,3 +396,18 @@ environment = SubResource("Environment_y1hls")
 stream = ExtResource("9_h6dhl")
 volume_db = -25.051
 pitch_scale = 1.45
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+material = SubResource("ShaderMaterial_o0vlb")
+layout_mode = 0
+offset_right = 1919.0
+offset_bottom = 1082.0
+color = Color(1, 1, 1, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_myi7s")
+}
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -1,16 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkidrfnurh1je"]
+[gd_scene load_steps=4 format=3 uid="uid://dkidrfnurh1je"]
 
 [ext_resource type="Script" path="res://Scenes/ui/RelicIcon.gd" id="1_iglts"]
 [ext_resource type="Texture2D" uid="uid://54bbmmbrcy0" path="res://Sprites/ui/relics/Blue Orb.png" id="2_cc4ev"]
-[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="3_is785"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r2vye"]
-bg_color = Color(0.388235, 0.380392, 0.403922, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_width_bottom = 3
-border_color = Color(0.207843, 0.207843, 0.25098, 1)
+[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="3_30ph8"]
 
 [node name="RelicIcon" type="Control"]
 custom_minimum_size = Vector2(64, 64)
@@ -31,23 +23,12 @@ position = Vector2(32, 32)
 scale = Vector2(2, 2)
 texture = ExtResource("2_cc4ev")
 
-[node name="InfoBox" type="Panel" parent="."]
-visible = false
+[node name="Tooltip" parent="." instance=ExtResource("3_30ph8")]
 z_index = 5
-layout_mode = 0
-offset_left = 80.0
-offset_right = 304.0
-offset_bottom = 112.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_r2vye")
-
-[node name="InfoLabel" type="Label" parent="InfoBox"]
-layout_mode = 0
-offset_left = 6.0
-offset_top = 7.0
-offset_right = 216.0
-offset_bottom = 104.0
-label_settings = ExtResource("3_is785")
-autowrap_mode = 2
+layout_mode = 1
+offset_left = 72.0
+offset_right = 288.832
+offset_bottom = 105.856
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

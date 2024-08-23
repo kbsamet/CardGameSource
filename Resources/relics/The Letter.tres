@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://bm32afll6wggn"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_pgr3t"]
+
+[resource]
+script = ExtResource("1_pgr3t")
+_name = "The Letter"
+description = "The Letter:Heal 4 health if you finish a fight without being damaged."
+cost = 25
