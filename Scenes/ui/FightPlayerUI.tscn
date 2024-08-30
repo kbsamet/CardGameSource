@@ -142,9 +142,9 @@ visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = -43.0
-offset_top = -34.0
+offset_top = -86.0
 offset_right = -3.0
-offset_bottom = 6.0
+offset_bottom = -46.0
 
 [node name="HealthBar" type="Control" parent="CanvasLayer/BossControl"]
 light_mask = 4

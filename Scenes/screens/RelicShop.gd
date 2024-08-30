@@ -5,18 +5,15 @@ class_name RelicShopScene
 var tavernScene : PackedScene = preload("res://Scenes/screens/TavernScreen.tscn")
 var relicForSaleScene : PackedScene = preload("res://Scenes/ui/RelicForSale.tscn")
 var chosen_relics : Dictionary = {}
-
+var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var relics_copy : Array[RelicData] = db.relics.duplicate(true)
+	relics = db.npcs["Wizard"].relics
 	for i in range(3):
-		var chosen_index : int = randi_range(0,relics_copy.size()-1)
-		var chosen_relic : RelicData = relics_copy[chosen_index]
-		chosen_relics[i] = chosen_relic
-		relics_copy.remove_at(chosen_index)
+		chosen_relics[i] = relics[i]
 		var chosen_relic_scene : RelicForSaleScene = relicForSaleScene.instantiate()
 		relicContainer.add_child(chosen_relic_scene)
-		chosen_relic_scene.set_data(chosen_relic,i)
+		chosen_relic_scene.set_data(relics[i],i)
 		chosen_relic_scene.relic_chosen.connect(_on_relic_chosen)
 
 func _on_relic_chosen(id:int) -> void:

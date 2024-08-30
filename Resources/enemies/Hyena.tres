@@ -1,0 +1,71 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=17 format=3 uid="uid://cx6jabwdvgqps"]
+
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_874k2"]
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="2_qa87k"]
+[ext_resource type="OccluderPolygon2D" uid="uid://tt6gg82fmwqh" path="res://Resources/enemies/occluders/Hyena Occluder.tres" id="3_h6hnl"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="4_3f4r1"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_oobnu"]
+
+[sub_resource type="Resource" id="Resource_vixgr"]
+script = ExtResource("2_qa87k")
+attack_type = 1
+amount = 4
+
+[sub_resource type="Resource" id="Resource_ms0p4"]
+script = ExtResource("2_qa87k")
+attack_type = 0
+amount = 4
+
+[sub_resource type="Resource" id="Resource_drygk"]
+script = ExtResource("2_qa87k")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_g1tcn"]
+script = ExtResource("1_874k2")
+attacks = Array[ExtResource("2_qa87k")]([SubResource("Resource_vixgr"), SubResource("Resource_ms0p4"), SubResource("Resource_drygk")])
+
+[sub_resource type="Resource" id="Resource_c3oud"]
+script = ExtResource("2_qa87k")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_rlrpm"]
+script = ExtResource("2_qa87k")
+attack_type = 15
+amount = 3
+
+[sub_resource type="Resource" id="Resource_r8uyi"]
+script = ExtResource("2_qa87k")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_fwlkx"]
+script = ExtResource("1_874k2")
+attacks = Array[ExtResource("2_qa87k")]([SubResource("Resource_c3oud"), SubResource("Resource_rlrpm"), SubResource("Resource_r8uyi")])
+
+[sub_resource type="Resource" id="Resource_x8jgx"]
+script = ExtResource("2_qa87k")
+attack_type = 1
+amount = 3
+
+[sub_resource type="Resource" id="Resource_pn0c3"]
+script = ExtResource("2_qa87k")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_kil4v"]
+script = ExtResource("1_874k2")
+attacks = Array[ExtResource("2_qa87k")]([SubResource("Resource_x8jgx"), SubResource("Resource_pn0c3")])
+
+[resource]
+script = ExtResource("4_3f4r1")
+_name = "Hyena"
+health = 16
+max_health = 16
+stamina = 3
+max_stamina = 3
+difficulty = 2
+attacks = Array[ExtResource("1_874k2")]([SubResource("Resource_g1tcn"), SubResource("Resource_fwlkx"), SubResource("Resource_kil4v")])
+status_effects = Array[ExtResource("5_oobnu")]([])
+occluder = ExtResource("3_h6hnl")

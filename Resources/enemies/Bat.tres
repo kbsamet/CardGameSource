@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=13 format=3 uid="uid://c67dy4ujougn8"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=14 format=3 uid="uid://c67dy4ujougn8"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_ophnv"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_pjiu2"]
 [ext_resource type="Script" path="res://Models/EnemyData.gd" id="3_e038j"]
 [ext_resource type="OccluderPolygon2D" uid="uid://htcwhl61nik1" path="res://Resources/enemies/occluders/Bat Occluder.tres" id="3_mq63b"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_7142q"]
 
 [sub_resource type="Resource" id="Resource_q120q"]
 script = ExtResource("1_ophnv")
@@ -52,5 +53,5 @@ stamina = 2
 max_stamina = 2
 difficulty = 2
 attacks = Array[ExtResource("2_pjiu2")]([SubResource("Resource_0nra1"), SubResource("Resource_tk6hu")])
-status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
+status_effects = Array[ExtResource("5_7142q")]([])
 occluder = ExtResource("3_mq63b")

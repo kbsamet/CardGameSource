@@ -64,6 +64,7 @@ func _on_button_input(event : InputEvent) -> void:
 @onready var blockSprite : Sprite2D = $CanvasLayer/BossControl/HealthBar/BlockIcon
 @onready var blockAmountLabel : Label = $CanvasLayer/BossControl/HealthBar/BlockIcon/Label
 @onready var blockBarRect : Panel =	$CanvasLayer/BossControl/HealthBar/BlockBarRect
+@onready var bossname : Label = $CanvasLayer/BossControl/Label
 var health_bar_full_width : float = -1
 var stamina_bar_full_width : float = -1
 
@@ -75,6 +76,7 @@ func set_boss_data(enemy_data: EnemyData) -> void:
 	if stamina_bar_full_width == -1:
 		stamina_bar_full_width = staminaBarRect.size.x
 	boss_data = enemy_data
+	bossname.text = enemy_data._name
 	update_health_bar_ui()
 	$CanvasLayer/BossControl.visible = true
 

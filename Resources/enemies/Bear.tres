@@ -1,0 +1,119 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=27 format=3 uid="uid://vmtffkr7ud6c"]
+
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_cwsi6"]
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="2_0y65s"]
+[ext_resource type="OccluderPolygon2D" uid="uid://bs0x5atyiwce3" path="res://Resources/enemies/occluders/Bear Occluder.tres" id="3_8wqb6"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="4_1cbrl"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_c1pwf"]
+
+[sub_resource type="Resource" id="Resource_rsbc0"]
+script = ExtResource("2_0y65s")
+attack_type = 1
+amount = 8
+
+[sub_resource type="Resource" id="Resource_i2ril"]
+script = ExtResource("2_0y65s")
+attack_type = 15
+amount = 5
+
+[sub_resource type="Resource" id="Resource_bqrhq"]
+script = ExtResource("2_0y65s")
+attack_type = 2
+amount = 4
+
+[sub_resource type="Resource" id="Resource_0urmx"]
+script = ExtResource("1_cwsi6")
+attacks = Array[ExtResource("2_0y65s")]([SubResource("Resource_rsbc0"), SubResource("Resource_i2ril"), SubResource("Resource_bqrhq")])
+
+[sub_resource type="Resource" id="Resource_peci6"]
+script = ExtResource("2_0y65s")
+attack_type = 4
+amount = 3
+
+[sub_resource type="Resource" id="Resource_lj7b4"]
+script = ExtResource("2_0y65s")
+attack_type = 9
+amount = 3
+
+[sub_resource type="Resource" id="Resource_6nwgf"]
+script = ExtResource("2_0y65s")
+attack_type = 8
+amount = 3
+
+[sub_resource type="Resource" id="Resource_i0gdv"]
+script = ExtResource("2_0y65s")
+attack_type = 11
+amount = 1
+
+[sub_resource type="Resource" id="Resource_q1nno"]
+script = ExtResource("2_0y65s")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_cmmbf"]
+script = ExtResource("1_cwsi6")
+attacks = Array[ExtResource("2_0y65s")]([SubResource("Resource_peci6"), SubResource("Resource_lj7b4"), SubResource("Resource_6nwgf"), SubResource("Resource_i0gdv"), SubResource("Resource_q1nno")])
+
+[sub_resource type="Resource" id="Resource_axfhw"]
+script = ExtResource("2_0y65s")
+attack_type = 1
+amount = 9
+
+[sub_resource type="Resource" id="Resource_vksni"]
+script = ExtResource("2_0y65s")
+attack_type = 9
+amount = 3
+
+[sub_resource type="Resource" id="Resource_dyig8"]
+script = ExtResource("2_0y65s")
+attack_type = 2
+amount = 5
+
+[sub_resource type="Resource" id="Resource_xogmj"]
+script = ExtResource("1_cwsi6")
+attacks = Array[ExtResource("2_0y65s")]([SubResource("Resource_axfhw"), SubResource("Resource_vksni"), SubResource("Resource_dyig8")])
+
+[sub_resource type="Resource" id="Resource_h0ndx"]
+script = ExtResource("2_0y65s")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_137nf"]
+script = ExtResource("2_0y65s")
+attack_type = 4
+amount = 2
+
+[sub_resource type="Resource" id="Resource_tf2oi"]
+script = ExtResource("2_0y65s")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_ht5yg"]
+script = ExtResource("1_cwsi6")
+attacks = Array[ExtResource("2_0y65s")]([SubResource("Resource_h0ndx"), SubResource("Resource_137nf"), SubResource("Resource_tf2oi")])
+
+[sub_resource type="Resource" id="Resource_mxiy8"]
+script = ExtResource("2_0y65s")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_3t336"]
+script = ExtResource("2_0y65s")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_46ida"]
+script = ExtResource("1_cwsi6")
+attacks = Array[ExtResource("2_0y65s")]([SubResource("Resource_mxiy8"), SubResource("Resource_3t336")])
+
+[resource]
+script = ExtResource("4_1cbrl")
+_name = "Bear"
+health = 40
+max_health = 40
+stamina = 10
+max_stamina = 10
+difficulty = 5
+attacks = Array[ExtResource("1_cwsi6")]([SubResource("Resource_0urmx"), SubResource("Resource_cmmbf"), SubResource("Resource_xogmj"), SubResource("Resource_ht5yg"), SubResource("Resource_46ida")])
+status_effects = Array[ExtResource("5_c1pwf")]([])
+occluder = ExtResource("3_8wqb6")

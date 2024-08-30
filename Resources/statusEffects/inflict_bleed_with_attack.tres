@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://uxvrnnpqonwt"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_ysl8o"]
+
+[resource]
+script = ExtResource("1_ysl8o")
+_name = "inflict_bleed_with_attack"
+amount = 0
+tooltip = ""
+hidden = true

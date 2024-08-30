@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=21 format=3 uid="uid://b1q4fd4bv13rw"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=22 format=3 uid="uid://b1q4fd4bv13rw"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_3ui8q"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_mbh5h"]
 [ext_resource type="OccluderPolygon2D" uid="uid://kl87c7544rkk" path="res://Resources/enemies/occluders/Minotaur Occluder.tres" id="3_4f3da"]
 [ext_resource type="Script" path="res://Models/EnemyData.gd" id="3_teadc"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_youh0"]
 
 [sub_resource type="Resource" id="Resource_xivf7"]
 script = ExtResource("1_3ui8q")
@@ -90,5 +91,5 @@ stamina = 8
 max_stamina = 8
 difficulty = 4
 attacks = Array[ExtResource("2_mbh5h")]([SubResource("Resource_s6p36"), SubResource("Resource_n0ifx"), SubResource("Resource_nrdjp"), SubResource("Resource_6mk0v")])
-status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
+status_effects = Array[ExtResource("5_youh0")]([])
 occluder = ExtResource("3_4f3da")

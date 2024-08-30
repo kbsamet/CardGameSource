@@ -1,7 +1,9 @@
 shader_type canvas_item;
-render_mode blend_mix;
+render_mode blend_add;
 uniform sampler2D SCREEN_TEXTURE : hint_screen_texture, filter_linear, repeat_disable;
 uniform float t : hint_range(-1.0, 10.0, 0.001) = 0;
+uniform float shake_t : hint_range(-1.0, 10.0, 0.001) = 0;
+
 uniform vec4 border_color : source_color;
 uniform bool screen_shake = false;
 uniform bool border_color_effect = false;
@@ -13,11 +15,11 @@ void fragment() {
 	vec2 uv = SCREEN_UV;
 	vec2 ps = SCREEN_PIXEL_SIZE;
 	vec2 ratio = (ps.x > ps.y) ? vec2(ps.y / ps.x, 1) : vec2(1, ps.x / ps.y);
-	vec4 color = textureLod(SCREEN_TEXTURE,uv,0.0);
+	vec4 color = vec4(0);
 	COLOR = color;
 	if(screen_shake){
-		uv.x += sin(uv.y * 12.56 + t) * 0.01;
-		color = textureLod(SCREEN_TEXTURE,uv*ratio,0.0);
+		uv.x += sin(uv.y * 12.56 + shake_t) * 0.01;
+		color = textureLod(SCREEN_TEXTURE,uv,0.0);
 		COLOR = color;
 	}
 	if(border_color_effect){

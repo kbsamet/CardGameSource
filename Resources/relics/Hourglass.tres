@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://d3olhw1bf0i66"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_t7ui1"]
+
+[resource]
+script = ExtResource("1_t7ui1")
+_name = "Hourglass"
+description = "Hourglass:Any positive status effects given by cards last 3 turns longer."
+cost = 40

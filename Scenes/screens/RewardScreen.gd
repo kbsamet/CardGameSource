@@ -29,7 +29,7 @@ func _ready() -> void:
 	reward.texture = load("res://Sprites/ui/rewardIcons/"+reward_data.reward+".png")
 
 func _go_to_select_reward() -> void:
-	if db.current_room % 5 == 0:
+	if db.current_room % 6 == 0:
 		get_tree().change_scene_to_packed(tavern_scene)
 		return
 	get_tree().change_scene_to_packed(load("res://Scenes/screens/RewardSelectScreen.tscn"))
@@ -56,7 +56,7 @@ func get_regular_reward(reward_name : String,reward_amount : Variant) -> void:
 	rewardText.text = "Gained " + str(amount) + " " + reward_name
 	reward.visible = false
 	await get_tree().create_timer(1.0).timeout 
-	if db.current_room % 5 == 0:
+	if db.current_room % 6 == 0:
 		get_tree().change_scene_to_packed(tavern_scene)
 		return
 	get_tree().change_scene_to_packed(load("res://Scenes/screens/RewardSelectScreen.tscn"))
@@ -67,16 +67,16 @@ func get_chest_reward() -> void:
 		rewardText.text = "You couldn't open the chest"
 		reward.visible = false
 		await get_tree().create_timer(1.0).timeout
-		if db.current_room % 5 == 0:
+		if db.current_room % 6 == 0:
 			get_tree().change_scene_to_packed(tavern_scene)
 			return
 		get_tree().change_scene_to_packed(load("res://Scenes/screens/RewardSelectScreen.tscn"))
 		return
 	db.player.keys -= 1
 	var reward_pool : Array[Dictionary] = []
-	for reward in db.locked_chest_rewards:
-		for m : int in reward.multiplier:
-			reward_pool.append(reward.duplicate(true))
+	for r in db.locked_chest_rewards:
+		for m : int in r.multiplier:
+			reward_pool.append(r.duplicate(true))
 	
 	var random_reward : Dictionary = reward_pool.pick_random()
 	if random_reward.reward == "choose_rare_card":

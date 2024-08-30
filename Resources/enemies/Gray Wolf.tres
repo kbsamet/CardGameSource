@@ -1,0 +1,136 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=30 format=3 uid="uid://dvuqxxbsjbmdl"]
+
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_2acnu"]
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="2_jix16"]
+[ext_resource type="OccluderPolygon2D" uid="uid://0kadogfnuoug" path="res://Resources/enemies/occluders/Vampire.tres" id="3_0qtlh"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="4_x6yho"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_owo3o"]
+
+[sub_resource type="Resource" id="Resource_0xfwx"]
+script = ExtResource("2_jix16")
+attack_type = 1
+amount = 8
+
+[sub_resource type="Resource" id="Resource_qxk5g"]
+script = ExtResource("2_jix16")
+attack_type = 15
+amount = 3
+
+[sub_resource type="Resource" id="Resource_0f0v7"]
+script = ExtResource("2_jix16")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_0bg0q"]
+script = ExtResource("1_2acnu")
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_0xfwx"), SubResource("Resource_qxk5g"), SubResource("Resource_0f0v7")])
+
+[sub_resource type="Resource" id="Resource_ebocm"]
+script = ExtResource("2_jix16")
+attack_type = 7
+amount = 3
+
+[sub_resource type="Resource" id="Resource_2pbpr"]
+script = ExtResource("2_jix16")
+attack_type = 9
+amount = 3
+
+[sub_resource type="Resource" id="Resource_7r8am"]
+script = ExtResource("2_jix16")
+attack_type = 6
+amount = 10
+
+[sub_resource type="Resource" id="Resource_6alpf"]
+script = ExtResource("2_jix16")
+attack_type = 5
+amount = 10
+
+[sub_resource type="Resource" id="Resource_l0jkv"]
+script = ExtResource("2_jix16")
+attack_type = 2
+amount = 8
+
+[sub_resource type="Resource" id="Resource_10v6m"]
+script = ExtResource("1_2acnu")
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_ebocm"), SubResource("Resource_2pbpr"), SubResource("Resource_7r8am"), SubResource("Resource_6alpf"), SubResource("Resource_l0jkv")])
+
+[sub_resource type="Resource" id="Resource_nu87i"]
+script = ExtResource("2_jix16")
+attack_type = 4
+amount = 3
+
+[sub_resource type="Resource" id="Resource_1874f"]
+script = ExtResource("2_jix16")
+attack_type = 15
+amount = 3
+
+[sub_resource type="Resource" id="Resource_wxfcx"]
+script = ExtResource("2_jix16")
+attack_type = 8
+amount = 3
+
+[sub_resource type="Resource" id="Resource_enn10"]
+script = ExtResource("2_jix16")
+attack_type = 11
+amount = 1
+
+[sub_resource type="Resource" id="Resource_qou4n"]
+script = ExtResource("2_jix16")
+attack_type = 2
+amount = 10
+
+[sub_resource type="Resource" id="Resource_w7vvu"]
+script = ExtResource("1_2acnu")
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_nu87i"), SubResource("Resource_1874f"), SubResource("Resource_wxfcx"), SubResource("Resource_enn10"), SubResource("Resource_qou4n")])
+
+[sub_resource type="Resource" id="Resource_lll0p"]
+script = ExtResource("2_jix16")
+attack_type = 1
+amount = 6
+
+[sub_resource type="Resource" id="Resource_ab6hy"]
+script = ExtResource("2_jix16")
+attack_type = 3
+amount = 1
+
+[sub_resource type="Resource" id="Resource_f2x4t"]
+script = ExtResource("2_jix16")
+attack_type = 2
+amount = 5
+
+[sub_resource type="Resource" id="Resource_pg3sa"]
+script = ExtResource("1_2acnu")
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_lll0p"), SubResource("Resource_ab6hy"), SubResource("Resource_f2x4t")])
+
+[sub_resource type="Resource" id="Resource_mlwfp"]
+script = ExtResource("2_jix16")
+attack_type = 1
+amount = 9
+
+[sub_resource type="Resource" id="Resource_v7j5b"]
+script = ExtResource("2_jix16")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_s1a1r"]
+script = ExtResource("1_2acnu")
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_mlwfp"), SubResource("Resource_v7j5b")])
+
+[sub_resource type="Resource" id="Resource_lhdgc"]
+script = ExtResource("5_owo3o")
+_name = "unstoppable"
+amount = 3
+tooltip = "Unstoppable:Can't be dazed for _ turns."
+hidden = false
+
+[resource]
+script = ExtResource("4_x6yho")
+_name = "Gray Wolf"
+health = 60
+max_health = 60
+stamina = 20
+max_stamina = 20
+difficulty = 9999999999
+attacks = Array[ExtResource("1_2acnu")]([SubResource("Resource_0bg0q"), SubResource("Resource_10v6m"), SubResource("Resource_w7vvu"), SubResource("Resource_pg3sa"), SubResource("Resource_s1a1r")])
+status_effects = Array[ExtResource("5_owo3o")]([SubResource("Resource_lhdgc")])
+occluder = ExtResource("3_0qtlh")

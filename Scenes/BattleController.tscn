@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cn44o3l7krv"]
+[gd_scene load_steps=21 format=3 uid="uid://cn44o3l7krv"]
 
 [ext_resource type="Script" path="res://Scenes/BattleController.gd" id="1_iqj2w"]
 [ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="2_3kwnt"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="7_3xgc3"]
 [ext_resource type="Shader" path="res://Scenes/BattleScreenEffectShader.gdshader" id="7_r6ita"]
 [ext_resource type="AudioStream" uid="uid://hrbbh1n15ao1" path="res://Sounds/SFX/hit.wav" id="9_h6dhl"]
+[ext_resource type="Shader" path="res://Shaders/StatusEffectShader.gdshader" id="10_6ck7j"]
 
 [sub_resource type="Environment" id="Environment_y1hls"]
 background_mode = 3
@@ -22,9 +23,17 @@ glow_hdr_threshold = 1.42
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_o0vlb"]
 shader = ExtResource("7_r6ita")
 shader_parameter/t = 0.111
+shader_parameter/shake_t = -1.0
 shader_parameter/border_color = Color(0.521569, 0.12549, 0.12549, 1)
 shader_parameter/screen_shake = false
 shader_parameter/border_color_effect = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i6byi"]
+shader = ExtResource("10_6ck7j")
+shader_parameter/block_color = Color(0.227451, 0.258824, 0.388235, 1)
+shader_parameter/overcharged_color = Color(0.933333, 0.709804, 0.317647, 1)
+shader_parameter/block_effect = true
+shader_parameter/overcharged_effect = false
 
 [sub_resource type="Animation" id="Animation_t5o40"]
 length = 0.001
@@ -327,8 +336,8 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_top = 577.0
-offset_bottom = 577.0
+offset_top = 595.0
+offset_bottom = 595.0
 grow_horizontal = 2
 
 [node name="Hand" parent="Control" instance=ExtResource("3_lhgsg")]
@@ -340,9 +349,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 2.0
-offset_top = 458.5
+offset_top = 474.5
 offset_right = 2.0
-offset_bottom = 458.5
+offset_bottom = 474.5
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -403,6 +412,14 @@ material = SubResource("ShaderMaterial_o0vlb")
 layout_mode = 0
 offset_right = 1919.0
 offset_bottom = 1082.0
+color = Color(1, 1, 1, 0)
+
+[node name="StatusEffectEffects" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_i6byi")
+layout_mode = 0
+offset_right = 1919.0
+offset_bottom = 1082.0
+mouse_filter = 2
 color = Color(1, 1, 1, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

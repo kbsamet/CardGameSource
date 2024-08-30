@@ -17,7 +17,7 @@ var selected_reward2 : RewardData
 func _ready() -> void:
 	var reward_pool : Array[RewardData] = []
 	var rewards_dict : Array[Dictionary] = db.rewards
-	if db.current_room % 5 == 0:
+	if db.current_room % 6 == 0:
 		rewards_dict = db.boss_rewards
 	for reward_data in rewards_dict:
 		var reward : RewardData = RewardData.fromDict(reward_data)

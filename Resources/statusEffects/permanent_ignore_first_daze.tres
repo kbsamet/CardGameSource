@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://b4acrwnhwivu2"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_2f8fj"]
+
+[resource]
+script = ExtResource("1_2f8fj")
+_name = "permanent_ignore_first_daze"
+amount = 0
+tooltip = ""
+hidden = true

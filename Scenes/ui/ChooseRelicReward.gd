@@ -9,12 +9,13 @@ signal relic_chosen
 var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	var relics_copy : Array[RelicData] = db.relics.duplicate(true)
+	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
 	for i in range(3):
 		var chosen_index : int = randi_range(0,relics_copy.size()-1)
 		var relic_data : RelicData = relics_copy[chosen_index]
 		relics.push_back(relic_data)
 		relics_copy.remove_at(chosen_index)
+	
 	relicIcon.set_data(relics[0])
 	relic2Icon.set_data(relics[1])
 	relic3Icon.set_data(relics[2])

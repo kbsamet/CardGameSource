@@ -190,10 +190,6 @@ func get_attack() -> EnemyAttackData:
 		#for i in range(attack.get_stamina_cost()):
 			#weighted_list.append(attack)
 	#selected_attack = weighted_list.pick_random().duplicate() as EnemyAttackData
-	var damage_amount : int = selected_attack.get_value_of_type(db.EnemyAttack.Damage)
-	var empowered_amount : int= enemy_data.get_status_effect("empowered")
-	if empowered_amount != -1 and damage_amount != -1:
-		selected_attack.set_value_of_type(db.EnemyAttack.Damage, damage_amount + empowered_amount)
 	assert(selected_attack != null, "Couldn't get attack!")
 	return selected_attack
 
@@ -252,7 +248,7 @@ func set_attack_info() -> void:
 		var icon : AttackIcon = attackIcon.instantiate()
 		icon.add_to_group("attack_icon")
 		infoPopup.add_child(icon)
-		icon.set_data(attack,enemy_data.get_status_effect("empowered") != -1)
+		icon.set_data(attack,enemy_data.get_status_effect("empowered"))
 		infoBox.size.y = selected_attack.attacks.size() * 80
 		infoBox.visible = true
 

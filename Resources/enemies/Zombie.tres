@@ -1,9 +1,10 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=15 format=3 uid="uid://jr8nqpf8vc0l"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=16 format=3 uid="uid://jr8nqpf8vc0l"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_h1y1y"]
 [ext_resource type="Script" path="res://Models/EnemyData.gd" id="1_iovah"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_onb48"]
 [ext_resource type="OccluderPolygon2D" uid="uid://dnkbba0246ygr" path="res://Resources/enemies/occluders/Zombie Occluder.tres" id="3_ey564"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_4y6e5"]
 
 [sub_resource type="Resource" id="Resource_3nj2e"]
 script = ExtResource("1_h1y1y")
@@ -61,5 +62,5 @@ stamina = 3
 max_stamina = 3
 difficulty = 1
 attacks = Array[ExtResource("1_onb48")]([SubResource("Resource_lklfo"), SubResource("Resource_mym73"), SubResource("Resource_xu0e4")])
-status_effects = Array[Resource("res://Models/StatusEffectData.gd")]([])
+status_effects = Array[ExtResource("5_4y6e5")]([])
 occluder = ExtResource("3_ey564")

@@ -131,95 +131,65 @@ func end_enemy_attack() -> void:
 							continue
 					if "block" in db.player.status_effects and "barbedshield" in db.player.status_effects:
 						attacking_enemy.add_status_effect("bleed",min(single_attack.amount,db.player.status_effects["block"].amount))
-					db.player.damage_player(single_attack.amount,unblockable)
+					
+					db.player.damage_player(calculate_damage(attacking_enemy.enemy_data,single_attack.amount),unblockable)
 				else:
 					db.screen_effect.emit("dodged")
 			db.EnemyAttack.StaminaCost:
 				attacking_enemy.change_stamina(-single_attack.amount)
 			db.EnemyAttack.Bleed:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("bleed",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("bleed",single_attack.amount,unblockable)
 			db.EnemyAttack.Daze:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("dazed",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("dazed",single_attack.amount,unblockable)
 			db.EnemyAttack.Blind:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("blind",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("blind",single_attack.amount,unblockable)
 			db.EnemyAttack.ArmorUp:
 				attacking_enemy.add_status_effect("block",single_attack.amount)
 			db.EnemyAttack.HealAll:
 				for enemy : EnemyNode in enemies.values():
 					enemy.heal(single_attack.amount)
 			db.EnemyAttack.Burn:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("burn",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("burn",single_attack.amount,unblockable)
 			db.EnemyAttack.Empower:
-				for enemy : EnemyNode in enemies.values():
-					enemy.add_status_effect("empowered",single_attack.amount)
+				attacking_enemy.add_status_effect("empowered",single_attack.amount)
 			db.EnemyAttack.Lifesteal:
 				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					if "dodge_chance" in db.player.status_effects:
 						if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
 							db.screen_effect.emit("dodged")
 							continue
-					db.player.damage_player(single_attack.amount,unblockable)
+					db.player.damage_player(calculate_damage(attacking_enemy.enemy_data,single_attack.amount),unblockable)
 					attacking_enemy.heal(single_attack.amount)
 				else:
 					db.screen_effect.emit("dodged")
 			db.EnemyAttack.DrainAp:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("drainAp",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("drainAp",single_attack.amount,unblockable)
 			db.EnemyAttack.DrainRp:
-				if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
-					if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
-						if "dodge_chance" in db.player.status_effects:
-							if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
-								db.screen_effect.emit("dodged")
-								continue
-						db.player.add_player_status_effect("drainRp",single_attack.amount)
-					else:
-						db.screen_effect.emit("dodged")
+				do_status_effect_attack("drainRp",single_attack.amount,unblockable)
 			db.EnemyAttack.Unstoppable:
 				attacking_enemy.add_status_effect("unstoppable",single_attack.amount)
-					
+			db.EnemyAttack.Cripple:
+				do_status_effect_attack("crippled",single_attack.amount,unblockable)
 	if "dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0:
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()
+
+func calculate_damage(enemy: EnemyData, base: int) -> int:
+	var empowered_amount : int = enemy.get_status_effect("empowered")
+	var damage : int = base
+	if empowered_amount != -1:
+		return damage + empowered_amount
+	return damage
+func do_status_effect_attack(effect : String,amount: int,unblockable : bool) -> void:
+	if unblockable or !("block" in db.player.status_effects.keys() and db.player.status_effects["block"].amount > 0):
+		if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
+			if "dodge_chance" in db.player.status_effects:
+				if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
+					db.screen_effect.emit("dodged")
+					return
+			db.player.add_player_status_effect(effect,amount)
+		else:
+			db.screen_effect.emit("dodged")
 
 func _enemy_attack_end_done() -> void:
 	center_enemies()

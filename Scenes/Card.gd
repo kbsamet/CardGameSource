@@ -57,7 +57,7 @@ func add_description_colors()-> void:
 func add_damage_color() -> void:
 	descriptionLabel.text = original_text
 		
-	if not "empowered" in db.player.status_effects:
+	if not ("empowered" in db.player.status_effects or "crippled" in db.player.status_effects):
 		for effect in card_data.effects:
 			if effect.effect == db.CardEffect.Damage:
 				descriptionLabel.text = descriptionLabel.text.replace("/damage",str(effect.amount))
@@ -68,16 +68,18 @@ func add_damage_color() -> void:
 		add_description_colors()
 		return
 	var new_damage : String = ""
+	var empowered_amount : int = 0 if "empowered" not in db.player.status_effects else db.player.status_effects["empowered"].amount
+	var crippled_amount : int = 0 if "crippled" not in db.player.status_effects else db.player.status_effects["crippled"].amount
+	
 	for effect in card_data.effects:
+		new_damage = str(effect.amount + empowered_amount - crippled_amount)
+		var color : String = "74ab74" if empowered_amount > crippled_amount else "ca5954"
 		if effect.effect == db.CardEffect.Damage:
-			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
-			descriptionLabel.text = descriptionLabel.text.replace("/damage","[color=74ab74]"+ new_damage + "[/color]")
+			descriptionLabel.text = descriptionLabel.text.replace("/damage","[color="+color+"]"+ new_damage + "[/color]")
 		elif effect.effect == db.CardEffect.DamageAll:
-			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
-			descriptionLabel.text = descriptionLabel.text.replace("/damageAll","[color=74ab74]"+ new_damage + "[/color]")
+			descriptionLabel.text = descriptionLabel.text.replace("/damageAll","[color="+color+"]"+ new_damage + "[/color]")
 		elif effect.effect == db.CardEffect.Riposte:
-			new_damage = str(effect.amount + db.player.status_effects["empowered"].amount)
-			descriptionLabel.text = descriptionLabel.text.replace("/riposte","[color=74ab74]"+ new_damage + "[/color]")
+			descriptionLabel.text = descriptionLabel.text.replace("/riposte","[color="+color+"]"+ new_damage + "[/color]")
 			
 		add_description_colors()
 func _player_status_effect_changed()-> void:

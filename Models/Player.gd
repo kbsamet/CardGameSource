@@ -44,7 +44,14 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 			add_player_status_effect("heal_if_not_hit",2)
 		"Morte":
 			add_player_status_effect("empowered_overcharged",5)
+		"Rock":
+			add_player_status_effect("permanent_ignore_first_daze",1)
+		"Scissors":
+			add_player_status_effect("inflict_bleed_with_attack",1)
+		"Hourglass":
+			add_player_status_effect("boost_status_effects",3)
 			
+		
 	if purchased:
 		gold -= relic.cost
 	db.player_state_changed.emit()
@@ -97,10 +104,16 @@ func damage_player(amount: int,unblockable:bool = false)->void:
 			db.screen_effect.emit("damaged")
 	db.player_state_changed.emit()
 
-func add_player_status_effect(effect : String,amount: int) -> void:
+func add_player_status_effect(effect : String,amount: int,positive : bool = false) -> void:
 	print("status effect: " + effect + " amount: " + str(amount))
+	var new_amount:int = amount
+	if positive and "boost_status_effects" in status_effects:
+		new_amount += status_effects["boost_status_effects"].amount
+	if effect == "dazed" and "ignore_first_daze" in status_effects:
+		add_player_status_effect("ignore_first_daze",-1)
+		return
 	if effect in status_effects:
-		if status_effects[effect].amount <= -amount:
+		if status_effects[effect].amount <= -new_amount:
 			if effect == "drunk":
 				add_max_ap(-1)
 				add_max_rp(1)
@@ -110,11 +123,11 @@ func add_player_status_effect(effect : String,amount: int) -> void:
 				add_max_rp(1)
 			status_effects.erase(effect)
 		else:
-			if effect == "dazed" and amount > 0 and status_effects[effect].amount != 0:
+			if effect == "dazed" and new_amount > 0 and status_effects[effect].amount != 0:
 				return
-			status_effects[effect].amount += amount
+			status_effects[effect].amount += new_amount
 	else:
-		if amount < 0:
+		if new_amount < 0:
 			return
 		if effect == "drunk":
 			add_max_ap(1)
@@ -124,9 +137,9 @@ func add_player_status_effect(effect : String,amount: int) -> void:
 		if effect == "drainRp":
 			add_max_rp(-1)
 			
-		status_effects[effect] = db.get_status_effect(effect,amount)
+		status_effects[effect] = db.get_status_effect(effect,new_amount)
 	if effect == "block":
-		if amount > 0:
+		if new_amount > 0:
 			db.screen_effect.emit("gained_block")
 		db.player_state_changed.emit()
 	db.player_status_effect_changed.emit()
@@ -197,7 +210,8 @@ func start_fight_effects() -> void:
 		add_player_status_effect("block",status_effects["permanent_block"].amount)
 	if "permanent_empower" in status_effects:
 		add_player_status_effect("empowered",status_effects["permanent_empower"].amount)
-		
+	if "permanent_ignore_first_daze" in status_effects:
+		add_player_status_effect("ignore_first_daze",status_effects["permanent_ignore_first_daze"].amount)
 	
 func reset() -> void:
 	health = max_health

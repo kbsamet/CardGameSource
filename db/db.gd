@@ -58,7 +58,8 @@ enum CardEffect {
 }
 
 enum EnemyAttack {
-	Bleed,Damage,StaminaCost,Daze,Blind,ArmorUp,HealAll,Unstoppable,Burn,Empower,Lifesteal,Unblockable,DrainAp,DrainRp,GainStamina
+	Bleed,Damage,StaminaCost,Daze,Blind,ArmorUp,HealAll,Unstoppable,Burn,Empower,Lifesteal,Unblockable,DrainAp,DrainRp,
+	GainStamina,Cripple
 }
 
 enum ItemEffect {
@@ -79,12 +80,13 @@ const enemy_tooltips : Dictionary = {
 	db.EnemyAttack.Blind: "Blind:You will be unable to target enemies for _ turns.",
 	db.EnemyAttack.Burn: "Burn:You will discard a random card for _ turns.",
 	db.EnemyAttack.Unstoppable: "Unstoppable:This enemy will be unable to be stunned for _ turns.",
-	db.EnemyAttack.Empower: "Empower:All enemies will do _ more damage.",
+	db.EnemyAttack.Empower: "Empower:This enemy will do _ more damage.",
 	db.EnemyAttack.Lifesteal: "Lifesteal:Deal _ damage. Heal _ health.",
 	db.EnemyAttack.Unblockable: "Unblockable:This attack cannot be blocked.",
 	db.EnemyAttack.DrainAp: "Drain AP:Lose 1 ap for _ turns.",
 	db.EnemyAttack.DrainRp: "Drain RP:Lose 1 rp for _ turns.",
-	db.EnemyAttack.GainStamina : "Gain Stamina:This enemy will recover _ stamina"
+	db.EnemyAttack.GainStamina : "Gain Stamina:This enemy will recover _ stamina",
+	db.EnemyAttack.Cripple : "Cripple:You will deal _ less damage."
 }
 
 const card_tooltips : Dictionary = {
@@ -208,7 +210,7 @@ const locked_chest_rewards : Array[Dictionary] = [
 	
 ]
 
-const npcs : Dictionary = {
+var npcs : Dictionary = {
 	"Bartender" : {
 		"name" : "Bartender",
 		"position" : Vector2(74,309),
@@ -226,6 +228,16 @@ const npcs : Dictionary = {
 		"dialogue_offset" : Vector2(-50,-180)
 	}
 }
+
+func setup_wizard_shop() -> void:
+	var relics : Array[RelicData] = []
+	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
+	for i in range(3):
+		var chosen_index : int = randi_range(0,relics_copy.size()-1)
+		var relic_data : RelicData = relics_copy[chosen_index]
+		relics.push_back(relic_data)
+		relics_copy.remove_at(chosen_index)
+	db.npcs["Wizard"].relics = relics
 
 func remove_from_deck(card_index : int) -> void:
 	player.deck.remove_at(card_index)

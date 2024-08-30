@@ -16,4 +16,5 @@ func _on_control_mouse_exited() -> void:
 func _on_control_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.is_released():
+			db.setup_wizard_shop()
 			get_tree().change_scene_to_packed(tavernScene)

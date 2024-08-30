@@ -17,7 +17,7 @@ func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)) -> void:
 		#InfoBox.size.y = descriptionLabel.get_minimum_size().y + 45 * _scale.y
 	InfoBox.custom_minimum_size = InfoBox.size
 
-func add_colors_to_text(text : String) -> String:
-	var strs : PackedStringArray = text.split(":")
+func add_colors_to_text(s : String) -> String:
+	var strs : PackedStringArray = s.split(":")
 	strs[0] = "[color=e8c65b]"+ strs[0] + "[/color]"
 	return strs[0] + ":\n" + strs[1]

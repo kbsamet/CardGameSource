@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://ddsxs7v16y6sr"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_ws5o1"]
+
+[resource]
+script = ExtResource("1_ws5o1")
+_name = "boost_status_effects"
+amount = 0
+tooltip = ""
+hidden = true

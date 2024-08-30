@@ -5,6 +5,8 @@ class_name BattleController
 @onready var fightUI : PlayerUI= $Control/FightPlayerUI
 @onready var hitSound : AudioStreamPlayer = $hitSound
 @onready var screenAnimation :AnimationPlayer = $AnimationPlayer
+@onready var statusEffectRect :ColorRect = $StatusEffectEffects
+
 var enemyScene : PackedScene = preload("res://Scenes/enemies/Enemy.tscn")
 var rewardScene : PackedScene= preload("res://Scenes/screens/RewardScreen.tscn")
 var reward : RewardData
@@ -32,6 +34,9 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _on_player_status_effect() -> void:
+	statusEffectRect.material.set_shader_parameter("block_effect","block" in db.player.status_effects)
+	statusEffectRect.material.set_shader_parameter("overcharged_effect", "overcharged" in db.player.status_effects)
+
 	if "dazed" in db.player.status_effects:
 		$CanvasModulate.color = Color("7a7d82")
 		
@@ -63,14 +68,14 @@ func spawn_boss(boss_name : String) -> Node2D:
 	return new_enemy
 	
 func spawn_enemies() -> void:
-	if db.current_room == 5:
-		var vampire : Node2D = spawn_boss("Vampire")
-		vampire.phase = 1
-		fightUI.set_boss_data(vampire.enemy.enemy_data)
-		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
-		vampire.boss_phase_changed.connect(boss_phase_changed)
+	if db.current_room == 6:
+		var wolf : Node2D = spawn_boss("GrayWolf")
+		spawn_enemy("Hyena")
+		spawn_enemy("Hyena")
+		fightUI.set_boss_data(wolf.enemy.enemy_data)
+		wolf.boss_state_changed.connect(fightUI.update_health_bar_ui)
 		return
-	if db.current_room == 10:
+	if db.current_room == 12:
 		var vampire : Node2D = spawn_boss("Vampire")
 		fightUI.set_boss_data(vampire.enemy.enemy_data)
 		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
@@ -132,6 +137,8 @@ func _use_card(enemy_id : int) -> void:
 					var base : int = effect.amount
 					hitSound.play()
 					enemyController.enemies[enemy_id].damage(calculate_damage(base,enemyController.enemies[enemy_id].enemy_data))
+					if "inflict_bleed_with_attack" in db.player.status_effects:
+						enemyController.enemies[enemy_id].add_status_effect("bleed", db.player.status_effects["inflict_bleed_with_attack"].amount)
 				db.CardEffect.ShieldSlam:
 					var base : int = 0 if "block" not in db.player.status_effects else db.player.status_effects["block"].amount
 					hitSound.play()
@@ -154,10 +161,12 @@ func _use_card(enemy_id : int) -> void:
 				db.CardEffect.Heal:
 					db.player.heal_player(effect.amount)
 				db.CardEffect.Dodge:
-					db.player.add_player_status_effect("dodge",effect.amount)
+					db.player.add_player_status_effect("dodge",effect.amount,true)
 				db.CardEffect.DamageAll:
 					for enemy : EnemyNode in enemyController.enemies.values():
 						enemy.damage(calculate_damage(effect.amount,enemy.enemy_data))
+						if "inflict_bleed_with_attack" in db.player.status_effects:
+							enemy.add_status_effect("bleed", db.player.status_effects["inflict_bleed_with_attack"].amount)
 				db.CardEffect.ConvertAllAp:
 					db.player.rp += db.player.ap
 					db.player.ap = 0
@@ -167,14 +176,14 @@ func _use_card(enemy_id : int) -> void:
 					db.player.rp = 0
 					db.player_state_changed.emit()
 				db.CardEffect.Crushing:
-					db.player.add_player_status_effect("crushing",effect.amount)
+					db.player.add_player_status_effect("crushing",effect.amount,true)
 				db.CardEffect.Draw:
 					for i in range(effect.amount):
 						hand.draw_card()
 				db.CardEffect.Empower:
-					db.player.add_player_status_effect("empowered",effect.amount)
+					db.player.add_player_status_effect("empowered",effect.amount,true)
 				db.CardEffect.DiscardRandom:
-					var hand_copy : Array[int] = hand.cards.keys().duplicate()
+					var hand_copy : Array = hand.cards.keys().duplicate()
 					hand_copy.erase(card_id)
 					hand.discard(hand_copy.pick_random())
 				db.CardEffect.SwapActionReaction:
@@ -188,12 +197,12 @@ func _use_card(enemy_id : int) -> void:
 				db.CardEffect.NoManaNextTurn:
 					db.player.add_player_status_effect("overcharged",effect.amount)
 				db.CardEffect.DoubleDamageTurn:
-					db.player.add_player_status_effect("doubledamage",effect.amount)
+					db.player.add_player_status_effect("doubledamage",effect.amount,true)
 				db.CardEffect.BleedAll:
 					for enemy : EnemyNode in enemyController.enemies.values():
 						enemy.add_status_effect("bleed", effect.amount)
 				db.CardEffect.BarbedArmor:
-					db.player.add_player_status_effect("barbedshield",effect.amount)
+					db.player.add_player_status_effect("barbedshield",effect.amount,true)
 				db.CardEffect.GainApOnKill:
 					if enemy_id not in enemyController.enemies or enemyController.enemies[enemy_id].enemy_data.health <= 0:
 						db.player.ap += effect.amount
@@ -214,6 +223,8 @@ func calculate_damage(base:int , enemy: EnemyData) -> int:
 	var damage_amount : int = base
 	if "empowered" in db.player.status_effects:
 		damage_amount += db.player.status_effects["empowered"].amount
+	if "crippled" in db.player.status_effects:
+		damage_amount = max(0,damage_amount - db.player.status_effects["crippled"].amount)
 	if "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != -1:
 		damage_amount *= 2
 	if "doubledamage" in db.player.status_effects:
@@ -270,6 +281,8 @@ func _enemy_turn_done() -> void:
 		db.player.add_player_status_effect("burn",-1)
 	if "crushing" in db.player.status_effects:
 		db.player.add_player_status_effect("crushing",-1)
+	if "crippled" in db.player.status_effects:
+		db.player.add_player_status_effect("crippled",-1)
 	if "drainAp" in db.player.status_effects:
 		db.player.add_player_status_effect("drainAp",-1)
 	if "drainRp" in db.player.status_effects:
@@ -324,10 +337,10 @@ func create_deck() -> void:
 	for i in range(4):
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
-	db.player.deck.push_back(db.get_card("Quick Strike"))
+	db.player.deck.push_back(db.get_card("Strike"))
 	db.player.deck.push_back(db.get_card("Daze"))
-	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Morte")
-	db.player.add_relic(dice[0])
+	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Hourglass")
+	#db.player.add_relic(dice[0])
 	fightUI.update_ui_values()
 
 
