@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://bsib0vo5xcibe"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_lnv3l"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_m3ss3"]
+
+[sub_resource type="Resource" id="Resource_6otwh"]
+script = ExtResource("1_lnv3l")
+effect = 26
+amount = 2
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_lnv3l")
+effect = 17
+amount = -1
+next_turn = false
+
+[resource]
+script = ExtResource("2_m3ss3")
+_name = "Decharge"
+type = 2
+description = "Take 2 damage. Lose 1 overcharged."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_lnv3l")]([SubResource("Resource_6otwh"), SubResource("Resource_6w00h")])
+is_rare = false

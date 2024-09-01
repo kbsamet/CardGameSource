@@ -6,11 +6,13 @@ extends Node
 @onready var all_status_effects : ResourceGroup = preload("res://Resources/all_status_effects.tres")
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
 @onready var all_relics : ResourceGroup = preload("res://Resources/all_relics.tres")
+@onready var all_trials : ResourceGroup = preload("res://Resources/all_trials.tres")
 
 var cards : Array[CardData] 
 var status_effects : Array[StatusEffectData]
 var enemies : Array[EnemyData]
 var relics : Array[RelicData]
+var trials : Array[TrialData]
 var clickPlayer : AudioStreamPlayer
 var run_time : float = 0.0
 func _ready() -> void:
@@ -19,6 +21,7 @@ func _ready() -> void:
 	all_status_effects.load_all_into(status_effects)
 	all_enemies.load_all_into(enemies)
 	all_relics.load_all_into(relics)
+	all_trials.load_all_into(trials)
 	var click : AudioStreamPlayer = clickPlayerScene.instantiate()
 	add_child(click)
 	clickPlayer = click
@@ -54,7 +57,7 @@ enum CardType {
 enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
 	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
-	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding
+	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding,DiscardAllReactionDrawEqual,BlockIfNoOtherReactionCards,DamageSelf
 }
 
 enum EnemyAttack {
@@ -137,32 +140,48 @@ const rewards : Array[Dictionary] = [
 		"reward" : "key",
 		"amount" : 1,
 		"tooltip" : "Gain a key after the next fight.",
-		"multiplier": 1
+		"multiplier": 2
 	},
 	{
 		"reward" : "locked_chest",
 		"amount" : 1,
 		"tooltip" : "There is a locked chest after the next fight.",
-		"multiplier": 2
+		"multiplier": 4
 		
 	},
 	{
 		"reward" : "choose_card",
 		"amount" : 3,
 		"tooltip" : "Choose one of 3 cards after the next fight.",
-		"multiplier": 3
+		"multiplier": 5
 		
 	},
-	#{
-		#"reward" : "choose_relic",
-		#"amount" : 3,
-		#"tooltip" : "Choose one of 3 relics after the next fight."
-		#
-	#},
+	{
+		"reward" : "event",
+		"amount" : 1,
+		"tooltip" : "There is a random event after the next fight.",
+		"multiplier": 1
+		
+	},
+	{
+		"reward" : "choose_relic",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 relics after the next fight.",
+		"multiplier": 1
+		
+	},
+	
 	{
 		"reward" : "tavern",
 		"amount" : 1,
 		"tooltip" : "There is a tavern after the next fight.",
+		"multiplier": 0
+		
+	},
+	{
+		"reward" : "choose_rare_card",
+		"amount" : 3,
+		"tooltip" : "Choose one of 3 rare cards after the next fight.",
 		"multiplier": 0
 		
 	},
@@ -278,6 +297,12 @@ func get_enemy(enemy_name : String) -> EnemyData:
 	assert(filtered_enemies.size() != 0, enemy_name + " not found !")
 	assert(filtered_enemies.size() < 2, "multiple enemies with the name " + enemy_name + " found !")
 	return filtered_enemies[0].duplicate(true)
+	
+func get_reward(reward_name : String) -> RewardData:
+	var filtered_rewards: Array[Dictionary] = rewards.filter(func(reward : Dictionary) -> bool: return reward.reward == reward_name)
+	assert(filtered_rewards.size() != 0, reward_name + " not found !")
+	assert(filtered_rewards.size() < 2, "multiple rewards with the name " + reward_name + " found !")
+	return RewardData.fromDict(filtered_rewards[0])
 	
 func get_status_effect(status_effect_name : String,amount:int) -> StatusEffectData:
 	var filtered_status_effects : Array[StatusEffectData] = status_effects.filter(func(effect : StatusEffectData) -> bool : return effect._name == status_effect_name)

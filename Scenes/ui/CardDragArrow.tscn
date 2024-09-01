@@ -16,6 +16,7 @@ z_index = 7
 script = ExtResource("1_7ie0x")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+light_mask = 7
 z_index = 7
 material = ExtResource("2_qvi1i")
 position = Vector2(0, -24)

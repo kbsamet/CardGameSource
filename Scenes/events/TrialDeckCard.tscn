@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=3 uid="uid://duncfc25vpw7p"]
+
+[ext_resource type="Script" path="res://Scenes/events/trial_deck_card.gd" id="1_1ddvn"]
+[ext_resource type="Texture2D" uid="uid://dyqwdmwipxqar" path="res://Sprites/ui/deck.png" id="2_g2uui"]
+
+[node name="TrialDeckCard" type="Control"]
+light_mask = 7
+custom_minimum_size = Vector2(160, 323)
+layout_mode = 3
+anchor_right = 0.134
+anchor_bottom = 0.476
+offset_right = -0.279999
+offset_bottom = -0.0800171
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_1ddvn")
+
+[node name="CardBack" type="Sprite2D" parent="."]
+position = Vector2(129, 258)
+scale = Vector2(4, 4)
+texture = ExtResource("2_g2uui")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://ccahuji0hnyjn"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_qeb3o"]
+
+[resource]
+script = ExtResource("1_qeb3o")
+_name = "give_ap"
+amount = 0
+tooltip = "Extra Ap:You have +1 action point for _ fights"
+hidden = false

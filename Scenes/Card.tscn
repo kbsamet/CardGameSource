@@ -101,7 +101,7 @@ anchors_preset = 0
 offset_left = -78.0
 offset_top = -159.0
 offset_right = 79.0
-offset_bottom = 159.0
+offset_bottom = 290.0
 mouse_filter = 1
 mouse_default_cursor_shape = 2
 
@@ -147,8 +147,8 @@ autowrap_mode = 2
 layout_mode = 0
 offset_left = 3.0
 offset_top = 214.0
-offset_right = 154.0
-offset_bottom = 313.0
+offset_right = 153.0
+offset_bottom = 315.0
 alignment = 1
 
 [node name="DescriptionLabel" type="RichTextLabel" parent="Control/DescriptionContainer"]

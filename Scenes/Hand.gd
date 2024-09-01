@@ -73,7 +73,7 @@ func _on_card_hold(id : int) -> void:
 			cards[selected_card].set_selected(false)
 		selected_card_state_changed.emit(false)
 		selected_card = -1
-		arrow.visible = false
+		arrow.make_visible(false)
 	else:
 		if !(id in cards) or cards[id].disabled or dragged_card_id != -1:
 			return
@@ -81,7 +81,7 @@ func _on_card_hold(id : int) -> void:
 		selected_card_state_changed.emit(true)
 		selected_card = id
 		if cards[id].card_data.targeted and !("blind" in db.player.status_effects):
-			arrow.visible = true
+			arrow.make_visible(true)
 	dragged_card_id = id
 
 func enemy_hovered(enemy_id : int,enemy_position: Variant) -> void:

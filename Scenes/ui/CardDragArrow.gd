@@ -35,6 +35,9 @@ func set_data(from : Vector2, to: Vector2,animate: bool = false) -> void:
 	tween.tween_property(arrowhead,"global_position",new_to,t)
 	queue_redraw()
 
+func make_visible(is_visible : bool) -> void:
+	visible = is_visible
+
 func _draw() -> void:
 	if points:
 		draw_polyline(points,Color.WHITE,32)

@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TrialData" load_steps=2 format=3 uid="uid://j5j84wu1sah6"]
+
+[ext_resource type="Script" path="res://Models/TrialData.gd" id="1_8x8fh"]
+
+[resource]
+script = ExtResource("1_8x8fh")
+_name = "Action"
+description = "Have 2 action cards"

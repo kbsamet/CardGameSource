@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://bc5jtknk64sf7"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_pi60i"]
+
+[resource]
+script = ExtResource("1_pi60i")
+_name = "give_rp"
+amount = 0
+tooltip = "Extra Rp:You have +1 reaction point for _ fights"
+hidden = false

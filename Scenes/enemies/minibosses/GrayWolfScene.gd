@@ -12,6 +12,8 @@ func _ready() -> void:
 
 func boss_dead() -> void:
 	enemy.die()
+	db.player.health = db.player.max_health
+	db.player_state_changed.emit()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

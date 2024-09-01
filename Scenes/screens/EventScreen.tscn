@@ -1,0 +1,96 @@
+[gd_scene load_steps=10 format=3 uid="uid://dlpcgh7fw5qiy"]
+
+[ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="1_1docc"]
+[ext_resource type="Script" path="res://Scenes/screens/event_screen.gd" id="1_d7acx"]
+[ext_resource type="Texture2D" uid="uid://6nhx6bjh1dd7" path="res://Sprites/ui/screens/moon.png" id="3_qaug3"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="4_ux7s8"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="5_sfwla"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="7_tmh63"]
+[ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="8_bbkkm"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="9_srqlo"]
+[ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="10_8nki7"]
+
+[node name="EventScreen" type="Node2D"]
+script = ExtResource("1_d7acx")
+
+[node name="Background" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(962, 524)
+scale = Vector2(2.13333, 2.13333)
+texture = ExtResource("1_1docc")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2(962, 524)
+scale = Vector2(2.13333, 2.13333)
+color = Color(0.631373, 0.690196, 0.772549, 1)
+
+[node name="Moon" type="Sprite2D" parent="."]
+position = Vector2(1624.11, 74.1775)
+scale = Vector2(2.1915, 2.18188)
+texture = ExtResource("3_qaug3")
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1610, 73)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 1.03
+range_z_max = 7
+range_item_cull_mask = 2
+texture = ExtResource("4_ux7s8")
+texture_scale = 1.15
+height = 30.0
+script = ExtResource("5_sfwla")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.76
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("4_ux7s8")
+texture_scale = 1.37
+script = ExtResource("5_sfwla")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.51402, -3.0281)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("4_ux7s8")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("5_sfwla")
+
+[node name="Button" type="Button" parent="."]
+light_mask = 0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 827.0
+offset_top = 953.0
+offset_right = 1135.0
+offset_bottom = 1009.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("7_tmh63")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("8_bbkkm")
+theme_override_styles/hover = ExtResource("8_bbkkm")
+theme_override_styles/pressed = ExtResource("8_bbkkm")
+theme_override_styles/normal = ExtResource("9_srqlo")
+text = "Leave"
+
+[node name="PlayerInfoUi" parent="." instance=ExtResource("10_8nki7")]
+offset_left = -50.0
+offset_top = -183.0
+offset_right = -50.0
+offset_bottom = -183.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://cf0bdmusu0u3h"]
+
+[ext_resource type="Script" path="res://Scenes/events/potion_event.gd" id="1_nf0eg"]
+[ext_resource type="Texture2D" uid="uid://f8omwdwderyp" path="res://Sprites/ui/screens/events/potionEvent/potionBackground.png" id="2_t0gd2"]
+[ext_resource type="Texture2D" uid="uid://x2v8d4nl0cnt" path="res://Sprites/ui/screens/events/potionEvent/potion_blue.png" id="3_yxwst"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_p7ceo"]
+polygon = PackedVector2Array(-74.5313, 211.875, -66.0938, 213.75, -57.1875, 215.625, -52.0313, 216.563, -43.5938, 218.438, -38.4375, 218.906, -14.5313, 219.375, -5.15625, 220.781, 5.15625, 220.781, 14.5313, 219.844, 39.8438, 218.906, 46.4063, 217.969, 54.8438, 216.094, 62.8125, 214.219, 72.1875, 212.813, 75.4687, 211.875, 62.8125, 214.688, 54.8438, 216.563, 46.875, 218.906, 40.3125, 219.844, 15, 220.781, 5.15625, 221.719, -5.15625, 221.719, -14.5313, 220.313, -38.4375, 220.313, -44.5313, 219.375, -52.0313, 217.969, -60.9375, 216.094, -66.5625, 214.688, -75, 213.281)
+
+[node name="PotionEvent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nf0eg")
+
+[node name="Event" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(962, 383)
+scale = Vector2(2.13333, 2.13333)
+texture = ExtResource("2_t0gd2")
+
+[node name="Control" type="Control" parent="."]
+light_mask = 7
+layout_mode = 3
+anchors_preset = 0
+offset_left = 919.0
+offset_top = 383.0
+offset_right = 1004.0
+offset_bottom = 509.0
+
+[node name="Potion" type="Sprite2D" parent="Control"]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+position = Vector2(43.2667, 66)
+scale = Vector2(2.13333, 2.13333)
+texture = ExtResource("3_yxwst")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+position = Vector2(962, 383)
+scale = Vector2(2.13333, 2.13333)
+occluder = SubResource("OccluderPolygon2D_p7ceo")
+
+[connection signal="gui_input" from="Control" to="." method="_on_control_gui_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_control_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_control_mouse_exited"]

@@ -5,5 +5,5 @@
 [resource]
 script = ExtResource("1_t7ui1")
 _name = "Hourglass"
-description = "Hourglass:Any positive status effects given by cards last 3 turns longer."
+description = "Hourglass:Any positive status effects given by cards last 2 turns longer."
 cost = 40

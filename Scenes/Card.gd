@@ -72,7 +72,7 @@ func add_damage_color() -> void:
 	var crippled_amount : int = 0 if "crippled" not in db.player.status_effects else db.player.status_effects["crippled"].amount
 	
 	for effect in card_data.effects:
-		new_damage = str(effect.amount + empowered_amount - crippled_amount)
+		new_damage = str(max(1,effect.amount + empowered_amount - crippled_amount))
 		var color : String = "74ab74" if empowered_amount > crippled_amount else "ca5954"
 		if effect.effect == db.CardEffect.Damage:
 			descriptionLabel.text = descriptionLabel.text.replace("/damage","[color="+color+"]"+ new_damage + "[/color]")

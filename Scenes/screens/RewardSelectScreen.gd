@@ -23,11 +23,16 @@ func _ready() -> void:
 		var reward : RewardData = RewardData.fromDict(reward_data)
 		for i in range(reward.multiplier):
 			reward_pool.append(reward)
+	reward_pool = reward_pool.filter(func(reward:RewardData) -> bool : return db.current_room > 5 or (reward.reward != "choose_relic" and reward.reward != "event"))
+	
 	selected_reward1 = reward_pool.pick_random() 
 	selected_reward2 = reward_pool.pick_random() 
 	while selected_reward2 == selected_reward1:
 		selected_reward2 = reward_pool.pick_random()
-	
+	if db.current_room > 6 and selected_reward1.reward == "choose_card" and randf() < 0.3:
+		selected_reward1 = db.get_reward("choose_rare_card")
+	if db.current_room > 6 and selected_reward2.reward == "choose_card" and randf() < 0.3:
+		selected_reward2 = db.get_reward("choose_rare_card")
 	reward1Icon.texture = load("res://Sprites/ui/rewardIcons/"+selected_reward1.reward+".png")
 	reward2Icon.texture = load("res://Sprites/ui/rewardIcons/"+selected_reward2.reward+".png")
 	reward1Label.text = selected_reward1.tooltip

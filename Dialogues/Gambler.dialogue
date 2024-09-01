@@ -1,0 +1,84 @@
+~ start
+How did you find me? I don't get visitors often.
+Since you are here I'm afraid I can't just let you go.
+We are going to play a game. Since you are the visitor I'll let you choose the stakes.
+If you win I will give you double of whatever you wager.
+- 10 Health
+	do get_parent().set_chosen_wager("health")
+- All your gold
+	do get_parent().set_chosen_wager("gold")
+- One of your cards
+	do get_parent().set_chosen_wager("card")
+- One of your relics
+	do get_parent().set_chosen_wager("relic")
+=> END
+
+~ start_intro
+In this game I will pick 3 random cards from your deck.
+You get to choose the challange these cards must satisfy.
+Choose carefully.
+=> END
+
+~ deal_cards
+I will deal your cards now.
+Flip them to see your fate.
+=> END
+
+~ win
+You win.
+=> END
+
+~ lost
+You lost. It's time for payment.
+=> END
+
+~ lost_gold
+You can always get more gold. Be glad you didn't lose something more permanent.
+=> END
+
+~ lost_card
+You have a nice deck. Which one should I pick?
+How about this one?
+do get_parent().show_lost_card()
+This will be a nice addition to my collection.
+You can leave now.
+=> END
+
+~ lost_relic
+if db.player.relics.is_empty():
+	Huh. Looks like you don't have any relics. 
+	You should never bet something you don't have. I guess you will pay with your blood.
+	do db.player.damage_player(10)
+	You should leave now.
+	=> END
+else:
+	Quite a collection of relics you have there. Which one should I pick? 
+	This one seems good.
+	do get_parent().show_lost_relic()
+	This will be a nice addition to my collection.
+	You should leave now.
+	=> END
+
+~ lost_health
+Quite brave to wager your blood. I admire your courge.
+Doesn't change the fact that you lost. You should take better risks from now on.
+Leave.
+=> END
+
+~ won_gold
+Congratulations. Here is your gold.
+Now leave.
+=> END
+
+~ won_card
+Lucky draw. Choose whichever you want and leave.
+=> END
+
+~ won_relic
+Lucky draw. Choose whichever you want and leave.
+=> END
+
+~ won_health
+Good job. This should heal your wounds.
+Now leave.
+=> END

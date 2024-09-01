@@ -15,13 +15,18 @@
     "res://Resources/statusEffects/": {
       "resource_local_to_scene": true,
       "resource_name": true
+    },
+    "res://Resources/trials/": {
+      "resource_local_to_scene": true,
+      "resource_name": true
     }
   },
   "recent_paths": [
     "res://Resources/cards/",
     "res://Resources/enemies/",
     "res://Resources/statusEffects/",
-    "res://Resources/relics/"
+    "res://Resources/relics/",
+    "res://Resources/trials/"
   ],
   "table_functions": {
     "filter": [

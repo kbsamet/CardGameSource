@@ -27,3 +27,5 @@ func boss_dead() -> void:
 		phase = 1
 	elif phase == 1:
 		enemy.die()
+		db.player.health = db.player.max_health
+		db.player_state_changed.emit()

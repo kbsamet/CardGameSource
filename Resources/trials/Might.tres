@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TrialData" load_steps=2 format=3 uid="uid://dy2m2dj6yang"]
+
+[ext_resource type="Script" path="res://Models/TrialData.gd" id="1_bh4hj"]
+
+[resource]
+script = ExtResource("1_bh4hj")
+_name = "Might"
+description = "Have a total attack greater than 9"

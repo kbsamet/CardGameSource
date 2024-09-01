@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://6p8genmljho3"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_lrss8"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_ut6ac"]
+
+[sub_resource type="Resource" id="Resource_6otwh"]
+script = ExtResource("1_lrss8")
+effect = 12
+amount = 3
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_lrss8")
+effect = 17
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_ut6ac")
+_name = "Overloaded Deck"
+type = 2
+description = "Draw 3 cards. Gain 1 overcharged."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_lrss8")]([SubResource("Resource_6otwh"), SubResource("Resource_6w00h")])
+is_rare = false

@@ -9,6 +9,7 @@ class_name BattleController
 
 var enemyScene : PackedScene = preload("res://Scenes/enemies/Enemy.tscn")
 var rewardScene : PackedScene= preload("res://Scenes/screens/RewardScreen.tscn")
+var event_screen : PackedScene = preload("res://Scenes/screens/EventScreen.tscn")
 var reward : RewardData
 var card_selected : bool = false
 var is_player_hit : bool = false
@@ -81,11 +82,18 @@ func spawn_enemies() -> void:
 		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
 		vampire.boss_phase_changed.connect(boss_phase_changed)
 		return
-	var diff_cap : int = floor(2 + (db.current_room*1.1))
+	var diff_cap : int = floor(2 + (db.current_room*0.9))
 	var current_difficulty : int = 0
 	var enemies : Dictionary = {}
 	while current_difficulty < diff_cap:
 		var new_enemy : EnemyData = db.enemies.pick_random() as EnemyData
+		var num_of_enemies : int = 0
+		for enemy_count :int in enemies.values():
+			num_of_enemies += enemy_count
+		if num_of_enemies > 3:
+			enemies = {}
+			current_difficulty = 0
+			continue
 		if new_enemy.difficulty > diff_cap * 3/4:
 			continue
 		if new_enemy.difficulty + current_difficulty > diff_cap:
@@ -161,7 +169,7 @@ func _use_card(enemy_id : int) -> void:
 				db.CardEffect.Heal:
 					db.player.heal_player(effect.amount)
 				db.CardEffect.Dodge:
-					db.player.add_player_status_effect("dodge",effect.amount,true)
+					db.player.add_player_status_effect("dodge",effect.amount)
 				db.CardEffect.DamageAll:
 					for enemy : EnemyNode in enemyController.enemies.values():
 						enemy.damage(calculate_damage(effect.amount,enemy.enemy_data))
@@ -210,7 +218,28 @@ func _use_card(enemy_id : int) -> void:
 				db.CardEffect.DamageIfEnemyBleeding:
 					if enemyController.enemies[enemy_id].enemy_data.get_status_effect("bleed") != -1:
 						enemyController.enemies[enemy_id].damage(calculate_damage(effect.amount,enemyController.enemies[enemy_id].enemy_data))
-					
+				db.CardEffect.DiscardAllReactionDrawEqual:
+					for id : int in hand.cards.keys():
+						var card : CardNode = hand.cards[id]
+						var num_discarded :int = 0
+						if card.card_data.type == db.CardType.Reaction:
+							hand.discard(id)
+							num_discarded += 1
+						for i in range(num_discarded):
+							hand.draw_card()
+				db.CardEffect.BlockIfNoOtherReactionCards:
+					var num_reaction :int = 0
+					for id : int in hand.cards.keys():
+						var card : CardNode = hand.cards[id]
+						if card.card_data.type == db.CardType.Reaction:
+							num_reaction += 1
+					if num_reaction == 1:
+						if "block" in db.player.status_effects:
+							db.player.change_player_status_effect("block", db.player.status_effects.block.amount + effect.amount)
+						else:
+							db.player.change_player_status_effect("block", effect.amount)
+				db.CardEffect.DamageSelf:
+					db.player.damage_player(effect.amount)
 	if db.current_turn == db.Turn.PlayerAction:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -224,7 +253,7 @@ func calculate_damage(base:int , enemy: EnemyData) -> int:
 	if "empowered" in db.player.status_effects:
 		damage_amount += db.player.status_effects["empowered"].amount
 	if "crippled" in db.player.status_effects:
-		damage_amount = max(0,damage_amount - db.player.status_effects["crippled"].amount)
+		damage_amount = max(1,damage_amount - db.player.status_effects["crippled"].amount)
 	if "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != -1:
 		damage_amount *= 2
 	if "doubledamage" in db.player.status_effects:
@@ -269,7 +298,7 @@ func _enemy_turn_done() -> void:
 			db.player.rp += 1
 	db.player_state_changed.emit()
 	db.player.end_turn_process_player_status_effects()
-	db.check_game_over()
+	
 	db.set_turn(db.Turn.PlayerAction)
 	enemyController.attacking_enemy_id = -1
 	hand.discard_all()
@@ -301,6 +330,7 @@ func _enemy_turn_done() -> void:
 		db.player.ap = 0
 		db.player.add_player_status_effect("overcharged",-1)
 		db.player_state_changed.emit()
+	
 		
 func _fight_over() -> void:
 	if "heal_if_not_hit" in db.player.status_effects and !is_player_hit:
@@ -315,6 +345,10 @@ func _fight_over() -> void:
 	enemyController.attacking_enemy_id = -1
 	db.player.end_fight_process_player_status_effects()
 	hand.discard_all()
+	if reward.reward == "event":
+		get_tree().change_scene_to_packed(event_screen)
+		return
+		
 	var reward_scene : RewardScreen = rewardScene.instantiate() 
 	reward_scene.reward_data = reward
 	fightUI.remove_boss_data()
@@ -337,8 +371,8 @@ func create_deck() -> void:
 	for i in range(4):
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
-	db.player.deck.push_back(db.get_card("Strike"))
 	db.player.deck.push_back(db.get_card("Daze"))
+	db.player.deck.push_back(db.get_card("Strike"))
 	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Hourglass")
 	#db.player.add_relic(dice[0])
 	fightUI.update_ui_values()

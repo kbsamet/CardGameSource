@@ -3,6 +3,7 @@
 [sub_resource type="Shader" id="Shader_k36iq"]
 code = "shader_type canvas_item;
 
+varying vec4 v_vertex_color;
 uniform vec4 color : source_color = vec4(1.0);
 uniform float width : hint_range(0, 10) = 1.0;
 uniform int pattern : hint_range(0, 2) = 0; // diamond, circle, square
@@ -13,6 +14,7 @@ void vertex() {
 	if (add_margins) {
 		VERTEX += (UV * 2.0 - 1.0) * width;
 	}
+	v_vertex_color = COLOR;
 }
 
 bool hasContraryNeighbour(vec2 uv, vec2 texture_pixel_size, sampler2D texture) {
@@ -52,10 +54,10 @@ void fragment() {
 		if (uv != clamp(uv, vec2(0.0), vec2(1.0))) {
 			COLOR.a = 0.0;
 		} else {
-			COLOR = texture(TEXTURE, uv);
+			COLOR = v_vertex_color * texture(TEXTURE, UV);
 		}
 	} else {
-		COLOR = texture(TEXTURE, uv);
+		COLOR = v_vertex_color * texture(TEXTURE, UV);
 	}
 
 	if ((COLOR.a > 0.0) == inside && hasContraryNeighbour(uv, TEXTURE_PIXEL_SIZE, TEXTURE)) {
@@ -67,7 +69,7 @@ void fragment() {
 [resource]
 shader = SubResource("Shader_k36iq")
 shader_parameter/color = Color(1, 1, 1, 1)
-shader_parameter/width = 1.435
-shader_parameter/pattern = 0
+shader_parameter/width = 1.0
+shader_parameter/pattern = 1
 shader_parameter/inside = false
-shader_parameter/add_margins = true
+shader_parameter/add_margins = false

@@ -49,7 +49,7 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 		"Scissors":
 			add_player_status_effect("inflict_bleed_with_attack",1)
 		"Hourglass":
-			add_player_status_effect("boost_status_effects",3)
+			add_player_status_effect("boost_status_effects",2)
 			
 		
 	if purchased:
@@ -103,7 +103,7 @@ func damage_player(amount: int,unblockable:bool = false)->void:
 		if new_amount != 0:
 			db.screen_effect.emit("damaged")
 	db.player_state_changed.emit()
-
+	db.check_game_over()
 func add_player_status_effect(effect : String,amount: int,positive : bool = false) -> void:
 	print("status effect: " + effect + " amount: " + str(amount))
 	var new_amount:int = amount
@@ -114,6 +114,10 @@ func add_player_status_effect(effect : String,amount: int,positive : bool = fals
 		return
 	if effect in status_effects:
 		if status_effects[effect].amount <= -new_amount:
+			if effect == "give_ap":
+				add_max_ap(-1)
+			if effect == "give_rp":
+				add_max_rp(-1)
 			if effect == "drunk":
 				add_max_ap(-1)
 				add_max_rp(1)
@@ -129,6 +133,10 @@ func add_player_status_effect(effect : String,amount: int,positive : bool = fals
 	else:
 		if new_amount < 0:
 			return
+		if effect == "give_ap":
+			add_max_ap(1)
+		if effect == "give_rp":
+			add_max_rp(1)
 		if effect == "drunk":
 			add_max_ap(1)
 			add_max_rp(-1)
@@ -181,6 +189,12 @@ func end_fight_process_player_status_effects() -> void:
 		db.player.add_player_status_effect("drunk",-1)
 	if "tipsy" in db.player.status_effects:
 		db.player.add_player_status_effect("tipsy",-1)
+	
+	if "give_ap" in db.player.status_effects:
+		db.player.add_player_status_effect("give_ap",-1)
+	
+	if "give_rp" in db.player.status_effects:
+		db.player.add_player_status_effect("give_rp",-1)
 	
 	change_player_status_effect("block",0)
 	change_player_status_effect("empowered",0)

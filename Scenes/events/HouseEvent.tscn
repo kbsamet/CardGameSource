@@ -1,0 +1,75 @@
+[gd_scene load_steps=7 format=3 uid="uid://c342ughpba3rg"]
+
+[ext_resource type="Script" path="res://Scenes/events/house_event.gd" id="1_avq6u"]
+[ext_resource type="Texture2D" uid="uid://bri01p3s2s11o" path="res://Sprites/ui/screens/events/HouseEvent/House.png" id="1_b2pgf"]
+[ext_resource type="Texture2D" uid="uid://dfag5esy4xts2" path="res://Sprites/ui/screens/events/HouseEvent/Door.png" id="2_3eiwi"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="3_kvh6s"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="4_e0uik"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_puqik"]
+polygon = PackedVector2Array(-215.156, 211.406, 213.75, 210.469, 213.281, 211.875, -215.625, 212.344)
+
+[node name="HouseEvent" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_avq6u")
+
+[node name="House" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(962, 509)
+scale = Vector2(1.75333, 1.75333)
+texture = ExtResource("1_b2pgf")
+
+[node name="Control" type="Control" parent="."]
+light_mask = 7
+layout_mode = 3
+anchors_preset = 0
+offset_left = 888.0
+offset_top = 635.0
+offset_right = 978.0
+offset_bottom = 835.0
+
+[node name="Door" type="Sprite2D" parent="Control"]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(44.9999, 100)
+scale = Vector2(1.75333, 1.75333)
+texture = ExtResource("2_3eiwi")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+position = Vector2(962, 383)
+scale = Vector2(2.13333, 2.13333)
+occluder = SubResource("OccluderPolygon2D_puqik")
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1305, 507)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.3
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_kvh6s")
+texture_scale = 2.94
+height = 30.0
+script = ExtResource("4_e0uik")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.15
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_kvh6s")
+texture_scale = 1.37
+script = ExtResource("4_e0uik")
+
+[connection signal="gui_input" from="Control" to="." method="_on_control_gui_input"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_control_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_control_mouse_exited"]

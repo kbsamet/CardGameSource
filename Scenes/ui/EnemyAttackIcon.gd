@@ -7,7 +7,7 @@ class_name AttackIcon
 func set_data(attack: EnemySingleAttackData,empowered : int) -> void:
 	sprite.texture = load("res://Sprites/ui/enemyAttacks/"+get_attack_name(attack.attack_type)+".png")
 	var attack_amount :int = attack.amount
-	if empowered != -1:
+	if empowered != -1 and attack.attack_type == db.EnemyAttack.Damage:
 		attack_amount += empowered
 	amountLabel.text = str(attack_amount)
 	var tooltip_text_ : String = db.enemy_tooltips[attack.attack_type]

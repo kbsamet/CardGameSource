@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TrialData" load_steps=2 format=3 uid="uid://cflimbg1fdtg2"]
+
+[ext_resource type="Script" path="res://Models/TrialData.gd" id="1_fp6k4"]
+
+[resource]
+script = ExtResource("1_fp6k4")
+_name = "Neutrality"
+description = "Have a neutral card"

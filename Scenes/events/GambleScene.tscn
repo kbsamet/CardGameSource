@@ -1,0 +1,127 @@
+[gd_scene load_steps=6 format=3 uid="uid://d1vwlxi6kcw5w"]
+
+[ext_resource type="Script" path="res://Scenes/events/gamble_scene.gd" id="1_jl1k0"]
+[ext_resource type="Texture2D" uid="uid://bg5k863pvjqfn" path="res://Sprites/ui/screens/events/HouseEvent/GambleTable.png" id="1_yuyna"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="3_ud3ua"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="4_m06w4"]
+[ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="5_8l8uv"]
+
+[node name="GambleScene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_jl1k0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 5
+position = Vector2(980.875, 493)
+scale = Vector2(2.1625, 2.1625)
+texture = ExtResource("1_yuyna")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+layout_mode = 0
+offset_left = 455.0
+offset_top = 327.0
+offset_right = 1166.0
+offset_bottom = 646.0
+scale = Vector2(1.5, 1.5)
+mouse_filter = 2
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1920, 0)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+light_mask = 2
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.86
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_ud3ua")
+texture_scale = 8.16
+height = 30.0
+script = ExtResource("4_m06w4")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+light_mask = 4
+position = Vector2(-1.02678e-05, -2.05356e-05)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.6
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_ud3ua")
+texture_scale = 3.24
+script = ExtResource("4_m06w4")
+
+[node name="ShadowLight" type="PointLight2D" parent="light"]
+position = Vector2(1.51402, -3.0281)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("3_ud3ua")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("4_m06w4")
+
+[node name="light2" type="Node2D" parent="."]
+position = Vector2(-33, -74)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light2"]
+light_mask = 2
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.86
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_ud3ua")
+texture_scale = 8.16
+height = 30.0
+script = ExtResource("4_m06w4")
+
+[node name="UILight" type="PointLight2D" parent="light2"]
+light_mask = 4
+position = Vector2(0.504662, -1.09139e-11)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.6
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_ud3ua")
+texture_scale = 3.24
+script = ExtResource("4_m06w4")
+
+[node name="ShadowLight" type="PointLight2D" parent="light2"]
+position = Vector2(1.51402, -3.0281)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("3_ud3ua")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("4_m06w4")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(0.631373, 0.690196, 0.772549, 1)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerInfoUi" parent="CanvasLayer" instance=ExtResource("5_8l8uv")]
+offset_left = -33.0
+offset_top = -188.0
+offset_right = -33.0
+offset_bottom = -188.0
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

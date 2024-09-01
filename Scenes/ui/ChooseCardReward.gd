@@ -6,8 +6,12 @@ var cardScene : PackedScene = preload("res://Scenes/ui/RewardCard.tscn")
 var outlineShader : ShaderMaterial = preload("res://Shaders/outline.tres")
 var cards : Array[CardData]
 var rare_only : bool = false
+@export var disable_button_and_text : bool = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Label.visible = !disable_button_and_text
+	$Button.disabled = disable_button_and_text
+	$Button.visible = !disable_button_and_text
 	var cards_copy : Array[CardData] = db.cards.duplicate(true)
 	cards_copy = cards_copy.filter(func(card : CardData) -> bool : return card._name != "Strike" and card._name != "Block" and card.type != db.CardType.Neutral)
 	if rare_only:

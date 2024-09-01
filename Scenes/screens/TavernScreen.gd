@@ -34,7 +34,6 @@ func _on_gui_input(event : InputEvent) -> void:
 				for k in n.get_children():
 					if k is DialogueBalloon:
 						k._on_balloon_gui_input(event)
-						db.clickPlayer.play()
 
 
 func _on_button_pressed() -> void:

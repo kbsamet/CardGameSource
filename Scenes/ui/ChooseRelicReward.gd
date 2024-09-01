@@ -5,10 +5,11 @@ signal relic_chosen
 @onready var relicIcon : RelicIcon = $Control/RelicIcon
 @onready var relic2Icon : RelicIcon = $Control/Relic2Icon
 @onready var relic3Icon : RelicIcon = $Control/Relic3Icon
-
+@export var removeLabel : bool = false
 var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Label.visible = !removeLabel
 	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
 	for i in range(3):
 		var chosen_index : int = randi_range(0,relics_copy.size()-1)
