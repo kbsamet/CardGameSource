@@ -21,7 +21,6 @@ var chosen_lost_relic : RelicData
 
 
 func _ready() -> void:
-	
 	var balloon : Node = DialogueManager.show_dialogue_balloon(self,into_dialogue,"start_intro")
 	balloon.dialogue_ended.connect(_intro_dialogue_ended)
 	balloon.get_child(0).global_position = Vector2(get_viewport_rect().size.x / 2 - balloon.get_child(0).get_child(0).size.x /2,50)
@@ -158,7 +157,7 @@ func lose_card() -> void:
 	db.player_state_changed.emit()
 	leave()
 func lose_relic() -> void:
-	db.player.relics.erase(chosen_lost_relic)
+	db.player.remove_relic(chosen_lost_relic._name)
 	db.player_state_changed.emit()
 	leave()
 	

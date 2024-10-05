@@ -74,17 +74,21 @@ func set_card_selected(new_state : bool) -> void:
 
 func start_turn()-> void:
 	if enemies.is_empty():
+		print("turn started enemies empty returning")
 		enemies_empty.emit()
 		return
 	for enemy : EnemyNode in enemies.values():
 		enemy.process_status_effects()
+	print("processed status effects")
 	var gen : ArrayIterator.Iterator = ArrayIterator.Iterator.new(enemies.keys())
 	enemy_generator = gen
+	print("turn started")
 	play_turn(gen)
 	
 func play_turn(gen:ArrayIterator.Iterator) -> void:
 	assert(gen != null, "generator null")
 	if !gen.has_next():
+		print("generator empty")
 		enemy_turn_done.emit()
 		return
 	var id : int = gen.next()
@@ -93,6 +97,7 @@ func play_turn(gen:ArrayIterator.Iterator) -> void:
 			enemy_turn_done.emit()
 			return
 		id = gen.next()
+	print(str(id) + " attack started")
 	enemies[id].start_attack_animation()
 	attacking_enemy_id = id
 	
@@ -210,4 +215,8 @@ func _enemy_dead(enemy_id : int) -> void:
 	if enemies.is_empty():
 		enemies_empty.emit()
 	center_enemies()
+	if enemy_id == attacking_enemy_id and db.current_turn == db.Turn.EnemyAction:
+		play_turn(enemy_generator)
+		
+	
 	

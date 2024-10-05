@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://baifpqo2mcouh"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_elye5"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_eet4t"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_elye5")
+effect = 28
+amount = 1
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_by16c"]
+script = ExtResource("1_elye5")
+effect = 13
+amount = -2
+next_turn = true
+
+[resource]
+script = ExtResource("2_eet4t")
+_name = "Rage"
+type = 0
+description = "Double your empowered. Lose 2 empowered next turn."
+cost = 0
+targeted = false
+effects = Array[ExtResource("1_elye5")]([SubResource("Resource_6w00h"), SubResource("Resource_by16c")])
+is_rare = false

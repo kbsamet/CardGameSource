@@ -3,6 +3,8 @@ class_name Player
 
 var max_health : int = 30
 var health : int = 30
+var max_mana : int = 10
+var mana : int = 10
 var max_ap : int = 3
 var ap : int = 3
 var rp : int = 3
@@ -13,6 +15,7 @@ var status_effects : Dictionary = {}
 var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
+var ability : AbilityData 
 var gold : int = 10
 var keys : int = 1
 
@@ -36,7 +39,7 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 		"Minotaur's Horns":
 			add_player_status_effect("permanent_empower",3)
 		"Gambler's Dice":
-			add_player_status_effect("dodge_chance",20)
+			add_player_status_effect("dodge_chance",10)
 			add_player_status_effect("double_hit_chance",5)
 		"Pocket Watch":
 			add_player_status_effect("mana_carry_over",1)
@@ -50,18 +53,68 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 			add_player_status_effect("inflict_bleed_with_attack",1)
 		"Hourglass":
 			add_player_status_effect("boost_status_effects",2)
+		"Mana Crystal":
+			max_mana += 10
+			max_health -= 5
+			health = min(health,max_health)
+			db.player_state_changed.emit()
 			
 		
 	if purchased:
 		gold -= relic.cost
 	db.player_state_changed.emit()
 	relics_changed.emit()
-	
+
+func use_ability() -> void:
+	if mana < ability.cost:
+		return
+	match ability._name:
+		"Empower":
+			add_player_status_effect("empowered",2)
+		"Enchant":
+			add_player_status_effect("empowered",1)
+			add_player_status_effect("block",2)
+			
+	mana -= ability.cost
+	db.player_state_changed.emit()
+
 func remove_relic(name : String) -> void:
 	var filtered_relics : Array[RelicData] = relics.filter(func(relic : RelicData) -> bool: return relic._name == name)
 	assert(filtered_relics.size() > 0, name + " not found in relics!")
-	if name == "Holy Cross":
-		add_player_status_effect("revive_half",-1)
+	match name:
+		"Blue Orb":
+			add_max_ap(1)
+			add_max_rp(-2)
+		"Red Orb":
+			add_max_ap(-1)
+			hand_size += 1
+		"Holy Cross":
+			add_player_status_effect("revive_half",-1)
+		"Iron Breastplate":
+			add_player_status_effect("permanent_block",-5)
+		"Minotaur's Horns":
+			add_player_status_effect("permanent_empower",-3)
+		"Gambler's Dice":
+			add_player_status_effect("dodge_chance",-10)
+			add_player_status_effect("double_hit_chance",-5)
+		"Pocket Watch":
+			add_player_status_effect("mana_carry_over",-1)
+		"The Letter":
+			add_player_status_effect("heal_if_not_hit",-2)
+		"Morte":
+			add_player_status_effect("empowered_overcharged",-5)
+		"Rock":
+			add_player_status_effect("permanent_ignore_first_daze",-1)
+		"Scissors":
+			add_player_status_effect("inflict_bleed_with_attack",-1)
+		"Hourglass":
+			add_player_status_effect("boost_status_effects",-2)
+		"Mana Crystal":
+			max_mana -= 10
+			max_health += 5
+			mana = min(mana,max_mana)
+			db.player_state_changed.emit()
+			
 	relics.erase(filtered_relics[0])
 	relics_changed.emit()
 	db.player_state_changed.emit()
@@ -80,6 +133,12 @@ func heal_player(amount : int) -> void:
 	health += amount
 	health = min(max_health,health)
 	db.player_state_changed.emit()
+
+func restore_mana(amount:int) -> void:
+	mana += amount
+	mana = min(max_mana,mana)
+	db.player_state_changed.emit()
+
 
 func damage_player(amount: int,unblockable:bool = false)->void:
 	var new_amount : int = amount
@@ -183,6 +242,8 @@ func end_turn_process_player_status_effects() -> void:
 		match effect.effect:
 			db.CardEffect.Block:
 				add_player_status_effect("block",effect.amount)
+			db.CardEffect.LoseAllEmpowered:
+				db.player.change_player_status_effect("empowered",0)
 	next_turn_effects = []
 func end_fight_process_player_status_effects() -> void:
 	if "drunk" in db.player.status_effects:
@@ -228,6 +289,8 @@ func start_fight_effects() -> void:
 		add_player_status_effect("ignore_first_daze",status_effects["permanent_ignore_first_daze"].amount)
 	
 func reset() -> void:
+	max_health = 30
+	max_mana = 10
 	health = max_health
 	max_ap = 3
 	max_rp = 3
@@ -239,6 +302,7 @@ func reset() -> void:
 	gold = 10
 	keys = 1
 	relics = []
+	mana = max_mana
 	
 	
 # Relic funcs

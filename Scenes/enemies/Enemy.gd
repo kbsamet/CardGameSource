@@ -206,10 +206,12 @@ func heal(amount:int) -> void:
 
 func _on_animation_finished(anim_name : String)-> void:
 	if anim_name == "attack_rise":
+		print(str(id) + " attack rise finished")
 		attack_rise_done.emit(id)
 		set_attack_info()
 		
 	elif anim_name == "attack_end":
+		print(str(id) + " attack end finished")
 		attack_end_done.emit()
 		remove_attack_info()
 		remove_status_effect_info()

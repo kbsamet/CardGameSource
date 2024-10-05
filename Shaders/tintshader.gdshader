@@ -8,7 +8,7 @@ void vertex() {
 void fragment() {
 	float grayscale = (COLOR.r + COLOR.g + COLOR.b) / 3.0 ;
 
-	COLOR = vec4(vec3(grayscale),1.0);
+	COLOR = vec4(vec3(grayscale),COLOR.a);
 }
 
 //void light() {

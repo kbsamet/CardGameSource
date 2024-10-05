@@ -1,5 +1,9 @@
 {
   "hidden_columns": {
+    "res://Resources/abilities/": {
+      "resource_local_to_scene": true,
+      "resource_name": true
+    },
     "res://Resources/cards/": {
       "resource_local_to_scene": true,
       "resource_name": true
@@ -26,7 +30,8 @@
     "res://Resources/enemies/",
     "res://Resources/statusEffects/",
     "res://Resources/relics/",
-    "res://Resources/trials/"
+    "res://Resources/trials/",
+    "res://Resources/abilities/"
   ],
   "table_functions": {
     "filter": [

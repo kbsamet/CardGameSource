@@ -83,10 +83,17 @@ func add_damage_color() -> void:
 			
 		add_description_colors()
 func _player_status_effect_changed()-> void:
+	if "dazed" in db.player.status_effects:
+		disabled = true
+		sprite.material = disabledShader
 	if card_data.is_damage_card():
 		add_damage_color()
 		
 func _player_state_changed()-> void:
+	if "dazed" in db.player.status_effects:
+		disabled = true
+		sprite.material = disabledShader
+		return
 	if card_data.type == db.CardType.Neutral:
 		if (db.current_turn == db.Turn.PlayerAction and db.player.ap >= card_data.cost) or \
 		 (db.current_turn == db.Turn.PlayerReaction and db.player.rp >= card_data.cost):
@@ -106,6 +113,10 @@ func _player_state_changed()-> void:
 func _turn_changed(new_turn : db.Turn)-> void:
 	if hovered:
 		_on_hover_over()
+	if "dazed" in db.player.status_effects:
+		disabled = true
+		sprite.material = disabledShader
+		return
 	if (new_turn == db.Turn.PlayerAction && card_data.type == db.CardType.Reaction) || \
 	 (new_turn == db.Turn.PlayerReaction && card_data.type == db.CardType.Action) || \
 	 new_turn == db.Turn.EnemyAction || new_turn == db.Turn.EnemyReaction || \

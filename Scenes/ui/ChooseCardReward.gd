@@ -29,7 +29,14 @@ func _ready() -> void:
 		cardContainer.add_child(new_scene)
 		new_scene.set_data(card_data,i)
 		new_scene.card_chosen.connect(_card_chosen)
-
+	if cards.filter(func(card:CardData) -> bool : return card.type == db.CardType.Action).size() == 0:
+		cards_copy = cards_copy.filter(func(card:CardData) -> bool: return card.type == db.CardType.Action)
+		cards.remove_at(0)
+		cards.push_back(cards_copy.pick_random())
+	elif cards.filter(func(card:CardData) -> bool : return card.type == db.CardType.Reaction).size() == 0:
+		cards_copy = cards_copy.filter(func(card:CardData) -> bool: return card.type == db.CardType.Reaction)
+		cards.remove_at(0)
+		cards.push_back(cards_copy.pick_random())
 func _card_chosen(id : int)-> void:
 	db.player.add_to_deck(cards[id])
 	card_chosen.emit()

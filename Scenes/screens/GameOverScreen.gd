@@ -1,6 +1,6 @@
 extends Control
 
-@export var chooseRewardScene : PackedScene = preload("res://Scenes/screens/RewardSelectScreen.tscn")
+var chooseRewardScene : PackedScene = load("res://Scenes/screens/RewardSelectScreen.tscn")
 @onready var levelLabel : Label = $VBoxContainer/LevelLabel
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dunuofaogk85e"]
+[gd_scene load_steps=15 format=3 uid="uid://dunuofaogk85e"]
 
 [ext_resource type="Texture2D" uid="uid://cosogl3d7bq7w" path="res://Sprites/ui/player_health_bar.png" id="1_o0dsw"]
 [ext_resource type="Script" path="res://Scenes/ui/PlayerInfoUI.gd" id="1_qlls4"]
@@ -7,6 +7,7 @@
 [ext_resource type="Shader" path="res://Shaders/circularbarshader.gdshader" id="4_m16q0"]
 [ext_resource type="Texture2D" uid="uid://cu85vs3bqcpl1" path="res://Sprites/ui/ap_bar.png" id="5_daek1"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="6_4yd53"]
+[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="7_h8cyy"]
 [ext_resource type="Texture2D" uid="uid://e2pvd6ycuw" path="res://Sprites/ui/rewardIcons/gold.png" id="7_uj2tu"]
 [ext_resource type="Texture2D" uid="uid://bn81552rvli0r" path="res://Sprites/ui/rewardIcons/key.png" id="8_kr8wf"]
 
@@ -40,9 +41,14 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_qlls4")
 
+[node name="HealthControl" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="HealthBar" type="Sprite2D" parent="."]
-position = Vector2(257, 236)
-scale = Vector2(1.5, 1.5)
+position = Vector2(216, 208)
+scale = Vector2(1.2, 1.2)
 texture = ExtResource("1_o0dsw")
 
 [node name="HealthBarRect" type="ColorRect" parent="HealthBar"]
@@ -56,6 +62,15 @@ offset_bottom = -19.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.662745, 0.286275, 0.286275, 1)
+
+[node name="Tooltip" parent="HealthBar/HealthBarRect" instance=ExtResource("7_h8cyy")]
+layout_mode = 1
+offset_left = 358.333
+offset_top = 39.6667
+offset_right = 367.293
+offset_bottom = 47.9867
+text = "Health:This is your health bar. When it reaches 0 you die."
+create_mouse_events = true
 
 [node name="BlockBarRect" type="ColorRect" parent="HealthBar"]
 offset_left = -11.0
@@ -84,7 +99,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="BlockIcon" type="Sprite2D" parent="HealthBar"]
-visible = false
 light_mask = 0
 position = Vector2(-150, 1.19209e-06)
 scale = Vector2(1.23958, 1.23958)
@@ -99,6 +113,68 @@ offset_top = -15.0
 offset_right = -15.992
 offset_bottom = -16.008
 text = "3"
+label_settings = ExtResource("2_cg573")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="HealthBar/BlockIcon"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -13.0
+offset_top = -16.0
+offset_right = 19.0
+offset_bottom = 16.0
+
+[node name="Tooltip" parent="HealthBar/BlockIcon/Control" instance=ExtResource("7_h8cyy")]
+layout_mode = 1
+offset_left = 139.387
+offset_top = 42.8908
+offset_right = 148.347
+offset_bottom = 51.2108
+text = "Block:This is your block. It blocks damage for this turn only."
+create_mouse_events = true
+
+[node name="ManaBar" type="Sprite2D" parent="."]
+position = Vector2(216, 256)
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("1_o0dsw")
+
+[node name="ManaBarRect" type="ColorRect" parent="ManaBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -125.0
+offset_top = -13.0
+offset_right = -131.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.462745, 0.623529, 0.65098, 1)
+
+[node name="Tooltip" parent="ManaBar/ManaBarRect" instance=ExtResource("7_h8cyy")]
+layout_mode = 1
+offset_left = 351.667
+offset_top = 46.3333
+offset_right = 360.627
+offset_bottom = 54.6533
+text = "Mana:This is your mana bar. You can use your ability at any time using your mana. "
+create_mouse_events = true
+
+[node name="ManaLabel" type="Label" parent="ManaBar"]
+anchors_preset = -1
+anchor_left = 0.012
+anchor_top = 0.094
+anchor_right = 0.985
+anchor_bottom = 0.875
+offset_left = -128.072
+offset_top = -16.008
+offset_right = -127.16
+offset_bottom = -15.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+text = "10/10"
 label_settings = ExtResource("2_cg573")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -130,13 +206,22 @@ label_settings = ExtResource("2_cg573")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Tooltip" parent="ApBar" instance=ExtResource("7_h8cyy")]
+layout_mode = 1
+offset_left = 244.0
+offset_top = 52.0
+offset_right = 252.96
+offset_bottom = 60.32
+text = "Action Points:This is your action point bar. You can play action cards using action points (AP)."
+create_mouse_events = true
+
 [node name="RpBar" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_77nf3")
 layout_mode = 0
-offset_left = 329.0
-offset_top = 51.0
-offset_right = 448.0
-offset_bottom = 170.0
+offset_left = 248.0
+offset_top = 48.0
+offset_right = 367.0
+offset_bottom = 167.0
 
 [node name="RpBarOutline" type="Sprite2D" parent="RpBar"]
 position = Vector2(60, 59)
@@ -157,12 +242,21 @@ label_settings = ExtResource("2_cg573")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Tooltip" parent="RpBar" instance=ExtResource("7_h8cyy")]
+layout_mode = 1
+offset_left = 240.0
+offset_top = 56.0
+offset_right = 248.96
+offset_bottom = 64.32
+text = "Reaction Points:This is your reaction point bar. You can play reaction cards using reaction points (RP)."
+create_mouse_events = true
+
 [node name="GoldLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 113.0
-offset_top = 281.0
-offset_right = 167.0
-offset_bottom = 337.0
+offset_left = 106.0
+offset_top = 280.0
+offset_right = 160.0
+offset_bottom = 336.0
 text = ":10"
 label_settings = SubResource("LabelSettings_54v5l")
 vertical_alignment = 1
@@ -174,10 +268,10 @@ texture = ExtResource("7_uj2tu")
 
 [node name="KeyLabel" type="Label" parent="."]
 layout_mode = 0
-offset_left = 247.0
-offset_top = 281.0
-offset_right = 301.0
-offset_bottom = 337.0
+offset_left = 240.0
+offset_top = 280.0
+offset_right = 294.0
+offset_bottom = 336.0
 text = ":10"
 label_settings = SubResource("LabelSettings_54v5l")
 vertical_alignment = 1
@@ -189,18 +283,18 @@ texture = ExtResource("8_kr8wf")
 
 [node name="RelicsContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 481.0
-offset_top = 69.0
-offset_right = 1089.0
-offset_bottom = 160.0
+offset_left = 400.0
+offset_top = 48.0
+offset_right = 1008.0
+offset_bottom = 139.0
 mouse_filter = 2
 
 [node name="StatusEffectsContainer" type="HBoxContainer" parent="."]
 layout_mode = 0
-offset_left = 71.0
-offset_top = 334.0
-offset_right = 503.0
-offset_bottom = 425.0
+offset_left = 64.0
+offset_top = 333.0
+offset_right = 496.0
+offset_bottom = 424.0
 mouse_filter = 2
 
 [node name="CurrentLevelLabel" type="Label" parent="."]

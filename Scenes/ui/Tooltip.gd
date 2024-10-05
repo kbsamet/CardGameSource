@@ -2,8 +2,17 @@ extends Control
 class_name TooltipNode
 @onready var InfoBox : Panel = $InfoBox
 @onready var descriptionLabel : RichTextLabel = $InfoBox/InfoLabel
-var text : String = ""
+@export var text : String = ""
+@export var create_mouse_events : bool = false
 
+func _ready() -> void:
+	if create_mouse_events:
+		var parent : Control = get_parent() as Control
+		parent.mouse_entered.connect(func() -> void : visible = true)
+		parent.mouse_exited.connect(func() -> void : visible = false)
+		if text != "":
+			set_data(text)
+	
 func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)) -> void:
 	text = tooltip
 	descriptionLabel.text = add_colors_to_text(text)
@@ -15,7 +24,9 @@ func set_data(tooltip: String,_scale :Vector2 = Vector2(1,1)) -> void:
 	InfoBox.size.y = descriptionLabel.get_minimum_size().y + 30 #+ (40 if get_global_transform().get_scale() == _scale else 0)
 	#if _scale != Vector2(1,1):
 		#InfoBox.size.y = descriptionLabel.get_minimum_size().y + 45 * _scale.y
-	InfoBox.custom_minimum_size = InfoBox.size
+	custom_minimum_size = InfoBox.size
+	
+	
 
 func add_colors_to_text(s : String) -> String:
 	var strs : PackedStringArray = s.split(":")

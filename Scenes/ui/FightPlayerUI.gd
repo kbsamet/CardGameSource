@@ -8,6 +8,7 @@ class_name PlayerUI
 @onready var deck : Sprite2D = $CanvasLayer/Control/Deck
 @onready var discardPileLabel : Label = $CanvasLayer/Control2/DiscardPile/DiscardPileCountLabel
 @onready var cardPileScreen : CardPileScreen = $CanvasLayer/CardPileScreen
+@onready var abilityIcon : Sprite2D = $CanvasLayer/Control3/AbilityIcon
 
 signal end_turn_clicked
 
@@ -19,15 +20,22 @@ var disabled_material: ShaderMaterial = preload("res://Shaders/gray_tint.tres")
 var boss_data : EnemyData = null
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	abilityIcon.texture = load("res://Sprites/abilities/"+db.player.ability._name+".png")
+	$CanvasLayer/Control3/Tooltip.set_data(db.player.ability.tooltip)
 	db.turn_changed.connect(turn_changed)
 	db.player_state_changed.connect(update_ui_values)
 	if boss_data != null:
 		$CanvasLayer/BossControl.visible = true
 	update_ui_values()
 	
+	
 func update_ui_values()-> void:
 	if !is_inside_tree():
 		return
+	if db.player.ability.cost > db.player.mana:
+		abilityIcon.material = disabled_material
+	else:
+		abilityIcon.material = null
 	deckCountLabel.text = str(db.player.deck.size()) + " / " + str(db.player.deck_size )
 	discardPileLabel.text = str(db.player.discardPile.size()) + " / " + str(db.player.deck_size )
 	
@@ -130,3 +138,10 @@ func _on_discard_pile_gui_input(event : InputEvent)-> void:
 				return
 			cardPileScreen.set_data(db.player.discardPile)
 			cardPileScreen.visible = true
+
+
+func _on_ability_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.is_released():
+			db.clickPlayer.play()
+			db.player.use_ability()

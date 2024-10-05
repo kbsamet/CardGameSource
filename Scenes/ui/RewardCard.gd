@@ -12,6 +12,7 @@ var tooltipScene : PackedScene = preload("res://Scenes/ui/Tooltip.tscn")
 var id : int
 var card_data : CardData
 var no_outline : bool = false
+var clicked : bool = false
 
 func set_data(data:CardData,_id : int,no_outline : bool=false) -> void:
 	self.no_outline = no_outline
@@ -46,9 +47,10 @@ func _on_mouse_exited() -> void:
 
 func _on_gui_input(event : InputEvent) -> void:
 	if event is InputEventMouseButton:
-		if event.is_released():
+		if event.is_released() and not clicked:
 			db.clickPlayer.play()
 			card_chosen.emit(id)
+			clicked = true
 	
 func remove_info() -> void:
 	for n in tooltipContainer.get_children():

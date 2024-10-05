@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://dhmpowfoswdl2"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_emexp"]
+
+[resource]
+script = ExtResource("1_emexp")
+_name = "Enchant"
+cost = 4
+tooltip = "Enchant:Your abilities will do 1 more damage. Gain 2 block. Costs 4 mana."

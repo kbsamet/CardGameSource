@@ -182,7 +182,10 @@ func draw_card() -> void:
 	
 func deal_hand() -> Signal:
 	var tween : Tween= create_tween()
-	while cards.size() < db.player.hand_size:
+	var hand_size : int = db.player.hand_size
+	if "burn" in db.player.status_effects:
+		hand_size -= 1
+	while cards.size() < hand_size:
 		if db.player.deck.size() == 0:
 			shuffle_discard_to_deck()
 		var index : int= random.randi_range(0,db.player.deck.size() -1)

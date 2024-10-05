@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=30 format=3 uid="uid://dvuqxxbsjbmdl"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=29 format=3 uid="uid://dvuqxxbsjbmdl"]
 
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_2acnu"]
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="2_jix16"]
@@ -59,11 +59,6 @@ script = ExtResource("2_jix16")
 attack_type = 4
 amount = 3
 
-[sub_resource type="Resource" id="Resource_1874f"]
-script = ExtResource("2_jix16")
-attack_type = 15
-amount = 3
-
 [sub_resource type="Resource" id="Resource_wxfcx"]
 script = ExtResource("2_jix16")
 attack_type = 8
@@ -81,7 +76,7 @@ amount = 10
 
 [sub_resource type="Resource" id="Resource_w7vvu"]
 script = ExtResource("1_2acnu")
-attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_nu87i"), SubResource("Resource_1874f"), SubResource("Resource_wxfcx"), SubResource("Resource_enn10"), SubResource("Resource_qou4n")])
+attacks = Array[ExtResource("2_jix16")]([SubResource("Resource_nu87i"), SubResource("Resource_wxfcx"), SubResource("Resource_enn10"), SubResource("Resource_qou4n")])
 
 [sub_resource type="Resource" id="Resource_lll0p"]
 script = ExtResource("2_jix16")
@@ -126,8 +121,8 @@ hidden = false
 [resource]
 script = ExtResource("4_x6yho")
 _name = "Gray Wolf"
-health = 60
-max_health = 60
+health = 80
+max_health = 80
 stamina = 20
 max_stamina = 20
 difficulty = 9999999999

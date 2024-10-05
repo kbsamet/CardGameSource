@@ -10,6 +10,7 @@ class_name BattleController
 var enemyScene : PackedScene = preload("res://Scenes/enemies/Enemy.tscn")
 var rewardScene : PackedScene= preload("res://Scenes/screens/RewardScreen.tscn")
 var event_screen : PackedScene = preload("res://Scenes/screens/EventScreen.tscn")
+var ability_upgrade_screen : PackedScene = preload("res://Scenes/screens/AbilityUnlockScene.tscn")
 var reward : RewardData
 var card_selected : bool = false
 var is_player_hit : bool = false
@@ -19,6 +20,7 @@ func _ready() -> void:
 		create_deck()
 	db.player.start_fight_effects()
 	db.screen_effect.connect(_on_screen_effect)
+	db.player_dead.connect(_on_player_dead)
 	db.player_status_effect_changed.connect(_on_player_status_effect)
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
 	hand.play_card.connect(_use_card)
@@ -44,6 +46,12 @@ func _on_player_status_effect() -> void:
 	else:
 		$CanvasModulate.color = Color("a1b0c5")
 
+func _on_player_dead() -> void:
+	screenAnimation.stop()
+	screenAnimation.play("dead")
+	var tween : Tween = create_tween().set_parallel()
+	tween.tween_property($CanvasModulate,"color:a",0,2)
+	tween.tween_property($Control/FightPlayerUI/CanvasLayer/CanvasModulate,"color:a",0,2)
 func _on_screen_effect(effect : String) -> void:
 	if effect == "damaged":
 		is_player_hit = true
@@ -90,7 +98,7 @@ func spawn_enemies() -> void:
 		var num_of_enemies : int = 0
 		for enemy_count :int in enemies.values():
 			num_of_enemies += enemy_count
-		if num_of_enemies > 3:
+		if num_of_enemies > 2:
 			enemies = {}
 			current_difficulty = 0
 			continue
@@ -240,6 +248,27 @@ func _use_card(enemy_id : int) -> void:
 							db.player.change_player_status_effect("block", effect.amount)
 				db.CardEffect.DamageSelf:
 					db.player.damage_player(effect.amount)
+				db.CardEffect.GainEmpoweredOnKill:
+					if enemy_id not in enemyController.enemies or enemyController.enemies[enemy_id].enemy_data.health <= 0:
+						db.player.add_player_status_effect("empowered",effect.amount,true)
+				db.CardEffect.DoubleEmpowered:
+					if "empowered" in db.player.status_effects:
+						db.player.add_player_status_effect("empowered",db.player.status_effects.empowered.amount,true)
+				db.CardEffect.LoseAllEmpowered:
+					db.player.change_player_status_effect("empowered",0)
+				db.CardEffect.GainMana:
+					db.player.restore_mana(effect.amount)
+				db.CardEffect.DamageEqualToMana:
+					var base : int = db.player.mana
+					hitSound.play()
+					enemyController.enemies[enemy_id].damage(calculate_damage(base,enemyController.enemies[enemy_id].enemy_data))
+					if "inflict_bleed_with_attack" in db.player.status_effects:
+						enemyController.enemies[enemy_id].add_status_effect("bleed", db.player.status_effects["inflict_bleed_with_attack"].amount)
+				db.CardEffect.BlockEqualToMana:
+					if "block" in db.player.status_effects:
+						db.player.change_player_status_effect("block", db.player.status_effects.block.amount + db.player.mana)
+					else:
+						db.player.change_player_status_effect("block", db.player.mana)
 	if db.current_turn == db.Turn.PlayerAction:
 		db.player.ap = db.player.ap - selected_card.cost
 		db.player_state_changed.emit()
@@ -264,6 +293,8 @@ func calculate_damage(base:int , enemy: EnemyData) -> int:
 func _end_turn_clicked() ->void:
 	for enemy : EnemyNode in enemyController.enemies.values():
 		enemy = enemy as EnemyNode
+		if enemy.enemy_data.health <= 0:
+			continue
 		if enemy.animationPlayer.is_playing():
 			return
 		if enemy.death_animation_playing:
@@ -272,10 +303,15 @@ func _end_turn_clicked() ->void:
 		return
 	if hand.selected_card != -1:
 		return
-		
+	if "dazed" in db.player.status_effects:
+		db.player.add_player_status_effect("dazed", -1)
 	if db.current_turn == db.Turn.PlayerAction:
 		if "overcharged" in db.player.status_effects:
-			db.player.rp = 0
+			if db.player.mana >= 5:
+				db.player.mana -= 5
+			else:
+				db.player.mana = 0
+				db.player.add_player_status_effect("dazed",1)
 			db.player.add_player_status_effect("overcharged",-1)
 			db.player_state_changed.emit()
 		db.set_turn(db.Turn.EnemyAction)
@@ -306,7 +342,6 @@ func _enemy_turn_done() -> void:
 	if "blind" in db.player.status_effects:
 		db.player.add_player_status_effect("blind",-1)
 	if "burn" in db.player.status_effects:
-		hand.discard(hand.cards.keys().pick_random())
 		db.player.add_player_status_effect("burn",-1)
 	if "crushing" in db.player.status_effects:
 		db.player.add_player_status_effect("crushing",-1)
@@ -322,12 +357,15 @@ func _enemy_turn_done() -> void:
 		db.player.add_player_status_effect("barbedshield",-1)
 	if "empowered" in db.player.status_effects and db.player.status_effects["empowered"].amount > 0:
 		db.player.add_player_status_effect("empowered",-1)
-	if "dazed" in db.player.status_effects:
-		db.player.add_player_status_effect("dazed", -1)
-		db.set_turn(db.Turn.EnemyAction)
-		enemyController.start_turn()
 	if "overcharged" in db.player.status_effects:
-		db.player.ap = 0
+		if "overcharged" in db.player.status_effects:
+			if db.player.mana >= 5:
+				db.player.mana -= 5
+			else:
+				db.player.mana = 0
+				db.player.add_player_status_effect("dazed",1)
+			db.player.add_player_status_effect("overcharged",-1)
+			db.player_state_changed.emit()
 		db.player.add_player_status_effect("overcharged",-1)
 		db.player_state_changed.emit()
 	
@@ -337,6 +375,7 @@ func _fight_over() -> void:
 		db.player.heal_player(db.player.status_effects["heal_if_not_hit"].amount)
 	db.player.ap = db.player.max_ap
 	db.player.rp = db.player.max_rp
+	db.player.restore_mana(3)
 	db.player_state_changed.emit()
 	db.player.end_turn_process_player_status_effects()
 	db.check_game_over()
@@ -372,7 +411,7 @@ func create_deck() -> void:
 		db.player.deck.push_back(db.get_card("Strike"))
 		db.player.deck.push_back(db.get_card("Block"))
 	db.player.deck.push_back(db.get_card("Daze"))
-	db.player.deck.push_back(db.get_card("Strike"))
+	db.player.deck.push_back(db.get_card("Mana Potion"))
 	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Hourglass")
 	#db.player.add_relic(dice[0])
 	fightUI.update_ui_values()
@@ -381,3 +420,6 @@ func create_deck() -> void:
 
 func _on_animation_player_animation_finished(anim_name : String) -> void:
 	$ColorRect.visible = false
+	if anim_name == "dead":
+		db.saveData.souls += db.current_room * 12
+		get_tree().change_scene_to_packed(ability_upgrade_screen)

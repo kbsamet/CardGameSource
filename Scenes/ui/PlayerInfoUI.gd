@@ -6,8 +6,10 @@ var relicIcon : PackedScene = preload("res://Scenes/ui/RelicIcon.tscn")
 @onready var blockAmountLabel : Label = $HealthBar/BlockIcon/Label
 @onready var healthBarSprite : Sprite2D = $HealthBar
 @onready var healthBarRect : ColorRect = $HealthBar/HealthBarRect
+@onready var manaBarRect : ColorRect = $ManaBar/ManaBarRect
 @onready var blockBarRect : ColorRect = $HealthBar/BlockBarRect
 @onready var healthBarLabel : Label = $HealthBar/HealthLabel
+@onready var manaBarLabel : Label = $ManaBar/ManaLabel
 @onready var apLabel: Label = $ApBar/ApBarOutline/ApLabel
 @onready var rpLabel: Label = $RpBar/RpBarOutline/RpLabel
 @onready var apBar: ColorRect = $ApBar
@@ -49,6 +51,8 @@ func update_ui_values() -> void:
 	if tween == null:
 		return
 	var max_health_bar_amount : float = float(db.player.max_health)
+	var max_mana_bar_amount : float = float(db.player.max_mana)
+	
 	var block_amount : int = 0
 	if "block" in db.player.status_effects and db.player.status_effects["block"].amount != 0:
 		block_amount = db.player.status_effects["block"].amount
@@ -65,11 +69,14 @@ func update_ui_values() -> void:
 		blockBarRect.size.x = 0
 		blockBarRect.visible = false
 	tween.tween_property(healthBarRect,"size:x",(float(db.player.health) /max_health_bar_amount) * health_bar_full_width,0.1)
+	tween.tween_property(manaBarRect,"size:x",(float(db.player.mana) /max_mana_bar_amount) * health_bar_full_width,0.1)
+	
 	goldLabel.text = ":"+str(db.player.gold)
 	keyLabel.text = ":"+str(db.player.keys)
 	apLabel.text = str(db.player.ap) + " / " + str(db.player.max_ap)
 	rpLabel.text = str(db.player.rp) + " / " + str(db.player.max_rp)
-
+	
+	manaBarLabel.text = str(db.player.mana) + " / " + str(db.player.max_mana)
 	healthBarLabel.text = str(db.player.health ) + " / " + str(db.player.max_health)
 	tween.tween_method(func(value : float) -> void: apBar.material.set_shader_parameter("cutoff", value),apBar.material.get_shader_parameter("cutoff"),float(db.player.ap) / float(db.player.max_ap),0.2)
 	tween.tween_method(func(value : float) -> void: rpBar.material.set_shader_parameter("cutoff", value),rpBar.material.get_shader_parameter("cutoff"),float(db.player.rp) / float(db.player.max_rp),0.2)

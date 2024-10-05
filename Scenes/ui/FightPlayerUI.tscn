@@ -1,7 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=18 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_2gp3d"]
+[ext_resource type="Texture2D" uid="uid://bgs5ragrn6dxc" path="res://Sprites/abilities/Enchant.png" id="4_g60ly"]
+[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="5_tmrns"]
 [ext_resource type="Texture2D" uid="uid://bi387adpaice3" path="res://Sprites/ui/end_action.png" id="6_apsm4"]
 [ext_resource type="PackedScene" uid="uid://dunuofaogk85e" path="res://Scenes/ui/PlayerInfoUI.tscn" id="6_rgsw4"]
 [ext_resource type="Texture2D" uid="uid://dyqwdmwipxqar" path="res://Sprites/ui/deck.png" id="7_gocp1"]
@@ -80,6 +82,27 @@ label_settings = ExtResource("2_2gp3d")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Control3" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 388.0
+offset_top = 216.0
+offset_right = 455.0
+offset_bottom = 279.0
+scale = Vector2(1.2, 1.2)
+
+[node name="AbilityIcon" type="Sprite2D" parent="CanvasLayer/Control3"]
+position = Vector2(34, 31)
+texture = ExtResource("4_g60ly")
+
+[node name="Tooltip" parent="CanvasLayer/Control3" instance=ExtResource("5_tmrns")]
+layout_mode = 1
+offset_left = 180.0
+offset_top = 26.6667
+offset_right = 188.96
+offset_bottom = 34.9867
+create_mouse_events = true
+
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
 anchors_preset = 0
@@ -135,7 +158,7 @@ offset_bottom = -2.0
 
 [node name="CanvasModulate" type="CanvasModulate" parent="CanvasLayer"]
 position = Vector2(0, -1)
-color = Color(0.631373, 0.690196, 0.772549, 1)
+color = Color(0.6314, 0.68915, 0.77, 1)
 
 [node name="BossControl" type="Control" parent="CanvasLayer"]
 visible = false
@@ -313,6 +336,7 @@ offset_bottom = -1.0
 mouse_filter = 0
 
 [connection signal="gui_input" from="CanvasLayer/Container" to="." method="_on_button_input"]
+[connection signal="gui_input" from="CanvasLayer/Control3" to="." method="_on_ability_input"]
 [connection signal="gui_input" from="CanvasLayer/Control" to="." method="_on_deck_gui_input"]
 [connection signal="mouse_entered" from="CanvasLayer/Control" to="." method="_on_deck_mouse_entered"]
 [connection signal="mouse_exited" from="CanvasLayer/Control" to="." method="_on_deck_mouse_exited"]

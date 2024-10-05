@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://vx6gqm3d5j4m"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_t7seu"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_g3ltw"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_t7seu")
+effect = 30
+amount = 3
+next_turn = false
+
+[resource]
+script = ExtResource("2_g3ltw")
+_name = "Mana Potion"
+type = 1
+description = "Restore 3 mana."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_t7seu")]([SubResource("Resource_6w00h")])
+is_rare = false

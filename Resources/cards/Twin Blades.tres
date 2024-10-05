@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://mme0m7xu8iqe"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_lgepy"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_8njkx"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_lgepy")
+effect = 0
+amount = 6
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_g80x3"]
+script = ExtResource("1_lgepy")
+effect = 0
+amount = 6
+next_turn = false
+
+[resource]
+script = ExtResource("2_8njkx")
+_name = "Twin Blades"
+type = 0
+description = "Deal /damage damage twice"
+cost = 2
+targeted = true
+effects = Array[ExtResource("1_lgepy")]([SubResource("Resource_6w00h"), SubResource("Resource_g80x3")])
+is_rare = false

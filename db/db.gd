@@ -7,12 +7,16 @@ extends Node
 @onready var all_enemies : ResourceGroup = preload("res://Resources/all_enemies.tres")
 @onready var all_relics : ResourceGroup = preload("res://Resources/all_relics.tres")
 @onready var all_trials : ResourceGroup = preload("res://Resources/all_trials.tres")
+@onready var all_abilities : ResourceGroup = preload("res://Resources/all_abilities.tres")
 
 var cards : Array[CardData] 
 var status_effects : Array[StatusEffectData]
 var enemies : Array[EnemyData]
 var relics : Array[RelicData]
 var trials : Array[TrialData]
+var abilities : Array[AbilityData]
+
+var saveData : SaveData
 var clickPlayer : AudioStreamPlayer
 var run_time : float = 0.0
 func _ready() -> void:
@@ -22,24 +26,26 @@ func _ready() -> void:
 	all_enemies.load_all_into(enemies)
 	all_relics.load_all_into(relics)
 	all_trials.load_all_into(trials)
+	all_abilities.load_all_into(abilities)
 	var click : AudioStreamPlayer = clickPlayerScene.instantiate()
 	add_child(click)
 	clickPlayer = click
 	var music : AudioStreamPlayer = background_music.instantiate() 
 	add_child(music)
 	music.play()
-	
+	player.ability = get_ability("Enchant")
+	saveData = SaveData.load_save()
 func _process(delta : float) -> void:
 	if player.health > 0:
 		run_time += delta
 	#print("FPS: " + str(Engine.get_frames_per_second()))
-const gameOverScreen : PackedScene = preload("res://Scenes/screens/GameOverScreen.tscn")
 
 signal level_changed
 signal player_state_changed
 signal player_status_effect_changed
 signal screen_effect(effect : String)
 signal turn_changed(new_turn : Turn)
+signal player_dead
 
 var player : Player = Player.new()
 var current_room : int = 1
@@ -57,7 +63,8 @@ enum CardType {
 enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
 	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
-	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding,DiscardAllReactionDrawEqual,BlockIfNoOtherReactionCards,DamageSelf
+	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding,DiscardAllReactionDrawEqual,BlockIfNoOtherReactionCards,DamageSelf,
+	GainEmpoweredOnKill,DoubleEmpowered,LoseAllEmpowered,GainMana,DamageEqualToMana,BlockEqualToMana
 }
 
 enum EnemyAttack {
@@ -99,7 +106,7 @@ const card_tooltips : Dictionary = {
 	CardEffect.Bleed : "Bleed:The enemy will receive _ damage per turn.",
 	CardEffect.Crushing : "Crushing:Deal double damage to dazed enemies for _ turns.",
 	CardEffect.Empower : "Empower:Your attacks will do _ more damage.",
-	CardEffect.NoManaNextTurn : "Overcharged:You will lose all your reaction or action points next turn.",
+	CardEffect.NoManaNextTurn : "Overcharged:You wil lose 5 mana next turn. If you don't have enough mana you will be dazed.",
 	CardEffect.BarbedArmor : "Barbed Armor:Bleed is inflicted on attacking enemies equal to the damage you blocked.",
 	CardEffect.BleedAll : "Bleed:The enemy will receive _ damage per turn."
 	
@@ -279,8 +286,7 @@ func check_game_over() -> void:
 			player.remove_relic("Holy Cross")
 			player_state_changed.emit()
 			return
-		
-		get_tree().change_scene_to_packed(gameOverScreen)
+		player_dead.emit()
 
 func increase_level() -> void:
 	current_room += 1
@@ -303,6 +309,12 @@ func get_reward(reward_name : String) -> RewardData:
 	assert(filtered_rewards.size() != 0, reward_name + " not found !")
 	assert(filtered_rewards.size() < 2, "multiple rewards with the name " + reward_name + " found !")
 	return RewardData.fromDict(filtered_rewards[0])
+	
+func get_ability(ability_name : String) -> AbilityData:
+	var filtered_abilities: Array[AbilityData] = abilities.filter(func(ability : AbilityData) -> bool: return ability._name == ability_name)
+	assert(filtered_abilities.size() != 0, ability_name + " not found !")
+	assert(filtered_abilities.size() < 2, "multiple rewards with the name " + ability_name + " found !")
+	return filtered_abilities[0].duplicate(true)
 	
 func get_status_effect(status_effect_name : String,amount:int) -> StatusEffectData:
 	var filtered_status_effects : Array[StatusEffectData] = status_effects.filter(func(effect : StatusEffectData) -> bool : return effect._name == status_effect_name)

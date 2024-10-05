@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://bamxp678y5a5j"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_glfi7"]
+
+[resource]
+script = ExtResource("1_glfi7")
+_name = "Shield Up"
+cost = 3
+tooltip = "Shield Up:Gain 3 Block. Costs 3 mana."

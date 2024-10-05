@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://n5gta1ndti10"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_oy0ty"]
+
+[resource]
+script = ExtResource("1_oy0ty")
+_name = "Empower"
+cost = 3
+tooltip = "Empower:Your attacks will deal 2 more damage. Costs 4 mana."

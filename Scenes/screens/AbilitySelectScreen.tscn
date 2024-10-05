@@ -1,0 +1,364 @@
+[gd_scene load_steps=19 format=3 uid="uid://c6ji0vioawko"]
+
+[ext_resource type="Script" path="res://Scenes/screens/ability_select_screen.gd" id="1_wdhm1"]
+[ext_resource type="Texture2D" uid="uid://crd5fas6gaa3a" path="res://Sprites/ui/progress_r_empty.png" id="2_70g32"]
+[ext_resource type="Texture2D" uid="uid://gwjik6llv6oy" path="res://Sprites/ui/progress_r.png" id="3_kpdwf"]
+[ext_resource type="Texture2D" uid="uid://bjlkq8fkbgee2" path="res://Sprites/ui/progress_empty.png" id="4_4f7sn"]
+[ext_resource type="Texture2D" uid="uid://dfd1fxi6ksgqr" path="res://Sprites/ui/progress.png" id="5_5v5rk"]
+[ext_resource type="Texture2D" uid="uid://bgs5ragrn6dxc" path="res://Sprites/abilities/Enchant.png" id="6_t7cbn"]
+[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="7_xmvrc"]
+[ext_resource type="Material" uid="uid://b42dane6a1voe" path="res://Shaders/gray_tint.tres" id="8_ih4i8"]
+[ext_resource type="Texture2D" uid="uid://bt5iveoxlofph" path="res://Sprites/abilities/Empower.png" id="9_4mj80"]
+[ext_resource type="Texture2D" uid="uid://bgnd175vs8hhl" path="res://Sprites/abilities/Shield Up.png" id="10_paseu"]
+[ext_resource type="Texture2D" uid="uid://dvn5q52rbjdp8" path="res://Sprites/ui/HiddenAbility.png" id="11_iab8j"]
+[ext_resource type="Texture2D" uid="uid://cqfu8a4plwd72" path="res://Sprites/test.jpeg" id="12_funvy"]
+[ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="13_33ied"]
+[ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="14_2ifqs"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="15_6kypq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e2xsr"]
+bg_color = Color(0.41, 0.0984, 0.0984, 0)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_a1fuk"]
+font = ExtResource("13_33ied")
+font_size = 64
+font_color = Color(0.45, 0.108, 0.108, 1)
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ptcyg"]
+font = ExtResource("13_33ied")
+font_size = 64
+font_color = Color(0.1961, 0.38531, 0.53, 1)
+outline_color = Color(0.207843, 0.207843, 0.25098, 1)
+
+[node name="AbilitySelectScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wdhm1")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(1000, 700)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -820.0
+offset_right = 500.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_e2xsr")
+
+[node name="Connections" type="VBoxContainer" parent="Panel"]
+z_index = 4
+layout_mode = 0
+offset_right = 993.0
+offset_bottom = 692.0
+alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Connections"]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Connections"]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureProgressBar2" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer"]
+layout_mode = 2
+value = 56.0
+fill_mode = 2
+texture_under = ExtResource("2_70g32")
+texture_progress = ExtResource("3_kpdwf")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Connections/HBoxContainer"]
+custom_minimum_size = Vector2(75.245, 128)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer"]
+layout_mode = 2
+value = 50.0
+fill_mode = 2
+texture_under = ExtResource("4_4f7sn")
+texture_progress = ExtResource("5_5v5rk")
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Connections"]
+custom_minimum_size = Vector2(10, 74)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/Connections"]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureProgressBar2" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer2"]
+layout_mode = 2
+fill_mode = 2
+texture_under = ExtResource("2_70g32")
+texture_progress = ExtResource("3_kpdwf")
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/Connections/HBoxContainer2"]
+custom_minimum_size = Vector2(30, 128)
+layout_mode = 2
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer2"]
+layout_mode = 2
+fill_mode = 2
+texture_under = ExtResource("4_4f7sn")
+texture_progress = ExtResource("5_5v5rk")
+
+[node name="MarginContainer3" type="MarginContainer" parent="Panel/Connections/HBoxContainer2"]
+custom_minimum_size = Vector2(130, 128)
+layout_mode = 2
+
+[node name="TextureProgressBar3" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer2"]
+layout_mode = 2
+fill_mode = 2
+texture_under = ExtResource("2_70g32")
+texture_progress = ExtResource("3_kpdwf")
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/Connections/HBoxContainer2"]
+clip_contents = true
+custom_minimum_size = Vector2(30, 128)
+layout_mode = 2
+
+[node name="TextureProgressBar4" type="TextureProgressBar" parent="Panel/Connections/HBoxContainer2"]
+layout_mode = 2
+fill_mode = 2
+texture_under = ExtResource("4_4f7sn")
+texture_progress = ExtResource("5_5v5rk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+z_index = 10
+layout_mode = 0
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 990.0
+offset_bottom = 691.0
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Enchant" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource("6_t7cbn")
+expand_mode = 3
+
+[node name="Control" type="Control" parent="Panel/VBoxContainer/HBoxContainer/Enchant"]
+anchors_preset = 0
+offset_right = 132.0
+offset_bottom = 131.0
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+
+[node name="EnchantTooltip" parent="Panel/VBoxContainer/HBoxContainer/Enchant/Control" instance=ExtResource("7_xmvrc")]
+layout_mode = 1
+offset_left = 260.0
+offset_top = 50.0
+offset_right = 268.96
+offset_bottom = 58.32
+create_mouse_events = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Empower" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer2"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource("9_4mj80")
+expand_mode = 3
+
+[node name="EmpowerTooltip" parent="Panel/VBoxContainer/HBoxContainer2/Empower" instance=ExtResource("7_xmvrc")]
+layout_mode = 1
+offset_left = 238.0
+offset_top = 52.0
+offset_right = 246.96
+offset_bottom = 60.32
+create_mouse_events = true
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer2"]
+custom_minimum_size = Vector2(250, 128)
+layout_mode = 2
+
+[node name="Shield Up" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer2"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource("10_paseu")
+expand_mode = 3
+
+[node name="ShieldUpTooltip" parent="Panel/VBoxContainer/HBoxContainer2/Shield Up" instance=ExtResource("7_xmvrc")]
+layout_mode = 1
+offset_left = 234.0
+offset_top = 56.0
+offset_right = 242.96
+offset_bottom = 64.32
+create_mouse_events = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(64, 80)
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Enchant" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("11_iab8j")
+expand_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(140, 128)
+layout_mode = 2
+
+[node name="Enchant2" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("11_iab8j")
+expand_mode = 3
+
+[node name="Enchant3" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("11_iab8j")
+expand_mode = 3
+
+[node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer3"]
+custom_minimum_size = Vector2(140, 100)
+layout_mode = 2
+
+[node name="Enchant4" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
+material = ExtResource("8_ih4i8")
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("11_iab8j")
+expand_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+visible = false
+layout_mode = 0
+offset_left = 11.0
+offset_top = 10.0
+offset_right = 501.0
+offset_bottom = 690.0
+mouse_filter = 2
+color = Color(0.41, 0.0984, 0.0984, 0.666667)
+
+[node name="ColorRect3" type="TextureRect" parent="Panel"]
+modulate = Color(0.74, 0.1406, 0.1406, 0.745098)
+layout_mode = 0
+offset_left = 11.0
+offset_top = 10.0
+offset_right = 501.0
+offset_bottom = 690.0
+mouse_filter = 2
+texture = ExtResource("12_funvy")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="ColorRect2" type="ColorRect" parent="Panel"]
+visible = false
+layout_mode = 0
+offset_left = 501.0
+offset_top = 10.0
+offset_right = 993.0
+offset_bottom = 690.0
+mouse_filter = 2
+color = Color(0.2183, 0.435125, 0.59, 0.572549)
+
+[node name="ColorRect4" type="TextureRect" parent="Panel"]
+modulate = Color(0.252, 0.525, 0.72, 0.521569)
+layout_mode = 0
+offset_left = 501.0
+offset_top = 10.0
+offset_right = 993.0
+offset_bottom = 690.0
+mouse_filter = 2
+texture = ExtResource("12_funvy")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 26.0
+offset_top = 29.0
+offset_right = 314.0
+offset_bottom = 93.0
+text = "Offense"
+label_settings = SubResource("LabelSettings_a1fuk")
+
+[node name="Label2" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 723.0
+offset_top = 29.0
+offset_right = 1011.0
+offset_bottom = 93.0
+text = "Defense"
+label_settings = SubResource("LabelSettings_ptcyg")
+
+[node name="Button" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -160.0
+offset_top = 30.0
+offset_right = 148.0
+offset_bottom = 86.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("13_33ied")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/focus = ExtResource("14_2ifqs")
+theme_override_styles/hover = ExtResource("14_2ifqs")
+theme_override_styles/pressed = ExtResource("14_2ifqs")
+theme_override_styles/normal = ExtResource("15_6kypq")
+text = "Start
+"
+
+[node name="Label" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 456.0
+offset_top = 92.0
+offset_right = 1464.0
+offset_bottom = 229.0
+theme_override_fonts/normal_font = ExtResource("13_33ied")
+theme_override_font_sizes/normal_font_size = 56
+bbcode_enabled = true
+text = "[center]Select your ability"
+
+[connection signal="gui_input" from="Panel/VBoxContainer/HBoxContainer/Enchant" to="." method="_on_enchant_gui_input"]
+[connection signal="gui_input" from="Panel/VBoxContainer/HBoxContainer2/Empower" to="." method="_on_empower_gui_input"]
+[connection signal="gui_input" from="Panel/VBoxContainer/HBoxContainer2/Shield Up" to="." method="_on_shield_up_gui_input"]
+[connection signal="pressed" from="Panel/Button" to="." method="_on_button_pressed"]
