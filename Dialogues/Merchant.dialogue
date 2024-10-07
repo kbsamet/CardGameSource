@@ -1,0 +1,16 @@
+~ start
+if db.current_room < 7:
+	Hello there sir. I found myself in quite the predicament you see.
+	I am no warrior and so I have no chance out there with those things. So I am stuck here for the time being. 
+	However I might be of some help to you as I happen to be a merchant.
+	I have collected many trinkets that might be of aid to you. Would you like to take a look?
+else:
+	Welcome back traveller. I hope you are doing alright.
+	I assume you are back for more. Would you like to see what I have again?
+- Yes 
+	do get_tree().change_scene_to_packed(load("res://Scenes/screens/RelicShop.tscn"))
+	=> END
+- No => no
+~ no
+Oh I'm quite sure you will be back.
+=> END

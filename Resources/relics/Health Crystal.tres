@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://bt01eifejy2ff"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_nov45"]
+
+[resource]
+script = ExtResource("1_nov45")
+_name = "Health Crystal"
+description = "Health Crystal:+10 maximum health. -5 maximum mana."
+cost = 25

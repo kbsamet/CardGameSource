@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3 uid="uid://cag7u2giwi51l"]
+
+[ext_resource type="Script" path="res://Scenes/ui/skill_upgrade_rect.gd" id="1_81kv2"]
+[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="2_ju6ot"]
+
+[node name="SkillUpgradeRect" type="TextureRect"]
+custom_minimum_size = Vector2(128, 128)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 89.0
+offset_top = 34.0
+offset_right = -1703.0
+offset_bottom = -918.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_81kv2")
+
+[node name="Tooltip" parent="." instance=ExtResource("2_ju6ot")]
+layout_mode = 1
+offset_left = 238.0
+offset_top = 48.0
+offset_right = 246.96
+offset_bottom = 56.32
+create_mouse_events = true
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

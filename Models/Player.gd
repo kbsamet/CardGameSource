@@ -58,6 +58,14 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 			max_health -= 5
 			health = min(health,max_health)
 			db.player_state_changed.emit()
+		"Health Crystal":
+			max_health += 10
+			max_mana -= 5
+			mana = min(mana,max_mana)
+			db.player_state_changed.emit()
+		"Night Lamp":
+			add_player_status_effect("permanent_ignore_first_ability_cost",1)
+			
 			
 		
 	if purchased:
@@ -66,16 +74,34 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 	relics_changed.emit()
 
 func use_ability() -> void:
-	if mana < ability.cost:
+	var energized : bool = "energized" in status_effects
+	if !energized and mana < ability.cost:
 		return
 	match ability._name:
 		"Empower":
-			add_player_status_effect("empowered",2)
+			add_player_status_effect("empowered",ability.values[0])
 		"Enchant":
-			add_player_status_effect("empowered",1)
-			add_player_status_effect("block",2)
-			
-	mana -= ability.cost
+			add_player_status_effect("empowered",ability.values[0])
+			add_player_status_effect("block",ability.values[1])
+		"Shield Up":
+			add_player_status_effect("block",ability.values[0])
+		"Mass Bleed":
+			if db.current_turn == db.Turn.EnemyAction:
+				return
+			db.ability_effect.emit("Mass Bleed",ability.values[0])
+		"Mass Daze":
+			if db.current_turn == db.Turn.EnemyAction:
+				return
+			db.ability_effect.emit("Mass Daze",ability.values[0])
+		"Heal":
+			health += ability.values[0]
+			health = min(health,max_health)
+		"Dodge":
+			add_player_status_effect("dodge",ability.values[0])
+	if energized:
+		add_player_status_effect("energized",-1)
+	else:
+		mana -= ability.cost
 	db.player_state_changed.emit()
 
 func remove_relic(name : String) -> void:
@@ -114,7 +140,13 @@ func remove_relic(name : String) -> void:
 			max_health += 5
 			mana = min(mana,max_mana)
 			db.player_state_changed.emit()
-			
+		"Health Crystal":
+			max_health -= 10
+			max_mana += 5
+			health = min(health,max_health)
+			db.player_state_changed.emit()
+		"Night Lamp":
+			add_player_status_effect("permanent_ignore_first_ability_cost",-1)
 	relics.erase(filtered_relics[0])
 	relics_changed.emit()
 	db.player_state_changed.emit()
@@ -179,7 +211,7 @@ func add_player_status_effect(effect : String,amount: int,positive : bool = fals
 				add_max_rp(-1)
 			if effect == "drunk":
 				add_max_ap(-1)
-				add_max_rp(1)
+				add_max_rp(-1)
 			if effect == "tipsy" or effect == "drainAp":
 				add_max_ap(1)
 			if effect == "drainRp":
@@ -198,7 +230,7 @@ func add_player_status_effect(effect : String,amount: int,positive : bool = fals
 			add_max_rp(1)
 		if effect == "drunk":
 			add_max_ap(1)
-			add_max_rp(-1)
+			add_max_rp(1)
 		if effect == "tipsy" or effect == "drainAp":
 			add_max_ap(-1)
 		if effect == "drainRp":
@@ -244,6 +276,8 @@ func end_turn_process_player_status_effects() -> void:
 				add_player_status_effect("block",effect.amount)
 			db.CardEffect.LoseAllEmpowered:
 				db.player.change_player_status_effect("empowered",0)
+			db.CardEffect.Empower:
+				add_player_status_effect("empowered",effect.amount)
 	next_turn_effects = []
 func end_fight_process_player_status_effects() -> void:
 	if "drunk" in db.player.status_effects:
@@ -262,6 +296,7 @@ func end_fight_process_player_status_effects() -> void:
 	change_player_status_effect("dodge",0)
 	change_player_status_effect("overcharged",0)
 	change_player_status_effect("doubledamage",0)
+	change_player_status_effect("energized",0)
 func add_to_deck(card : CardData) -> void:
 	deck.push_back(card)
 	deck_size += 1
@@ -273,6 +308,8 @@ func purchase_item(item: String) -> void:
 		match effect:
 			db.ItemEffect.Heal:
 				heal_player(item_data[effect])
+			db.ItemEffect.RestoreMana:
+				restore_mana(item_data[effect])
 			db.ItemEffect.Tipsy:
 				add_player_status_effect("tipsy",item_data[effect])
 			db.ItemEffect.Drunk:
@@ -283,6 +320,8 @@ func purchase_item(item: String) -> void:
 func start_fight_effects() -> void:
 	if "permanent_block" in status_effects:
 		add_player_status_effect("block",status_effects["permanent_block"].amount)
+	if "permanent_ignore_first_ability_cost" in status_effects:
+		add_player_status_effect("energized",status_effects["permanent_ignore_first_ability_cost"].amount)
 	if "permanent_empower" in status_effects:
 		add_player_status_effect("empowered",status_effects["permanent_empower"].amount)
 	if "permanent_ignore_first_daze" in status_effects:
@@ -315,6 +354,6 @@ func add_max_rp(amount : int) -> void:
 	max_rp += amount
 	rp = max_rp
 	db.player_state_changed.emit()
-	
-	
+
+
 	

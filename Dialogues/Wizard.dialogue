@@ -1,9 +1,19 @@
 ~ start
-It's dangerous outside. You aren't going to last much in your state.
-Some magical artifacts would help you in your journey.
-Would you like to browse my wares?
-- Yes 
-	do get_tree().change_scene_to_packed(load("res://Scenes/screens/RelicShop.tscn"))
+if db.player.ability.level > 1:
+	I've already taught you everything I could.
+	=> END 
+if db.current_room < 7:
+	It's dangerous outside. You aren't going to last much in your state.
+	Your abilities are very weak. I can train you. Are you interested?
+else:
+	Welcome back traveller. It is only going to get tougher from here.
+	You should be trained properly. Are you interested?
+- Yes 50[img=16x16]res://Sprites/ui/rewardIcons/gold.png[/img]
+	if db.player.gold >= 50:
+		do db.player.ability.improve_ability()
+		It is done. I've thought you all I know.
+	else:
+		Come back when you have more money.
 	=> END
 - No => no
 ~ no

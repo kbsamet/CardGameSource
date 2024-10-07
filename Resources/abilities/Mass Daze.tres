@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://bqa01frj3uds3"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_3dr5g"]
+
+[resource]
+script = ExtResource("1_3dr5g")
+_name = "Mass Daze"
+cost = 8
+tooltip = "Mass Daze:Daze all enemies for /value1 turn.  Costs /cost mana."
+level = 1
+values = Array[int]([1])
+improve_amounts = Array[int]([1])
+soul_requirement = 500

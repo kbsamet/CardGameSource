@@ -43,6 +43,7 @@ func _process(delta : float) -> void:
 signal level_changed
 signal player_state_changed
 signal player_status_effect_changed
+signal ability_effect(effect :String, amount : int)
 signal screen_effect(effect : String)
 signal turn_changed(new_turn : Turn)
 signal player_dead
@@ -64,7 +65,7 @@ enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
 	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
 	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding,DiscardAllReactionDrawEqual,BlockIfNoOtherReactionCards,DamageSelf,
-	GainEmpoweredOnKill,DoubleEmpowered,LoseAllEmpowered,GainMana,DamageEqualToMana,BlockEqualToMana
+	GainEmpoweredOnKill,DoubleEmpowered,LoseAllEmpowered,GainMana,DamageEqualToMana,BlockEqualToMana,Energize
 }
 
 enum EnemyAttack {
@@ -73,7 +74,7 @@ enum EnemyAttack {
 }
 
 enum ItemEffect {
-	Heal,Drunk,Tipsy,Cost
+	Heal,RestoreMana,Drunk,Tipsy,Cost
 }
 
 const card_keywords = [
@@ -114,8 +115,8 @@ const card_tooltips : Dictionary = {
 
 const dialogue_tooltips : Dictionary = {
 	"beer" : "Beer:Restore 5 health.",
-	"wine" : "Wine:Restore 10 health. Lose 1 max ap for 1 fights.",
-	"whiskey" : "Whiskey:Restore 10 health.Gain +1 max ap and -1 max rp for 3 fights."
+	"wine" : "Wine:Restore 10 health. Restore 5 mana.",
+	"whiskey" : "Whiskey:Restore 15 health. Restore 10 mana. Gain +1 max ap and +1 max rp for 3 fights."
 }
 
 const items : Dictionary = {
@@ -124,13 +125,14 @@ const items : Dictionary = {
 		ItemEffect.Cost : 10
 	},
 	"wine" : {
-		ItemEffect.Heal : 15,
-		ItemEffect.Tipsy : 1,
+		ItemEffect.Heal : 10,
+		ItemEffect.RestoreMana : 5,
 		ItemEffect.Cost : 20
 	},
 	"whiskey" : {
-		ItemEffect.Heal : 10,
-		ItemEffect.Drunk : 3,
+		ItemEffect.Heal : 15,
+		ItemEffect.RestoreMana: 10,
+		ItemEffect.Drunk: 3,
 		ItemEffect.Cost : 30
 	}
 }
@@ -252,10 +254,15 @@ var npcs : Dictionary = {
 		"name" : "Plague Doctor",
 		"position" : Vector2(1369,368),
 		"dialogue_offset" : Vector2(-50,-180)
+	},
+	"Merchant" : {
+		"name" : "Merchant",
+		"position" : Vector2(562,466),
+		"dialogue_offset" : Vector2(0,-350)
 	}
 }
 
-func setup_wizard_shop() -> void:
+func setup_merchant_shop() -> void:
 	var relics : Array[RelicData] = []
 	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
 	for i in range(3):
@@ -263,7 +270,7 @@ func setup_wizard_shop() -> void:
 		var relic_data : RelicData = relics_copy[chosen_index]
 		relics.push_back(relic_data)
 		relics_copy.remove_at(chosen_index)
-	db.npcs["Wizard"].relics = relics
+	db.npcs["Merchant"].relics = relics
 
 func remove_from_deck(card_index : int) -> void:
 	player.deck.remove_at(card_index)

@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://hln635une6kn"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_5yqao"]
+
+[resource]
+script = ExtResource("1_5yqao")
+_name = "Night Lamp"
+description = "Night Lamp: The first ability you use every fight has no cost."
+cost = 20

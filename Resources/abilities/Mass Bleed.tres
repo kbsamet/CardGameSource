@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://cosjqniikgfu7"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_5t1an"]
+
+[resource]
+script = ExtResource("1_5t1an")
+_name = "Mass Bleed"
+cost = 4
+tooltip = "Mass Bleed:Inflict /value1 bleed on all enemies.  Costs /cost mana."
+level = 1
+values = Array[int]([3])
+improve_amounts = Array[int]([1])
+soul_requirement = 500

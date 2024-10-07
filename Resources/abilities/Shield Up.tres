@@ -6,4 +6,8 @@
 script = ExtResource("1_glfi7")
 _name = "Shield Up"
 cost = 3
-tooltip = "Shield Up:Gain 3 Block. Costs 3 mana."
+tooltip = "Shield Up:Gain /value1 Block. Costs /cost mana."
+level = 1
+values = Array[int]([3])
+improve_amounts = Array[int]([2])
+soul_requirement = 300

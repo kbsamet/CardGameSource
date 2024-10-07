@@ -1,6 +1,6 @@
 extends Control
 
-var chooseRewardScene : PackedScene = load("res://Scenes/screens/RewardSelectScreen.tscn")
+var abilitySelectScreen : PackedScene = preload("res://Scenes/screens/AbilitySelectScreen.tscn")
 @onready var levelLabel : Label = $VBoxContainer/LevelLabel
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,4 +14,4 @@ func _on_button_pressed() -> void:
 	db.clickPlayer.play()
 	db.reset_player()
 	db.run_time = 0
-	get_tree().change_scene_to_packed(chooseRewardScene)
+	get_tree().change_scene_to_packed(abilitySelectScreen)

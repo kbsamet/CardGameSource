@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://c11lsjn4m3irr"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_yyv1p"]
+
+[resource]
+script = ExtResource("1_yyv1p")
+_name = "Dodge"
+cost = 5
+tooltip = "Dodge:Gain /value1 dodge. Costs /cost mana."
+level = 1
+values = Array[int]([1])
+improve_amounts = Array[int]([1])
+soul_requirement = 500

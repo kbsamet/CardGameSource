@@ -6,4 +6,8 @@
 script = ExtResource("1_emexp")
 _name = "Enchant"
 cost = 4
-tooltip = "Enchant:Your abilities will do 1 more damage. Gain 2 block. Costs 4 mana."
+tooltip = "Enchant:Gain /value1 empowered. Gain /value2 block. Costs /cost mana."
+level = 1
+values = Array[int]([1, 2])
+improve_amounts = Array[int]([1, 2])
+soul_requirement = 0

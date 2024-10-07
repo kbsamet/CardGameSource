@@ -8,8 +8,8 @@ var chosen_relics : Dictionary = {}
 var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	relics = db.npcs["Wizard"].relics
-	for i in range(3):
+	relics = db.npcs["Merchant"].relics
+	for i in range(relics.size()):
 		chosen_relics[i] = relics[i]
 		var chosen_relic_scene : RelicForSaleScene = relicForSaleScene.instantiate()
 		relicContainer.add_child(chosen_relic_scene)
@@ -23,6 +23,7 @@ func _on_relic_chosen(id:int) -> void:
 		if relic.id == id:
 			chosen_relic = relic
 			break
+	db.npcs["Merchant"].relics = db.npcs["Merchant"].relics.filter(func(relic :RelicData) -> bool : return relic._name != chosen_relic.relic_data._name)
 	relicContainer.remove_child(chosen_relic)
 	chosen_relic.queue_free()
 	db.player.add_relic(chosen_relic.relic_data,true)

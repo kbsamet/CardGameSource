@@ -1,7 +1,10 @@
 ~ start
-You know it's not a fair fight out there.
-It wouldn't hurt to have something to balance the fight.
-Are you interested ?
+if db.current_room < 7:
+	You know it's not a fair fight out there.
+	It wouldn't hurt to have something to balance the fight.
+	Are you interested ?
+else:
+	Welcome back. I assume you are back for more?
 - Yes 
 	do get_tree().change_scene_to_packed(load("res://Scenes/screens/PlagueDoctorCardShop.tscn"))
 	=> END

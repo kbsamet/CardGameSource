@@ -1,5 +1,10 @@
 ~ start
-
+if db.current_room < 7:
+	if db.saveData.ability_progresses["Empower"] > 0 || db.saveData.ability_progresses["Shield Up"] > 0:
+		%3 Welcome.
+		% Welcome. They sent another one huh. Hope you are luckier than the last.
+else:
+	Welcome back. It must feel good to be back here.
 if db.player.health < db.player.max_health * 0.3:
 	You look like shit, want something to drink?
 else:

@@ -1,15 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://dd163wbohm13o"]
+[gd_scene load_steps=14 format=3 uid="uid://dd163wbohm13o"]
 
 [ext_resource type="Script" path="res://Scenes/screens/ability_unlock_scene.gd" id="1_7jjv8"]
-[ext_resource type="Texture2D" uid="uid://bgs5ragrn6dxc" path="res://Sprites/abilities/Enchant.png" id="1_apm0y"]
-[ext_resource type="Texture2D" uid="uid://bt5iveoxlofph" path="res://Sprites/abilities/Empower.png" id="2_b0x4f"]
-[ext_resource type="Texture2D" uid="uid://bgnd175vs8hhl" path="res://Sprites/abilities/Shield Up.png" id="3_6jnd8"]
-[ext_resource type="PackedScene" uid="uid://byt5jsdywffm7" path="res://Scenes/ui/Tooltip.tscn" id="3_aikf7"]
-[ext_resource type="Material" uid="uid://b42dane6a1voe" path="res://Shaders/gray_tint.tres" id="3_ba5d2"]
 [ext_resource type="Texture2D" uid="uid://crd5fas6gaa3a" path="res://Sprites/ui/progress_r_empty.png" id="3_uv6jf"]
 [ext_resource type="Texture2D" uid="uid://gwjik6llv6oy" path="res://Sprites/ui/progress_r.png" id="4_iqfsq"]
 [ext_resource type="Texture2D" uid="uid://dfd1fxi6ksgqr" path="res://Sprites/ui/progress.png" id="5_l0nds"]
-[ext_resource type="Texture2D" uid="uid://dvn5q52rbjdp8" path="res://Sprites/ui/HiddenAbility.png" id="6_aai40"]
+[ext_resource type="PackedScene" uid="uid://cag7u2giwi51l" path="res://Scenes/ui/SkillUpgradeRect.tscn" id="6_n7nkt"]
 [ext_resource type="Texture2D" uid="uid://bjlkq8fkbgee2" path="res://Sprites/ui/progress_empty.png" id="6_vw01t"]
 [ext_resource type="Texture2D" uid="uid://cqfu8a4plwd72" path="res://Sprites/test.jpeg" id="12_6a8jv"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="12_i8p0b"]
@@ -154,27 +149,8 @@ alignment = 1
 layout_mode = 2
 alignment = 1
 
-[node name="Enchant" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(128, 128)
+[node name="Enchant" parent="Panel/VBoxContainer/HBoxContainer" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-mouse_default_cursor_shape = 2
-texture = ExtResource("1_apm0y")
-expand_mode = 3
-
-[node name="Control" type="Control" parent="Panel/VBoxContainer/HBoxContainer/Enchant"]
-anchors_preset = 0
-offset_right = 132.0
-offset_bottom = 131.0
-mouse_filter = 1
-mouse_default_cursor_shape = 2
-
-[node name="EnchantTooltip" parent="Panel/VBoxContainer/HBoxContainer/Enchant/Control" instance=ExtResource("3_aikf7")]
-layout_mode = 1
-offset_left = 260.0
-offset_top = 50.0
-offset_right = 268.96
-offset_bottom = 58.32
-create_mouse_events = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer"]
 custom_minimum_size = Vector2(64, 64)
@@ -184,41 +160,15 @@ layout_mode = 2
 layout_mode = 2
 alignment = 1
 
-[node name="Empower" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer2"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Empower" parent="Panel/VBoxContainer/HBoxContainer2" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-mouse_default_cursor_shape = 2
-texture = ExtResource("2_b0x4f")
-expand_mode = 3
-
-[node name="EmpowerTooltip" parent="Panel/VBoxContainer/HBoxContainer2/Empower" instance=ExtResource("3_aikf7")]
-layout_mode = 1
-offset_left = 238.0
-offset_top = 52.0
-offset_right = 246.96
-offset_bottom = 60.32
-create_mouse_events = true
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer2"]
 custom_minimum_size = Vector2(250, 128)
 layout_mode = 2
 
-[node name="Shield Up" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer2"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Shield Up" parent="Panel/VBoxContainer/HBoxContainer2" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-mouse_default_cursor_shape = 2
-texture = ExtResource("3_6jnd8")
-expand_mode = 3
-
-[node name="ShieldUpTooltip" parent="Panel/VBoxContainer/HBoxContainer2/Shield Up" instance=ExtResource("3_aikf7")]
-layout_mode = 1
-offset_left = 234.0
-offset_top = 56.0
-offset_right = 242.96
-offset_bottom = 64.32
-create_mouse_events = true
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer"]
 custom_minimum_size = Vector2(64, 80)
@@ -228,41 +178,25 @@ layout_mode = 2
 layout_mode = 2
 alignment = 1
 
-[node name="Enchant" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Mass Bleed" parent="Panel/VBoxContainer/HBoxContainer3" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-texture = ExtResource("6_aai40")
-expand_mode = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(140, 128)
 layout_mode = 2
 
-[node name="Enchant2" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Mass Daze" parent="Panel/VBoxContainer/HBoxContainer3" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-texture = ExtResource("6_aai40")
-expand_mode = 3
 
-[node name="Enchant3" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Dodge" parent="Panel/VBoxContainer/HBoxContainer3" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-texture = ExtResource("6_aai40")
-expand_mode = 3
 
 [node name="MarginContainer2" type="MarginContainer" parent="Panel/VBoxContainer/HBoxContainer3"]
 custom_minimum_size = Vector2(140, 100)
 layout_mode = 2
 
-[node name="Enchant4" type="TextureRect" parent="Panel/VBoxContainer/HBoxContainer3"]
-material = ExtResource("3_ba5d2")
-custom_minimum_size = Vector2(128, 128)
+[node name="Heal" parent="Panel/VBoxContainer/HBoxContainer3" instance=ExtResource("6_n7nkt")]
 layout_mode = 2
-texture = ExtResource("6_aai40")
-expand_mode = 3
 
 [node name="ColorRect" type="ColorRect" parent="Panel"]
 visible = false
@@ -360,6 +294,4 @@ text = "[center]You are dead.
 You have collected [color=d68b45]_[/color] souls.
 Use them to unlock new powers."
 
-[connection signal="gui_input" from="Panel/VBoxContainer/HBoxContainer2/Empower" to="." method="_on_empower_gui_input"]
-[connection signal="gui_input" from="Panel/VBoxContainer/HBoxContainer2/Shield Up" to="." method="_on_shield_up_gui_input"]
 [connection signal="pressed" from="Panel/Button" to="." method="_on_button_pressed"]

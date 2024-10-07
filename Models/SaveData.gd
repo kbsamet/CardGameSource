@@ -16,7 +16,7 @@ func save_game() -> void:
 static func load_save() -> SaveData:
 	if not FileAccess.file_exists("user://savegame.save"):
 		var empty_save : SaveData = SaveData.new()
-		empty_save.souls = 600
+		empty_save.souls = 0
 		for ability : AbilityData in db.abilities:
 			empty_save.ability_progresses[ability._name] = 0
 		return empty_save

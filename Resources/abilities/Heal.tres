@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="AbilityData" load_steps=2 format=3 uid="uid://stbykn7v6s43"]
+
+[ext_resource type="Script" path="res://Models/AbilityData.gd" id="1_sewvl"]
+
+[resource]
+script = ExtResource("1_sewvl")
+_name = "Heal"
+cost = 5
+tooltip = "Heal:Restore /value1 health.  Costs /cost mana."
+level = 1
+values = Array[int]([3])
+improve_amounts = Array[int]([1])
+soul_requirement = 500

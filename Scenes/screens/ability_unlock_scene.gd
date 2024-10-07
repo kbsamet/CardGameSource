@@ -1,74 +1,92 @@
 extends Control
+@onready var enchant : SkillUpgradeRect = $Panel/VBoxContainer/HBoxContainer/Enchant
+@onready var shield_up : SkillUpgradeRect = $"Panel/VBoxContainer/HBoxContainer2/Shield Up" 
+@onready var empower : SkillUpgradeRect = $Panel/VBoxContainer/HBoxContainer2/Empower
+@onready var mass_bleed : SkillUpgradeRect = $"Panel/VBoxContainer/HBoxContainer3/Mass Bleed"
+@onready var mass_daze : SkillUpgradeRect = $"Panel/VBoxContainer/HBoxContainer3/Mass Daze"
+@onready var dodge : SkillUpgradeRect = $Panel/VBoxContainer/HBoxContainer3/Dodge
+@onready var heal : SkillUpgradeRect = $Panel/VBoxContainer/HBoxContainer3/Heal
 
-@onready var enchant : TextureRect = $Panel/VBoxContainer/HBoxContainer/Enchant
-@onready var empower : TextureRect = $Panel/VBoxContainer/HBoxContainer2/Empower
-@onready var shield_up : TextureRect = $"Panel/VBoxContainer/HBoxContainer2/Shield Up"
 @onready var empower_progress : TextureProgressBar = $Panel/Connections/HBoxContainer/TextureProgressBar2
 @onready var shield_up_progress : TextureProgressBar = $Panel/Connections/HBoxContainer/TextureProgressBar
-@onready var enchantTooltip : TooltipNode = $Panel/VBoxContainer/HBoxContainer/Enchant/Control/EnchantTooltip
-@onready var empowerTooltip : TooltipNode = $Panel/VBoxContainer/HBoxContainer2/Empower/EmpowerTooltip
-@onready var shieldUpTooltip : TooltipNode = $"Panel/VBoxContainer/HBoxContainer2/Shield Up/ShieldUpTooltip"
+@onready var mass_bleed_progress : TextureProgressBar = $Panel/Connections/HBoxContainer2/TextureProgressBar2
+@onready var mass_daze_progress: TextureProgressBar = $Panel/Connections/HBoxContainer2/TextureProgressBar
+@onready var dodge_progress : TextureProgressBar = $Panel/Connections/HBoxContainer2/TextureProgressBar3
+@onready var heal_progress : TextureProgressBar = $Panel/Connections/HBoxContainer2/TextureProgressBar4
 @onready var infoText : RichTextLabel = $Label
 
 var gameOverScreen : PackedScene = preload("res://Scenes/screens/GameOverScreen.tscn")
 const ACTION_INTERVAL: float = 0.006 # 200ms interval between actions
 var time_since_last_action: float = 0.0
-var held_ability : String = "none"
+var held_ability : int = -1
+
+@onready var abilities : Array[SkillUpgradeRect] = [enchant,empower,shield_up,mass_bleed,mass_daze,dodge,heal]
+@onready var progresses : Array[TextureProgressBar] = [empower_progress,shield_up_progress,mass_bleed_progress,mass_daze_progress,dodge_progress,heal_progress]
 func _ready() -> void:
-	empower_progress.max_value = 300
-	shield_up_progress.max_value = 300
-	empower_progress.value = db.saveData.ability_progresses["Empower"]
-	shield_up_progress.value = db.saveData.ability_progresses["Shield Up"]
+	enchant.set_data(0,"Enchant",false,false)
+	empower.set_data(1,"Empower",true,false)
+	shield_up.set_data(2,"Shield Up",true,false)
+	mass_bleed.set_data(3,"Mass Bleed",true,true)
+	mass_daze.set_data(4,"Mass Daze",true,true)
+	dodge.set_data(5,"Dodge",true,true)
+	heal.set_data(6,"Heal",true,true)
+	
+	var empower_unlocked : bool = db.saveData.ability_progresses["Empower"] == empower.ability.soul_requirement
+	var shield_up_unlocked : bool = db.saveData.ability_progresses["Shield Up"] == shield_up.ability.soul_requirement
+	
+	if empower_unlocked:
+		mass_bleed.set_hidden(false)
+		mass_daze.set_hidden(false)
+	if shield_up_unlocked:
+		dodge.set_hidden(false)
+		heal.set_hidden(false)
+	
+	for i in range(progresses.size()):
+		progresses[i].max_value = abilities[i+1].ability.soul_requirement
+	for ability in abilities:
+		ability.clicked.connect(_ability_clicked)
 	set_texts()
 	set_progress()
 	
 
 func _process(delta: float) -> void:
 	time_since_last_action += delta
-	if held_ability != "none" and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and time_since_last_action >= ACTION_INTERVAL:
-		if db.saveData.souls > 0 and db.saveData.ability_progresses[held_ability] < 300:
-			db.saveData.ability_progresses[held_ability] += 1
+	if held_ability != -1 and Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and time_since_last_action >= ACTION_INTERVAL:
+		if db.saveData.souls > 0 and db.saveData.ability_progresses[abilities[held_ability].ability._name] < abilities[held_ability].ability.soul_requirement:
+			db.saveData.ability_progresses[abilities[held_ability].ability._name] += 1
 			db.saveData.souls -= 1
 			set_texts()
 			set_progress()
-			if db.saveData.ability_progresses[held_ability] == 300:
+			if db.saveData.ability_progresses[abilities[held_ability].ability._name] == abilities[held_ability].ability.soul_requirement:
+				abilities[held_ability].set_disabled(false)
 				match held_ability:
-					"Empower":
-						empower.material = null
-					"Shield Up":
-						shield_up.material = null
+					1:
+						abilities[3].set_hidden(false)
+						abilities[4].set_hidden(false)
+					2:
+						abilities[5].set_hidden(false)
+						abilities[6].set_hidden(false)
 		time_since_last_action = 0.0  # Reset timer
 	
 func set_texts() -> void:
 	infoText.text = "[center]You are dead.\nYou have collected [color=d68b45]"+str(db.saveData.souls)+"[/color] souls.\nUse them to unlock new powers."
+	for ability : SkillUpgradeRect in abilities:
+		var tooltip:String = db.get_ability(ability.ability._name).get_tooltip()
+		if db.saveData.ability_progresses[ability.ability._name] != ability.ability.soul_requirement:
+			tooltip += "\n\n[color=e39347]"+str(db.saveData.ability_progresses[ability.ability._name])+"/"+str(ability.ability.soul_requirement)+" souls for unlock[/color]"
+		else:
+			tooltip += "\n\n[color=e39347]Unlocked[/color]"
+		ability.tooltip.set_data(tooltip)
 	
-	empowerTooltip.set_data(db.get_ability("Empower").tooltip + \
-	("\n\n[color=e39347]"+str(db.saveData.ability_progresses["Empower"])+"/300 souls for unlock[/color]" if db.saveData.ability_progresses["Empower"] != 300 else "\n\n[color=e39347]Unlocked[/color]"))
-	shieldUpTooltip.set_data(db.get_ability("Shield Up").tooltip + \
-	 ("\n\n[color=e39347]"+str(db.saveData.ability_progresses["Shield Up"])+"/300 souls for unlock[/color]" if db.saveData.ability_progresses["Shield Up"] != 300 else "\n\n[color=e39347]Unlocked[/color]"))
-	enchantTooltip.set_data(db.get_ability("Enchant").tooltip + "\n\n[color=e39347]Unlocked[/color]")
-
+	
 func set_progress() -> void:
-	empower_progress.value = db.saveData.ability_progresses["Empower"]
-	shield_up_progress.value = db.saveData.ability_progresses["Shield Up"]
-	if empower_progress.value == 300:
-		empower.material = null
-	if shield_up_progress.value == 300:
-		shield_up.material = null
-func _on_empower_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			held_ability = "Empower"
-		else:
-			held_ability = "none"
+	for i in range(progresses.size()):
+		progresses[i].value = db.saveData.ability_progresses[abilities[i+1].ability._name]
+		if progresses[i].value == abilities[i+1].ability.soul_requirement:
+			abilities[i+1].set_disabled(false)
 
-func _on_shield_up_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton:
-		if event.is_pressed():
-			held_ability = "Shield Up"
-		else:
-			held_ability = "none"
-
+func _ability_clicked(id:int) -> void:
+	held_ability = id
 
 func _on_button_pressed() -> void:
 	db.saveData.save_game()

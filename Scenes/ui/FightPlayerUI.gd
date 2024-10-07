@@ -21,7 +21,7 @@ var boss_data : EnemyData = null
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	abilityIcon.texture = load("res://Sprites/abilities/"+db.player.ability._name+".png")
-	$CanvasLayer/Control3/Tooltip.set_data(db.player.ability.tooltip)
+	$CanvasLayer/Control3/Tooltip.set_data(db.player.ability.get_tooltip())
 	db.turn_changed.connect(turn_changed)
 	db.player_state_changed.connect(update_ui_values)
 	if boss_data != null:
@@ -32,12 +32,13 @@ func _ready() -> void:
 func update_ui_values()-> void:
 	if !is_inside_tree():
 		return
-	if db.player.ability.cost > db.player.mana:
+	if db.player.ability.cost > db.player.mana and "energized" not in db.player.status_effects:
 		abilityIcon.material = disabled_material
 	else:
 		abilityIcon.material = null
 	deckCountLabel.text = str(db.player.deck.size()) + " / " + str(db.player.deck_size )
 	discardPileLabel.text = str(db.player.discardPile.size()) + " / " + str(db.player.deck_size )
+	$CanvasLayer/Control3/Tooltip.set_data(db.player.ability.get_tooltip())
 	
 
 func turn_changed(new_turn : db.Turn)-> void:

@@ -22,6 +22,7 @@ func _ready() -> void:
 	db.screen_effect.connect(_on_screen_effect)
 	db.player_dead.connect(_on_player_dead)
 	db.player_status_effect_changed.connect(_on_player_status_effect)
+	db.ability_effect.connect(_on_ability_effect)
 	hand.selected_card_state_changed.connect(_on_card_select_state_changed)
 	hand.play_card.connect(_use_card)
 	enemyController._on_card_used.connect(_use_card)
@@ -93,12 +94,13 @@ func spawn_enemies() -> void:
 	var diff_cap : int = floor(2 + (db.current_room*0.9))
 	var current_difficulty : int = 0
 	var enemies : Dictionary = {}
-	while current_difficulty < diff_cap:
+	while current_difficulty <  diff_cap:
 		var new_enemy : EnemyData = db.enemies.pick_random() as EnemyData
 		var num_of_enemies : int = 0
 		for enemy_count :int in enemies.values():
 			num_of_enemies += enemy_count
-		if num_of_enemies > 2:
+		var max_enemies :int = 3 if diff_cap < 14 else 5
+		if num_of_enemies > max_enemies - 1:
 			enemies = {}
 			current_difficulty = 0
 			continue
@@ -319,7 +321,15 @@ func _end_turn_clicked() ->void:
 	else:
 		db.set_turn(db.Turn.EnemyAction)
 		enemyController.end_enemy_attack()
-
+		
+func _on_ability_effect(effect: String, amount : int) -> void:
+	match effect:
+		"Mass Bleed":
+			for enemy : EnemyNode in enemyController.enemies.values():
+				enemy.add_status_effect("bleed", amount)
+		"Mass Daze":
+			for enemy : EnemyNode in enemyController.enemies.values():
+				enemy.add_status_effect("dazed", amount)
 func _enemy_turn_done() -> void:
 	var carryover : bool =  "mana_carry_over" in db.player.status_effects
 	var carry_ap : bool = db.player.ap > 0
@@ -412,7 +422,7 @@ func create_deck() -> void:
 		db.player.deck.push_back(db.get_card("Block"))
 	db.player.deck.push_back(db.get_card("Daze"))
 	db.player.deck.push_back(db.get_card("Mana Potion"))
-	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Hourglass")
+	var dice : Array[RelicData] = db.relics.filter(func(relic : RelicData) -> bool : return relic._name == "Night Lamp")
 	#db.player.add_relic(dice[0])
 	fightUI.update_ui_values()
 
