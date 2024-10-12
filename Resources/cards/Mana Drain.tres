@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://kyqac170f7pk"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_ntpq7"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_p5cb1"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_ntpq7")
+effect = 0
+amount = 5
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_g80x3"]
+script = ExtResource("1_ntpq7")
+effect = 30
+amount = 5
+next_turn = false
+
+[resource]
+script = ExtResource("2_p5cb1")
+_name = "Mana Drain"
+type = 0
+description = "Deal /damage damage. Gain 5 mana"
+cost = 2
+targeted = true
+effects = Array[ExtResource("1_ntpq7")]([SubResource("Resource_6w00h"), SubResource("Resource_g80x3")])
+is_rare = false

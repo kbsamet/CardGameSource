@@ -9,6 +9,7 @@ class_name PlayerUI
 @onready var discardPileLabel : Label = $CanvasLayer/Control2/DiscardPile/DiscardPileCountLabel
 @onready var cardPileScreen : CardPileScreen = $CanvasLayer/CardPileScreen
 @onready var abilityIcon : Sprite2D = $CanvasLayer/Control3/AbilityIcon
+@onready var abilityAnimation : AnimatedSprite2D = $CanvasLayer/AbilityAnimationSprite
 
 signal end_turn_clicked
 
@@ -20,6 +21,7 @@ var disabled_material: ShaderMaterial = preload("res://Shaders/gray_tint.tres")
 var boss_data : EnemyData = null
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	abilityAnimation.animation = db.player.ability._name
 	abilityIcon.texture = load("res://Sprites/abilities/"+db.player.ability._name+".png")
 	$CanvasLayer/Control3/Tooltip.set_data(db.player.ability.get_tooltip())
 	db.turn_changed.connect(turn_changed)
@@ -32,7 +34,7 @@ func _ready() -> void:
 func update_ui_values()-> void:
 	if !is_inside_tree():
 		return
-	if db.player.ability.cost > db.player.mana and "energized" not in db.player.status_effects:
+	if "silence" in db.player.status_effects or (db.player.ability.cost > db.player.mana and "energized" not in db.player.status_effects):
 		abilityIcon.material = disabled_material
 	else:
 		abilityIcon.material = null
@@ -74,6 +76,7 @@ func _on_button_input(event : InputEvent) -> void:
 @onready var blockAmountLabel : Label = $CanvasLayer/BossControl/HealthBar/BlockIcon/Label
 @onready var blockBarRect : Panel =	$CanvasLayer/BossControl/HealthBar/BlockBarRect
 @onready var bossname : Label = $CanvasLayer/BossControl/Label
+@onready var bossSpeakLabel : Label = $CanvasLayer/BossControl/BossTalkLabel
 var health_bar_full_width : float = -1
 var stamina_bar_full_width : float = -1
 
@@ -113,7 +116,25 @@ func update_health_bar_ui() -> void:
 	staminaLabel.text = str(boss_data.stamina) + "/" + str(boss_data.max_stamina)
 	healthLabel.text = str(boss_data.health) + "/" + str(boss_data.max_health)
 
+func play_ability_animation() -> void:
+	abilityAnimation.visible = true
+	abilityAnimation.play()
+	abilityAnimation.animation_looped.connect(ability_animation_finished)
 
+func bossTalk(say : String) -> Signal:
+	bossSpeakLabel.modulate.a = 0
+	bossSpeakLabel.visible = true
+	bossSpeakLabel.text = say
+	var tween :Tween = create_tween()
+	tween.tween_property(bossSpeakLabel,"modulate:a",1,0.5)
+	tween.tween_property(bossSpeakLabel,"modulate:a",1,2)
+	tween.tween_property(bossSpeakLabel,"modulate:a",0,0.5)
+	tween.tween_callback(func() -> void : bossSpeakLabel.visible = false)
+	return tween.finished
+
+func ability_animation_finished() -> void:
+	abilityAnimation.visible = false
+	abilityAnimation.stop()
 func _on_deck_mouse_entered() -> void:
 	deck.material = outline_material
 func _on_discard_pile_mouse_entered()-> void:
@@ -145,4 +166,6 @@ func _on_ability_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.is_released():
 			db.clickPlayer.play()
-			db.player.use_ability()
+			var ability_used : bool = db.player.use_ability()
+			if ability_used:
+				play_ability_animation()

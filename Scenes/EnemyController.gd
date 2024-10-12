@@ -175,6 +175,8 @@ func end_enemy_attack() -> void:
 				attacking_enemy.add_status_effect("unstoppable",single_attack.amount)
 			db.EnemyAttack.Cripple:
 				do_status_effect_attack("crippled",single_attack.amount,unblockable)
+			db.EnemyAttack.Silence:
+				do_status_effect_attack("silence",single_attack.amount,unblockable)
 	if "dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0:
 		db.player.add_player_status_effect("dodge",-1)
 	attacking_enemy.start_attack_end_animation()

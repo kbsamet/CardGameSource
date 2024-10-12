@@ -51,7 +51,7 @@ func _trial_chosen(id:int) -> void:
 func deal_cards() -> void:
 	
 	var cards_copy : Array[CardData] = db.player.deck.duplicate(true)
-	cards_copy.append(db.player.discardPile.duplicate(true))
+	cards_copy.append_array(db.player.discardPile.duplicate(true))
 	for i in range(3):
 		var card_data : CardData = cards_copy.pick_random()
 		cards.push_back(card_data)

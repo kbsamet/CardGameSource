@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="EnemyData" load_steps=25 format=3 uid="uid://fdw2etl0iacu"]
+[gd_resource type="Resource" script_class="EnemyData" load_steps=28 format=3 uid="uid://fdw2etl0iacu"]
 
 [ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="1_ouotu"]
 [ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="2_fa463"]
@@ -92,6 +92,20 @@ amount = 5
 script = ExtResource("2_fa463")
 attacks = Array[ExtResource("1_ouotu")]([SubResource("Resource_pipt3"), SubResource("Resource_5mga3"), SubResource("Resource_a20pj"), SubResource("Resource_c8cic"), SubResource("Resource_nb1h6"), SubResource("Resource_4dd06")])
 
+[sub_resource type="Resource" id="Resource_glmk8"]
+script = ExtResource("1_ouotu")
+attack_type = 1
+amount = 5
+
+[sub_resource type="Resource" id="Resource_d6uts"]
+script = ExtResource("1_ouotu")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_lygw0"]
+script = ExtResource("2_fa463")
+attacks = Array[ExtResource("1_ouotu")]([SubResource("Resource_glmk8"), SubResource("Resource_d6uts")])
+
 [sub_resource type="Resource" id="Resource_lhdgc"]
 script = ExtResource("5_mosu5")
 _name = "unstoppable"
@@ -107,6 +121,6 @@ max_health = 80
 stamina = 20
 max_stamina = 20
 difficulty = 9999999999
-attacks = Array[ExtResource("2_fa463")]([SubResource("Resource_qikcr"), SubResource("Resource_banu6"), SubResource("Resource_vjd4o"), SubResource("Resource_gtbfd"), SubResource("Resource_gtbfd")])
+attacks = Array[ExtResource("2_fa463")]([SubResource("Resource_qikcr"), SubResource("Resource_banu6"), SubResource("Resource_vjd4o"), SubResource("Resource_gtbfd"), SubResource("Resource_lygw0")])
 status_effects = Array[ExtResource("5_mosu5")]([SubResource("Resource_lhdgc")])
 occluder = ExtResource("3_5aoca")

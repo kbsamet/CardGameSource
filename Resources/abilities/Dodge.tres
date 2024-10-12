@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_yyv1p")
 _name = "Dodge"
-cost = 5
+cost = 6
 tooltip = "Dodge:Gain /value1 dodge. Costs /cost mana."
 level = 1
 values = Array[int]([1])

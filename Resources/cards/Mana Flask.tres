@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://db11vx5oex3du"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_ifdey"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_qi1vs"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_ifdey")
+effect = 30
+amount = 8
+next_turn = false
+
+[resource]
+script = ExtResource("2_qi1vs")
+_name = "Mana Flask"
+type = 1
+description = "Restore 8 mana."
+cost = 2
+targeted = false
+effects = Array[ExtResource("1_ifdey")]([SubResource("Resource_6w00h")])
+is_rare = false

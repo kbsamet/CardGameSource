@@ -24,7 +24,11 @@ config/name="CardGame"
 run/main_scene="res://Scenes/screens/AbilitySelectScreen.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)
-config/icon="res://icon.svg"
+boot_splash/image="res://Sprites/ui/splash.png"
+boot_splash/fullsize=false
+boot_splash/use_filter=false
+config/icon="res://Sprites/ui/splash.png"
+config/windows_native_icon="res://Sprites/ui/icon.ico"
 
 [autoload]
 

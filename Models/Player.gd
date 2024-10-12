@@ -73,10 +73,12 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 	db.player_state_changed.emit()
 	relics_changed.emit()
 
-func use_ability() -> void:
+func use_ability() -> bool:
 	var energized : bool = "energized" in status_effects
+	if "silence" in db.player.status_effects:
+		return false
 	if !energized and mana < ability.cost:
-		return
+		return false
 	match ability._name:
 		"Empower":
 			add_player_status_effect("empowered",ability.values[0])
@@ -87,11 +89,11 @@ func use_ability() -> void:
 			add_player_status_effect("block",ability.values[0])
 		"Mass Bleed":
 			if db.current_turn == db.Turn.EnemyAction:
-				return
+				return false
 			db.ability_effect.emit("Mass Bleed",ability.values[0])
 		"Mass Daze":
 			if db.current_turn == db.Turn.EnemyAction:
-				return
+				return false
 			db.ability_effect.emit("Mass Daze",ability.values[0])
 		"Heal":
 			health += ability.values[0]
@@ -103,7 +105,7 @@ func use_ability() -> void:
 	else:
 		mana -= ability.cost
 	db.player_state_changed.emit()
-
+	return true
 func remove_relic(name : String) -> void:
 	var filtered_relics : Array[RelicData] = relics.filter(func(relic : RelicData) -> bool: return relic._name == name)
 	assert(filtered_relics.size() > 0, name + " not found in relics!")

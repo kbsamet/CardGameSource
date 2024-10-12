@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://c1beb5c0eh7rh"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_ixfi4"]
+
+[resource]
+script = ExtResource("1_ixfi4")
+_name = "silence"
+amount = 0
+tooltip = "Sileneced:You cannot use your ability for _ turns."
+hidden = false

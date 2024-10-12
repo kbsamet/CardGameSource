@@ -53,6 +53,7 @@ func _on_player_dead() -> void:
 	var tween : Tween = create_tween().set_parallel()
 	tween.tween_property($CanvasModulate,"color:a",0,2)
 	tween.tween_property($Control/FightPlayerUI/CanvasLayer/CanvasModulate,"color:a",0,2)
+	tween.chain().tween_callback(go_to_ability_select)
 func _on_screen_effect(effect : String) -> void:
 	if effect == "damaged":
 		is_player_hit = true
@@ -87,6 +88,7 @@ func spawn_enemies() -> void:
 		return
 	if db.current_room == 12:
 		var vampire : Node2D = spawn_boss("Vampire")
+		vampire.bossTalkCallback = fightUI.bossTalk
 		fightUI.set_boss_data(vampire.enemy.enemy_data)
 		vampire.boss_state_changed.connect(fightUI.update_health_bar_ui)
 		vampire.boss_phase_changed.connect(boss_phase_changed)
@@ -201,9 +203,10 @@ func _use_card(enemy_id : int) -> void:
 				db.CardEffect.Empower:
 					db.player.add_player_status_effect("empowered",effect.amount,true)
 				db.CardEffect.DiscardRandom:
-					var hand_copy : Array = hand.cards.keys().duplicate()
-					hand_copy.erase(card_id)
-					hand.discard(hand_copy.pick_random())
+					if hand.cards.size() > 1:
+						var hand_copy : Array = hand.cards.keys().duplicate()
+						hand_copy.erase(card_id)
+						hand.discard(hand_copy.pick_random())
 				db.CardEffect.SwapActionReaction:
 					db.player.swap_points()
 				db.CardEffect.GainAp:
@@ -367,6 +370,8 @@ func _enemy_turn_done() -> void:
 		db.player.add_player_status_effect("barbedshield",-1)
 	if "empowered" in db.player.status_effects and db.player.status_effects["empowered"].amount > 0:
 		db.player.add_player_status_effect("empowered",-1)
+	if "silence" in db.player.status_effects:
+		db.player.add_player_status_effect("silence",-1)
 	if "overcharged" in db.player.status_effects:
 		if "overcharged" in db.player.status_effects:
 			if db.player.mana >= 5:
@@ -430,6 +435,7 @@ func create_deck() -> void:
 
 func _on_animation_player_animation_finished(anim_name : String) -> void:
 	$ColorRect.visible = false
-	if anim_name == "dead":
-		db.saveData.souls += db.current_room * 12
-		get_tree().change_scene_to_packed(ability_upgrade_screen)
+
+func go_to_ability_select() -> void:
+	db.saveData.souls += db.current_room * 12
+	get_tree().change_scene_to_packed(ability_upgrade_screen)

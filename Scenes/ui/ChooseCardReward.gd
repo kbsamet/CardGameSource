@@ -18,7 +18,7 @@ func _ready() -> void:
 		cards_copy = cards_copy.filter(func(card : CardData) -> bool : return card.is_rare)
 	for i in range(3):
 		var card_data : CardData = cards_copy.pick_random()
-		while card_data.is_rare:
+		while card_data.is_rare or db.player.deck.has(card_data) or db.player.discardPile.has(card_data):
 			if randf() > 0.9:
 				break
 			else:

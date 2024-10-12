@@ -51,6 +51,8 @@ func get_attack_name(attack : db.EnemyAttack) -> String:
 			return "staminaGain"
 		db.EnemyAttack.Cripple:
 			return "cripple"
+		db.EnemyAttack.Silence:
+			return "silence"
 	assert(false, "Attack name not found!")
 	return ""
 

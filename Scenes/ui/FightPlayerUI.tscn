@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://ddtkpa3ifuhnj"]
+[gd_scene load_steps=81 format=3 uid="uid://ddtkpa3ifuhnj"]
 
 [ext_resource type="Script" path="res://Scenes/ui/FightPlayerUI.gd" id="1_cpms0"]
 [ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="2_2gp3d"]
@@ -12,6 +12,67 @@
 [ext_resource type="Material" uid="uid://bgbyd7angtuq8" path="res://Shaders/crt_mat.tres" id="9_efegy"]
 [ext_resource type="PackedScene" uid="uid://osa3kgcnjs2t" path="res://Scenes/ui/CardPileScreen.tscn" id="10_2n451"]
 [ext_resource type="Texture2D" uid="uid://c205fbxp1o6vy" path="res://Sprites/ui/discard_pile.png" id="11_2b7bs"]
+[ext_resource type="Texture2D" uid="uid://damv2kdveqs4o" path="res://Sprites/abilities/animations/enchant1.png" id="13_7sxxv"]
+[ext_resource type="Texture2D" uid="uid://be5uwmrvpjlkb" path="res://Sprites/abilities/animations/Empower1.png" id="13_f10br"]
+[ext_resource type="Texture2D" uid="uid://cxx2vkoorykqs" path="res://Sprites/abilities/animations/Dodge1.png" id="13_vxfon"]
+[ext_resource type="Texture2D" uid="uid://1ovy5mc1h1kk" path="res://Sprites/abilities/animations/Dodge2.png" id="14_6c7or"]
+[ext_resource type="Texture2D" uid="uid://b3fy6pt8ajhqu" path="res://Sprites/abilities/animations/enchant2.png" id="14_hppm5"]
+[ext_resource type="Texture2D" uid="uid://coh28m0nxt65d" path="res://Sprites/abilities/animations/Empower2.png" id="14_wftgk"]
+[ext_resource type="Texture2D" uid="uid://rkofydwti2bs" path="res://Sprites/abilities/animations/Dodge3.png" id="15_fmahn"]
+[ext_resource type="Texture2D" uid="uid://bigr8p4mmupge" path="res://Sprites/abilities/animations/enchant3.png" id="15_wteff"]
+[ext_resource type="Texture2D" uid="uid://d11own2wjlpul" path="res://Sprites/abilities/animations/Empower3.png" id="15_yjodh"]
+[ext_resource type="Texture2D" uid="uid://23exslkdka8e" path="res://Sprites/abilities/animations/Empower4.png" id="16_cr2di"]
+[ext_resource type="Texture2D" uid="uid://b4d1vxhtwqlfq" path="res://Sprites/abilities/animations/enchant4.png" id="16_hojy8"]
+[ext_resource type="Texture2D" uid="uid://cs0maovuqxiop" path="res://Sprites/abilities/animations/Dodge4.png" id="16_vk74m"]
+[ext_resource type="Texture2D" uid="uid://d0hlmnq25myvs" path="res://Sprites/abilities/animations/Empower5.png" id="17_jd0q4"]
+[ext_resource type="Texture2D" uid="uid://dbtqmmc2cs705" path="res://Sprites/abilities/animations/Dodge5.png" id="17_qwl6t"]
+[ext_resource type="Texture2D" uid="uid://dvm78u1y5ub7u" path="res://Sprites/abilities/animations/enchant5.png" id="17_ywj4j"]
+[ext_resource type="Texture2D" uid="uid://dp5oyrg8c4ohe" path="res://Sprites/abilities/animations/Dodge6.png" id="18_a6hxe"]
+[ext_resource type="Texture2D" uid="uid://l6e67xn27dbj" path="res://Sprites/abilities/animations/Empower6.png" id="18_cji7j"]
+[ext_resource type="Texture2D" uid="uid://brpd4i6b6rg7j" path="res://Sprites/abilities/animations/enchant6.png" id="18_vftj8"]
+[ext_resource type="Texture2D" uid="uid://bdlwgbop6cfho" path="res://Sprites/abilities/animations/Dodge7.png" id="19_ueeif"]
+[ext_resource type="Texture2D" uid="uid://bqnwm1wxinm6c" path="res://Sprites/abilities/animations/enchant7.png" id="19_wxmaq"]
+[ext_resource type="Texture2D" uid="uid://chak2n7ncxraf" path="res://Sprites/abilities/animations/Dodge8.png" id="20_3m2ew"]
+[ext_resource type="Texture2D" uid="uid://e5j3algslgal" path="res://Sprites/abilities/animations/enchant.png" id="20_6lpuo"]
+[ext_resource type="Texture2D" uid="uid://7iqa64s4cqb" path="res://Sprites/abilities/animations/Dodge9.png" id="21_rauni"]
+[ext_resource type="Texture2D" uid="uid://ejonrgcji68a" path="res://Sprites/abilities/animations/Heal1.png" id="27_d56d0"]
+[ext_resource type="Texture2D" uid="uid://c7a5j1q6jhga" path="res://Sprites/abilities/animations/Heal2.png" id="28_wd5tn"]
+[ext_resource type="Texture2D" uid="uid://b5b8glpw0elff" path="res://Sprites/abilities/animations/Heal3.png" id="29_elv2s"]
+[ext_resource type="Texture2D" uid="uid://0j88nu1it7b6" path="res://Sprites/abilities/animations/Heal4.png" id="30_ml62t"]
+[ext_resource type="Texture2D" uid="uid://2w3ml44qdoup" path="res://Sprites/abilities/animations/Heal5.png" id="31_p134p"]
+[ext_resource type="Texture2D" uid="uid://caoqmy30sv7v3" path="res://Sprites/abilities/animations/Heal6.png" id="32_6pg78"]
+[ext_resource type="Texture2D" uid="uid://jd8khuh0x2f4" path="res://Sprites/abilities/animations/Heal7.png" id="33_2rmq4"]
+[ext_resource type="Texture2D" uid="uid://cr0lmwgmo7dc" path="res://Sprites/abilities/animations/Heal8.png" id="34_vmn4t"]
+[ext_resource type="Texture2D" uid="uid://br2cdj505ugr5" path="res://Sprites/abilities/animations/Heal9.png" id="35_cjrco"]
+[ext_resource type="Texture2D" uid="uid://dw6enw8mawmt6" path="res://Sprites/abilities/animations/Heal10.png" id="36_hhcoe"]
+[ext_resource type="Texture2D" uid="uid://g8i1meijj5o1" path="res://Sprites/abilities/animations/Shield Up1.png" id="37_2e4fk"]
+[ext_resource type="Texture2D" uid="uid://fibqelgjv0c7" path="res://Sprites/abilities/animations/Mass Bleed1.png" id="37_cqvh5"]
+[ext_resource type="Texture2D" uid="uid://cp37vss7fuheu" path="res://Sprites/abilities/animations/Shield Up2.png" id="38_eyhua"]
+[ext_resource type="Texture2D" uid="uid://hqrqls687fp8" path="res://Sprites/abilities/animations/Mass Bleed2.png" id="38_w7g26"]
+[ext_resource type="Texture2D" uid="uid://bcxnpb7jac3fm" path="res://Sprites/abilities/animations/Mass Bleed3.png" id="39_0ddvx"]
+[ext_resource type="Texture2D" uid="uid://dg8lft7fmukgc" path="res://Sprites/abilities/animations/Shield Up3.png" id="39_ybiri"]
+[ext_resource type="Texture2D" uid="uid://c4ni2jp5xmwg" path="res://Sprites/abilities/animations/Mass Bleed4.png" id="40_aa8fv"]
+[ext_resource type="Texture2D" uid="uid://dcrsyapymt63c" path="res://Sprites/abilities/animations/Shield Up4.png" id="40_n0ykh"]
+[ext_resource type="Texture2D" uid="uid://ddtefg3cv23xp" path="res://Sprites/abilities/animations/Shield Up5.png" id="41_01i38"]
+[ext_resource type="Texture2D" uid="uid://cxjwqelfness4" path="res://Sprites/abilities/animations/Mass Bleed5.png" id="41_8sl1k"]
+[ext_resource type="Texture2D" uid="uid://cm6lulvwrlx8d" path="res://Sprites/abilities/animations/Mass Bleed6.png" id="42_chiik"]
+[ext_resource type="Texture2D" uid="uid://dnbiuijyc5hrk" path="res://Sprites/abilities/animations/Shield Up6.png" id="42_ey0f0"]
+[ext_resource type="Texture2D" uid="uid://c14qen1x8i83a" path="res://Sprites/abilities/animations/Mass Bleed7.png" id="43_c7vta"]
+[ext_resource type="Texture2D" uid="uid://cjaxn8i8h5uky" path="res://Sprites/abilities/animations/Shield Up7.png" id="43_s6kvr"]
+[ext_resource type="Texture2D" uid="uid://bn0jst6hes7hx" path="res://Sprites/abilities/animations/Shield Up8.png" id="44_arcy5"]
+[ext_resource type="Texture2D" uid="uid://ce00gy4jbdffq" path="res://Sprites/abilities/animations/Mass Bleed8.png" id="44_ky2wd"]
+[ext_resource type="Texture2D" uid="uid://b8kr5ns17ofwe" path="res://Sprites/abilities/animations/Mass Bleed9.png" id="45_tu0h6"]
+[ext_resource type="Texture2D" uid="uid://ch6fkyv7aww2p" path="res://Sprites/abilities/animations/Mass Bleed10.png" id="46_f15u5"]
+[ext_resource type="Texture2D" uid="uid://dxo1jjsnombk6" path="res://Sprites/abilities/animations/Mass Bleed11.png" id="47_s488p"]
+[ext_resource type="Texture2D" uid="uid://b68w32etlivyc" path="res://Sprites/abilities/animations/Mass Daze1.png" id="48_d4c0k"]
+[ext_resource type="Texture2D" uid="uid://dy7dp03bgewb2" path="res://Sprites/abilities/animations/Mass Daze2.png" id="49_3ypnn"]
+[ext_resource type="Texture2D" uid="uid://bld5ldiy5qbo" path="res://Sprites/abilities/animations/Mass Daze3.png" id="50_438ec"]
+[ext_resource type="Texture2D" uid="uid://bcoj7hdqgumc5" path="res://Sprites/abilities/animations/Mass Daze4.png" id="51_5eo3c"]
+[ext_resource type="Texture2D" uid="uid://cfpwtmhe5e5tw" path="res://Sprites/abilities/animations/Mass Daze5.png" id="52_ffr1f"]
+[ext_resource type="Texture2D" uid="uid://jamw60nvcx7a" path="res://Sprites/abilities/animations/Mass Daze6.png" id="53_1pu4f"]
+[ext_resource type="Texture2D" uid="uid://bw7aw1xawpdk7" path="res://Sprites/abilities/animations/Mass Daze7.png" id="54_8fs05"]
+[ext_resource type="Texture2D" uid="uid://b6h0ja1lvetip" path="res://Sprites/abilities/animations/Mass Daze8.png" id="55_254u0"]
+[ext_resource type="Texture2D" uid="uid://fhx311v7eojf" path="res://Sprites/abilities/animations/Mass Daze9.png" id="56_we3ir"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vmp2n"]
 bg_color = Color(0.388235, 0.380392, 0.403922, 0.301961)
@@ -40,6 +101,231 @@ font_size = 64
 font_color = Color(0.792157, 0.34902, 0.329412, 1)
 outline_size = 2
 outline_color = Color(0.117647, 0.117647, 0.141176, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_lcteu"]
+font = ExtResource("9_77xup")
+font_size = 128
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3aclx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_vxfon")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_6c7or")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_fmahn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_vk74m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_qwl6t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_a6hxe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_ueeif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_3m2ew")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_rauni")
+}],
+"loop": true,
+"name": &"Dodge",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_f10br")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_wftgk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_yjodh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_cr2di")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_jd0q4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_cji7j")
+}],
+"loop": true,
+"name": &"Empower",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_7sxxv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_hppm5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_wteff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_hojy8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ywj4j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_vftj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_wxmaq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_6lpuo")
+}],
+"loop": true,
+"name": &"Enchant",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_d56d0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_wd5tn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_elv2s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ml62t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_p134p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_6pg78")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_2rmq4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_vmn4t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_cjrco")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_hhcoe")
+}],
+"loop": true,
+"name": &"Heal",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_cqvh5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_w7g26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_0ddvx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_aa8fv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_8sl1k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_chiik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_c7vta")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_ky2wd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_tu0h6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_f15u5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_s488p")
+}],
+"loop": true,
+"name": &"Mass Bleed",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_d4c0k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_3ypnn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_438ec")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_5eo3c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_ffr1f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_1pu4f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_8fs05")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_254u0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_we3ir")
+}],
+"loop": true,
+"name": &"Mass Daze",
+"speed": 25.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_2e4fk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_eyhua")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_ybiri")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_n0ykh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_01i38")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_ey0f0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_s6kvr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_arcy5")
+}],
+"loop": true,
+"name": &"Shield Up",
+"speed": 20.0
+}]
 
 [node name="FightPlayerUi" type="Control"]
 light_mask = 0
@@ -318,6 +604,17 @@ text = "Soul Eater"
 label_settings = SubResource("LabelSettings_yapfh")
 horizontal_alignment = 1
 
+[node name="BossTalkLabel" type="Label" parent="CanvasLayer/BossControl"]
+visible = false
+layout_mode = 0
+offset_left = 247.0
+offset_top = 523.0
+offset_right = 1818.0
+offset_bottom = 651.0
+text = "fdsfsdfsdf"
+label_settings = SubResource("LabelSettings_lcteu")
+horizontal_alignment = 1
+
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 visible = false
 light_mask = 7
@@ -334,6 +631,14 @@ z_index = 100
 offset_top = -1.0
 offset_bottom = -1.0
 mouse_filter = 0
+
+[node name="AbilityAnimationSprite" type="AnimatedSprite2D" parent="CanvasLayer"]
+visible = false
+modulate = Color(0.631373, 0.690196, 0.768627, 0.376471)
+position = Vector2(976, 520)
+scale = Vector2(7.061, 7)
+sprite_frames = SubResource("SpriteFrames_3aclx")
+animation = &"Mass Bleed"
 
 [connection signal="gui_input" from="CanvasLayer/Container" to="." method="_on_button_input"]
 [connection signal="gui_input" from="CanvasLayer/Control3" to="." method="_on_ability_input"]

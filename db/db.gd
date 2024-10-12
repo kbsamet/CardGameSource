@@ -70,7 +70,7 @@ enum CardEffect {
 
 enum EnemyAttack {
 	Bleed,Damage,StaminaCost,Daze,Blind,ArmorUp,HealAll,Unstoppable,Burn,Empower,Lifesteal,Unblockable,DrainAp,DrainRp,
-	GainStamina,Cripple
+	GainStamina,Cripple,Silence
 }
 
 enum ItemEffect {
@@ -97,7 +97,8 @@ const enemy_tooltips : Dictionary = {
 	db.EnemyAttack.DrainAp: "Drain AP:Lose 1 ap for _ turns.",
 	db.EnemyAttack.DrainRp: "Drain RP:Lose 1 rp for _ turns.",
 	db.EnemyAttack.GainStamina : "Gain Stamina:This enemy will recover _ stamina",
-	db.EnemyAttack.Cripple : "Cripple:You will deal _ less damage."
+	db.EnemyAttack.Cripple : "Cripple:You will deal _ less damage.",
+	db.EnemyAttack.Silence : "Silence:You will be unable to use your ability for _ turns."
 }
 
 const card_tooltips : Dictionary = {

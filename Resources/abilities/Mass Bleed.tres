@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_5t1an")
 _name = "Mass Bleed"
-cost = 4
-tooltip = "Mass Bleed:Inflict /value1 bleed on all enemies.  Costs /cost mana."
+cost = 6
+tooltip = "Mass Bleed:Inflict /value1 bleed on all enemies. Costs /cost mana."
 level = 1
 values = Array[int]([3])
 improve_amounts = Array[int]([1])

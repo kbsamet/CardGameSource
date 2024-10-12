@@ -5,6 +5,7 @@ signal boss_state_changed
 signal boss_phase_changed
 @onready var enemyScene : PackedScene = preload("res://Scenes/enemies/Enemy.tscn")
 
+var bossTalkCallback : Callable
 var phase : int = 0
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -15,6 +16,11 @@ func _ready() -> void:
 
 func boss_dead() -> void:
 	if phase == 0:
+		db.current_turn = db.Turn.EnemyAction
+		enemy.sprite.texture = load("res://Sprites/enemies/VampireDead.png")
+		await get_tree().create_timer(2).timeout
+		await bossTalkCallback.call("It is not over yet")
+		await bossTalkCallback.call("You wil pay for this") 
 		enemy.sprite.texture = load("res://Sprites/enemies/vampireBlue.png")
 		enemy.enemy_data = db.get_enemy("VampireBlue")
 		boss_phase_changed.emit(enemy.enemy_data)
@@ -25,6 +31,7 @@ func boss_dead() -> void:
 			bat_node.enemy_data = bat
 			get_parent().add_enemy(bat_node)
 		phase = 1
+		db.current_turn = db.Turn.PlayerAction
 	elif phase == 1:
 		enemy.die()
 		db.player.health = db.player.max_health
