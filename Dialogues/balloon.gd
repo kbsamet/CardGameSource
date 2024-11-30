@@ -52,7 +52,6 @@ var dialogue_line: DialogueLine:
 
 		responses_menu.hide()
 		responses_menu.set_responses(dialogue_line.responses)
-
 		# Show our balloon
 		balloon.show()
 		will_hide_balloon = false

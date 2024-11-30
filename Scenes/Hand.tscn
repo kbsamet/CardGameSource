@@ -15,7 +15,9 @@ visible = false
 stream = ExtResource("3_5hwf3")
 volume_db = -28.152
 pitch_scale = 1.33
+bus = &"sfx"
 
 [node name="dealPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_bgrpr")
 volume_db = -20.496
+bus = &"sfx"

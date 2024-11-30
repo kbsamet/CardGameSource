@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="StageData" load_steps=2 format=3 uid="uid://dg1d5v71x1x14"]
+
+[ext_resource type="Script" path="res://Models/StageData.gd" id="1_f6x2l"]
+
+[resource]
+script = ExtResource("1_f6x2l")
+name = "Forest"
+battleBackgroundSpriteName = "forest_fight"
+battleBackgroundSpritePos = Vector2(0, 0)
+modulateColor = Color(0.631373, 0.690196, 0.772549, 1)
+lightColor = Color(0.67451, 0.67451, 0.756863, 1)

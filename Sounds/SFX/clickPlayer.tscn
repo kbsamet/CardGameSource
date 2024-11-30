@@ -5,3 +5,4 @@
 [node name="ClickPlayer" type="AudioStreamPlayer"]
 stream = ExtResource("1_vfrwh")
 volume_db = -15.966
+bus = &"sfx"

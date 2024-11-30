@@ -16,6 +16,10 @@
       "resource_local_to_scene": true,
       "resource_name": true
     },
+    "res://Resources/stages/": {
+      "resource_local_to_scene": true,
+      "resource_name": true
+    },
     "res://Resources/statusEffects/": {
       "resource_local_to_scene": true,
       "resource_name": true
@@ -31,7 +35,8 @@
     "res://Resources/statusEffects/",
     "res://Resources/relics/",
     "res://Resources/trials/",
-    "res://Resources/abilities/"
+    "res://Resources/abilities/",
+    "res://Resources/stages/"
   ],
   "table_functions": {
     "filter": [

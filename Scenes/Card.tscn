@@ -190,6 +190,7 @@ libraries = {
 [node name="hoverPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("4_qgncp")
 volume_db = -11.387
+bus = &"sfx"
 
 [connection signal="gui_input" from="Control" to="." method="_on_input"]
 [connection signal="mouse_entered" from="Control" to="." method="_on_hover"]

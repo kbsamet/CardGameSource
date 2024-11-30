@@ -1,7 +1,11 @@
 ~ start
 if db.player.ability.level > 1:
-	I've already taught you everything I could.
-	=> END 
+	if !db.npcs["Wizard"]["questionsAsked"]:
+		I've already taught you everything I could. Was there anything else you wanted to know?
+		=> questions
+	else:
+		I need to rest now. We can talk later.
+		=> END
 if db.current_room < 7:
 	It's dangerous outside. You aren't going to last much in your state.
 	Your abilities are very weak. I can train you. Are you interested?
@@ -19,3 +23,31 @@ else:
 ~ no
 Your loss..
 => END
+
+~ questions
+set db.npcs["Wizard"]["questionsAsked"] = true
+- What are you doing here?
+	I'm having a drink and resting before the arduous journey ahead.
+	=> END
+- Where are you going?
+	I am searching for the source of a great power. 
+	I believe it comes from somewhere within this mountain.
+	- What is this power?
+		It's hard to say. I would need to study it first.
+		What I know is that it affects living beings. It is the reason the wildlife here has turned so aggresive.
+		There are legends about a certain... 
+		Well, maybe I've said more than I should have.
+		We can talk more if we meet again.
+		=> END
+	- Why are you searching for it?
+		I am a scholer of the arts. I've dedicated my life to the understanding.
+		It is vital that we understand and document these things so that they are not misused or forgotten.
+		There are many ancient powers that are forgotten. Only to be discovered generations later, poorly understood.
+		In the wrong hands a power like this can be catastrophic. 
+		=> END
+	- What will you do when you find it?
+		It might take years to study a power like this. We might never understand it completely.
+		I might dedicate the rest of my years to it. It will be my final and greatest contribution to human knowledge.
+		=> END
+- No, thank you.
+	=> END

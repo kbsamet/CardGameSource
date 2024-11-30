@@ -5,3 +5,4 @@
 [node name="BackgroundMusic" type="AudioStreamPlayer"]
 stream = ExtResource("1_vkffe")
 volume_db = -16.031
+bus = &"Music"

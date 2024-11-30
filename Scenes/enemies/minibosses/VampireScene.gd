@@ -17,6 +17,7 @@ func _ready() -> void:
 func boss_dead() -> void:
 	if phase == 0:
 		db.current_turn = db.Turn.EnemyAction
+		db.turn_changed.emit()
 		enemy.sprite.texture = load("res://Sprites/enemies/VampireDead.png")
 		await get_tree().create_timer(2).timeout
 		await bossTalkCallback.call("It is not over yet")
@@ -32,6 +33,7 @@ func boss_dead() -> void:
 			get_parent().add_enemy(bat_node)
 		phase = 1
 		db.current_turn = db.Turn.PlayerAction
+		db.turn_changed.emit()
 	elif phase == 1:
 		enemy.die()
 		db.player.health = db.player.max_health

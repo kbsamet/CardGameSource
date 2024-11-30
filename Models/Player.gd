@@ -16,7 +16,7 @@ var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
 var ability : AbilityData 
-var gold : int = 10
+var gold : int = 60
 var keys : int = 1
 
 var next_turn_effects : Array[CardEffectData] = []

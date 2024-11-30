@@ -48,9 +48,11 @@ var responses: Array = []:
 				# Otherwise assume we can just set the text
 				else:
 					item.get_child(1).text = "[center]"+response.text
-
+					
 				item.set_meta("response", response)
+
 				add_child(item)
+
 				if response.tags.size() > 0:
 					item.get_child(0).set_data(db.dialogue_tooltips[response.tags[0]])
 
@@ -74,7 +76,7 @@ func get_menu_items() -> Array:
 		if not child.visible: continue
 		if "Disallowed" in child.name: continue
 		items.append(child)
-		
+
 	return items
 
 
@@ -126,16 +128,17 @@ func _configure_focus() -> void:
 func _on_response_mouse_entered(item: Control) -> void:
 	if "Disallowed" in item.name: return
 	if item.get_child(0).text != "":
-		item.get_child(0).visible = true
+			item.get_child(0).visible = true
 	item.grab_focus()
+
 	
 func _on_response_mouse_exited(item: Control) -> void:
 	if "Disallowed" in item.name: return
 	item.get_child(0).visible = false
-
-
+	
 func _on_response_gui_input(event: InputEvent, item: Control, response) -> void:
 	if "Disallowed" in item.name: return
+
 	get_viewport().set_input_as_handled()
 
 	if event is InputEventMouseButton and event.is_pressed() and event.button_index == MOUSE_BUTTON_LEFT:

@@ -9,6 +9,9 @@ extends Node
 @onready var all_trials : ResourceGroup = preload("res://Resources/all_trials.tres")
 @onready var all_abilities : ResourceGroup = preload("res://Resources/all_abilities.tres")
 
+var pauseScreen : PackedScene = preload("res://Scenes/ui/PauseScreen.tscn")
+var activePauseScreen : PauseScreen
+
 var cards : Array[CardData] 
 var status_effects : Array[StatusEffectData]
 var enemies : Array[EnemyData]
@@ -17,8 +20,12 @@ var trials : Array[TrialData]
 var abilities : Array[AbilityData]
 
 var saveData : SaveData
+var settingsData : SettingsData
 var clickPlayer : AudioStreamPlayer
 var run_time : float = 0.0
+
+var music : AudioStreamPlayer
+
 func _ready() -> void:
 	DialogueManager.DialogueSettings.set_setting("balloon_path","res://Dialogues/balloon.tscn")
 	all_cards.load_all_into(cards)
@@ -30,16 +37,47 @@ func _ready() -> void:
 	var click : AudioStreamPlayer = clickPlayerScene.instantiate()
 	add_child(click)
 	clickPlayer = click
-	var music : AudioStreamPlayer = background_music.instantiate() 
+	music = background_music.instantiate() 
 	add_child(music)
 	music.play()
 	player.ability = get_ability("Enchant")
 	saveData = SaveData.load_save()
+	settingsData = SettingsData.load_settings()
+	apply_settings()
+	
 func _process(delta : float) -> void:
 	if player.health > 0:
 		run_time += delta
+	if Input.is_action_just_released("ui_escape"):
+		if !get_tree().paused:
+			print("pausing")
+			var p : PauseScreen = pauseScreen.instantiate()
+			activePauseScreen = p
+			get_parent().add_child(p)
+			get_tree().paused = true
 	#print("FPS: " + str(Engine.get_frames_per_second()))
+func unpause() -> void:
+	print("unpausing")
+	get_parent().remove_child(activePauseScreen)
+	activePauseScreen.queue_free()
+	get_tree().paused = false
 
+func percent_to_db(percent: float) -> float:
+	if percent <= 0:
+		return -80.0  # Return lowest possible dB (silence)
+	return 20.0 * log(percent / 100.0) / log(10.0)
+
+# Function to apply volume settings
+func apply_volume_settings() -> void:
+	var sfx_bus_idx := AudioServer.get_bus_index("sfx")
+	var music_bus_idx := AudioServer.get_bus_index("Music")
+
+	AudioServer.set_bus_volume_db(sfx_bus_idx, percent_to_db(settingsData.sfxVolume))
+	AudioServer.set_bus_volume_db(music_bus_idx, percent_to_db(settingsData.musicVolume))
+	
+func apply_settings() -> void:
+	apply_volume_settings()
+	
 signal level_changed
 signal player_state_changed
 signal player_status_effect_changed
@@ -81,7 +119,7 @@ const card_keywords = [
 	"block","dodge","daze","bleed","crushing","empowered","overcharged","barbed armor"
 ]
 
-const enemy_tooltips : Dictionary = {
+var enemy_tooltips : Dictionary = {
 	db.EnemyAttack.Damage : "Damage:Deal _ damage.",
 	db.EnemyAttack.Bleed :  "Bleed:_ damage per turn for _ turns.",
 	db.EnemyAttack.StaminaCost: "Cost:This attack will cost _ stamina.",
@@ -249,7 +287,8 @@ var npcs : Dictionary = {
 	"Wizard" : {
 		"name" : "Wizard",
 		"position" : Vector2(1149,192),
-		"dialogue_offset" : Vector2(-100,-130)
+		"dialogue_offset" : Vector2(-100,-130),
+		"questionsAsked" : false
 	},
 	"Plague Doctor" : {
 		"name" : "Plague Doctor",
