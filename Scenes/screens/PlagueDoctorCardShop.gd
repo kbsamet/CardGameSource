@@ -29,6 +29,7 @@ func _on_card_chosen(id : int) -> void:
 	chosen_card.queue_free()
 	db.player.add_to_deck(chosen_card.card_data)
 	db.player.gold -= chosen_card.price
+	db.player_state_changed.emit()
 
 func _on_button_pressed() -> void:
 	db.clickPlayer.play()

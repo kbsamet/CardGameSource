@@ -132,6 +132,8 @@ func end_enemy_attack() -> void:
 				if !("dodge" in db.player.status_effects.keys() and db.player.status_effects["dodge"].amount > 0):
 					if "dodge_chance" in db.player.status_effects:
 						if db.player.status_effects["dodge_chance"].amount > randi_range(0,100):
+							if "counter_attack" in db.player.status_effects:
+								attacking_enemy.damage(calculate_damage(attacking_enemy.enemy_data,single_attack.amount))
 							db.screen_effect.emit("dodged")
 							continue
 					if "block" in db.player.status_effects and "barbedshield" in db.player.status_effects:
@@ -139,6 +141,8 @@ func end_enemy_attack() -> void:
 					
 					db.player.damage_player(calculate_damage(attacking_enemy.enemy_data,single_attack.amount),unblockable)
 				else:
+					if "counter_attack" in db.player.status_effects:
+						attacking_enemy.damage(calculate_damage(attacking_enemy.enemy_data,single_attack.amount))
 					db.screen_effect.emit("dodged")
 			db.EnemyAttack.StaminaCost:
 				attacking_enemy.change_stamina(-single_attack.amount)

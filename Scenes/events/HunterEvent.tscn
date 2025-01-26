@@ -1,0 +1,86 @@
+[gd_scene load_steps=7 format=3 uid="uid://ba17ma6kbhqv1"]
+
+[ext_resource type="Texture2D" uid="uid://cmrg6pdlwcbbf" path="res://Sprites/ui/screens/events/trapperEvent/trapper_house.png" id="1_owxa4"]
+[ext_resource type="Script" path="res://Scenes/events/hunter_event.gd" id="1_qg7li"]
+[ext_resource type="Texture2D" uid="uid://csw6vip40jkci" path="res://Sprites/ui/screens/events/trapperEvent/trapper.png" id="2_hv8d7"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="3_3qe4t"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="4_nd15o"]
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_46gup"]
+polygon = PackedVector2Array(-165.938, 268.125, 139.688, 258.282, 145.781, 235.313, 119.531, 233.907, 119.531, 245.625, 51.5626, 245.157, 50.1563, 233.438, -145.781, 234.844)
+
+[node name="HunterEvent" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = -78.0
+offset_bottom = -78.0
+script = ExtResource("1_qg7li")
+
+[node name="House" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(962, 507)
+scale = Vector2(1.75333, 1.75333)
+texture = ExtResource("1_owxa4")
+
+[node name="Hunter" type="Sprite2D" parent="."]
+modulate = Color(0.317647, 0.317647, 0.396078, 1)
+light_mask = 7
+position = Vector2(962, 507)
+scale = Vector2(1.75333, 1.75333)
+texture = ExtResource("2_hv8d7")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+position = Vector2(962, 383)
+scale = Vector2(2.13333, 2.13333)
+occluder = SubResource("OccluderPolygon2D_46gup")
+
+[node name="light" type="Node2D" parent="."]
+position = Vector2(1140, 549)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.3
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_3qe4t")
+texture_scale = 2.94
+height = 30.0
+script = ExtResource("4_nd15o")
+
+[node name="UILight" type="PointLight2D" parent="light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.15
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_3qe4t")
+texture_scale = 1.37
+script = ExtResource("4_nd15o")
+
+[node name="light2" type="Node2D" parent="."]
+position = Vector2(816, 534)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="light2"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.898039, 0.435294, 0.294118, 1)
+energy = 0.3
+range_z_max = 7
+range_item_cull_mask = 6
+texture = ExtResource("3_3qe4t")
+texture_scale = 2.94
+height = 30.0
+script = ExtResource("4_nd15o")
+
+[node name="UILight" type="PointLight2D" parent="light2"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.15
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("3_3qe4t")
+texture_scale = 1.37
+script = ExtResource("4_nd15o")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

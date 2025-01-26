@@ -14,7 +14,7 @@ func _ready() -> void:
 		db.music.stream = tavernMusic
 		db.music.stream.loop = true
 		db.music.play(location)
-	
+	db.stop_weather()
 	for npc : String in db.npcs.keys():
 		var npc_data : NpcData = NpcData.from_dict(db.npcs[npc])
 		var npc_scene : NPCNode = npcScene.instantiate()
@@ -52,3 +52,4 @@ func _on_button_pressed() -> void:
 	db.music.stream = forestMusic
 	db.music.stream.loop = true
 	db.music.play()
+	db.start_weather("rain")

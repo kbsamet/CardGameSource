@@ -18,3 +18,4 @@ cost = 1
 targeted = false
 effects = Array[ExtResource("1_pnqgb")]([SubResource("Resource_6w00h")])
 is_rare = false
+no_random_pool = false

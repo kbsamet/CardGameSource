@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cot4ikvwomjgt"]
+[gd_scene load_steps=7 format=3 uid="uid://cot4ikvwomjgt"]
 
 [ext_resource type="Script" path="res://Scenes/ui/pause_screen.gd" id="1_7fvoa"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="2_1jopc"]
 [ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="3_280u3"]
 [ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="4_8skcy"]
-[ext_resource type="Theme" uid="uid://c35hb0x6mhlof" path="res://Misc/default_theme.tres" id="5_5in1o"]
-[ext_resource type="LabelSettings" uid="uid://ccugtg3ly1noj" path="res://Misc/CardLabelSettings.tres" id="6_elsf0"]
+[ext_resource type="PackedScene" uid="uid://cc345327cjfso" path="res://Scenes/screens/SettingsScene.tscn" id="5_8pmp1"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ryrjy"]
 bg_color = Color(0.0913, 0.0913, 0.11, 1)
@@ -13,10 +12,6 @@ border_width_left = 3
 border_width_top = 3
 border_width_right = 3
 border_width_bottom = 3
-border_color = Color(0.568627, 0.552941, 0.552941, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5c2u2"]
-bg_color = Color(0.2739, 0.2739, 0.33, 1)
 border_color = Color(0.568627, 0.552941, 0.552941, 1)
 
 [node name="PauseScreen" type="Control"]
@@ -39,7 +34,6 @@ mouse_default_cursor_shape = 2
 color = Color(0, 0, 0, 0.14902)
 
 [node name="Panel" type="Panel" parent="."]
-visible = false
 custom_minimum_size = Vector2(700, 500)
 layout_mode = 1
 anchors_preset = 8
@@ -97,132 +91,17 @@ theme_override_styles/pressed = ExtResource("3_280u3")
 theme_override_styles/normal = ExtResource("4_8skcy")
 text = "Abandon Run"
 
-[node name="Settings" type="Panel" parent="."]
-custom_minimum_size = Vector2(700, 500)
+[node name="SettingsScene" parent="." instance=ExtResource("5_8pmp1")]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -0.159973
-offset_top = -0.039978
-offset_right = 0.159973
-offset_bottom = 0.039978
-grow_horizontal = 2
-grow_vertical = 2
-mouse_default_cursor_shape = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_5c2u2")
-
-[node name="TabContainer" type="TabContainer" parent="Settings"]
-layout_mode = 0
-offset_right = 698.0
-offset_bottom = 495.0
-theme_override_fonts/font = ExtResource("2_1jopc")
-current_tab = 1
-
-[node name="Video" type="TabBar" parent="Settings/TabContainer"]
-visible = false
-custom_minimum_size = Vector2(0, 100)
-layout_mode = 2
-theme = ExtResource("5_5in1o")
-theme_override_fonts/font = ExtResource("2_1jopc")
-metadata/_tab_index = 0
-
-[node name="GridContainer" type="GridContainer" parent="Settings/TabContainer/Video"]
-layout_mode = 0
-offset_left = 19.0
-offset_top = 19.0
-offset_right = 679.0
-offset_bottom = 451.0
-columns = 2
-
-[node name="Button" type="Button" parent="Settings/TabContainer/Video"]
-custom_minimum_size = Vector2(10, 40)
-layout_mode = 0
-offset_left = 245.0
-offset_top = 416.0
-offset_right = 420.0
-offset_bottom = 456.0
-theme_override_fonts/font = ExtResource("2_1jopc")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/focus = ExtResource("3_280u3")
-theme_override_styles/hover = ExtResource("3_280u3")
-theme_override_styles/pressed = ExtResource("3_280u3")
-theme_override_styles/normal = ExtResource("4_8skcy")
-text = "Back
-"
-
-[node name="Audio" type="TabBar" parent="Settings/TabContainer"]
-layout_mode = 2
-metadata/_tab_index = 1
-
-[node name="GridContainer" type="GridContainer" parent="Settings/TabContainer/Audio"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 19.0
-offset_right = 660.0
-offset_bottom = 377.0
-theme_override_constants/h_separation = 50
-columns = 4
-
-[node name="Label" type="Label" parent="Settings/TabContainer/Audio/GridContainer"]
-layout_mode = 2
-text = "Music Volume:
-"
-label_settings = ExtResource("6_elsf0")
-
-[node name="MusicSlider" type="HSlider" parent="Settings/TabContainer/Audio/GridContainer"]
-custom_minimum_size = Vector2(100, 25)
-layout_mode = 2
-theme = ExtResource("5_5in1o")
-value = 10.0
-
-[node name="Label2" type="Label" parent="Settings/TabContainer/Audio/GridContainer"]
-layout_mode = 2
-text = "SFX Volume:
-"
-label_settings = ExtResource("6_elsf0")
-
-[node name="SFXSlider" type="HSlider" parent="Settings/TabContainer/Audio/GridContainer"]
-custom_minimum_size = Vector2(100, 25)
-layout_mode = 2
-theme = ExtResource("5_5in1o")
-value = 10.0
-
-[node name="Button" type="Button" parent="Settings/TabContainer/Audio"]
-custom_minimum_size = Vector2(10, 40)
-layout_mode = 0
-offset_left = 158.0
-offset_top = 416.0
-offset_right = 333.0
-offset_bottom = 456.0
-theme_override_fonts/font = ExtResource("2_1jopc")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/focus = ExtResource("3_280u3")
-theme_override_styles/hover = ExtResource("3_280u3")
-theme_override_styles/pressed = ExtResource("3_280u3")
-theme_override_styles/normal = ExtResource("4_8skcy")
-text = "Confirm
-"
-
-[node name="Button2" type="Button" parent="Settings/TabContainer/Audio"]
-custom_minimum_size = Vector2(10, 40)
-layout_mode = 0
-offset_left = 363.0
-offset_top = 416.0
-offset_right = 538.0
-offset_bottom = 456.0
-theme_override_fonts/font = ExtResource("2_1jopc")
-theme_override_font_sizes/font_size = 24
-theme_override_styles/focus = ExtResource("3_280u3")
-theme_override_styles/hover = ExtResource("3_280u3")
-theme_override_styles/pressed = ExtResource("3_280u3")
-theme_override_styles/normal = ExtResource("4_8skcy")
-text = "Cancel"
+offset_right = 0.0
+offset_bottom = 0.0
 
 [connection signal="pressed" from="Panel/VBoxContainer/Button" to="." method="_on_unpause_pressed"]
 [connection signal="pressed" from="Panel/VBoxContainer/Button2" to="." method="_on_settings_pressed"]
-[connection signal="pressed" from="Settings/TabContainer/Video/Button" to="." method="_on_setings_back_pressed"]
-[connection signal="pressed" from="Settings/TabContainer/Audio/Button" to="." method="_on_settings_apply"]
-[connection signal="pressed" from="Settings/TabContainer/Audio/Button2" to="." method="_on_setings_back_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Button3" to="." method="_on_abandon_run_pressed"]

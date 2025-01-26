@@ -7,6 +7,8 @@ class_name EnemyData
 @export var stamina : int
 @export var max_stamina : int
 @export var difficulty : int
+@export var minimum_stage : int = 0
+@export var maximum_stage : int = 0
 
 @export var attacks : Array[EnemyAttackData]
 @export var status_effects : Array[StatusEffectData]

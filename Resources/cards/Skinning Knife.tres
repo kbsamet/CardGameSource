@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://coa5g5fph06cd"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_bmgjr"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_s8tis"]
+
+[sub_resource type="Resource" id="Resource_528xs"]
+script = ExtResource("1_bmgjr")
+effect = 0
+amount = 3
+next_turn = false
+
+[resource]
+script = ExtResource("2_s8tis")
+_name = "Skinning Knife"
+type = 0
+description = "Deal /damage damage. If this kills the Gray Wolf, receive it's pelt."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_bmgjr")]([SubResource("Resource_528xs")])
+is_rare = false
+no_random_pool = true

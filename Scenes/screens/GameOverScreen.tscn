@@ -1,11 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://pkc6cj4lyag0"]
+[gd_scene load_steps=7 format=3 uid="uid://pkc6cj4lyag0"]
 
 [ext_resource type="Script" path="res://Scenes/screens/GameOverScreen.gd" id="1_c6lrm"]
 [ext_resource type="FontFile" uid="uid://35ubclsxhjgd" path="res://Fonts/lunchds.ttf" id="1_q333b"]
+[ext_resource type="StyleBox" uid="uid://oohuxemtj3rw" path="res://Misc/ButtonHoverStyle.tres" id="3_cdprt"]
+[ext_resource type="StyleBox" uid="uid://vrw3phfka8cx" path="res://Misc/TooltipStyle.tres" id="4_f617o"]
 
-[sub_resource type="LabelSettings" id="LabelSettings_4171p"]
+[sub_resource type="LabelSettings" id="LabelSettings_npm1p"]
 font = ExtResource("1_q333b")
 font_size = 128
+font_color = Color(0.662745, 0.286275, 0.286275, 1)
 outline_color = Color(0.207843, 0.207843, 0.25098, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_wsw5n"]
@@ -24,19 +27,24 @@ script = ExtResource("1_c6lrm")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
-anchor_right = 0.997
-anchor_bottom = 1.0
-offset_left = 517.0
-offset_right = -554.24
-offset_bottom = 3.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -324.0
+offset_top = -333.0
+offset_right = 324.0
+offset_bottom = 333.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 128
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 text = "Game Over"
-label_settings = SubResource("LabelSettings_4171p")
+label_settings = SubResource("LabelSettings_npm1p")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -47,9 +55,45 @@ label_settings = SubResource("LabelSettings_wsw5n")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RestartButton" type="Button" parent="VBoxContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "Restart"
-icon_alignment = 1
+theme_override_constants/separation = 20
 
-[connection signal="pressed" from="VBoxContainer/RestartButton" to="." method="_on_button_pressed"]
+[node name="Button2" type="Button" parent="VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(10, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_q333b")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/focus = ExtResource("3_cdprt")
+theme_override_styles/hover = ExtResource("3_cdprt")
+theme_override_styles/pressed = ExtResource("3_cdprt")
+theme_override_styles/normal = ExtResource("4_f617o")
+text = "New Run"
+
+[node name="Button" type="Button" parent="VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(10, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_q333b")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/focus = ExtResource("3_cdprt")
+theme_override_styles/hover = ExtResource("3_cdprt")
+theme_override_styles/pressed = ExtResource("3_cdprt")
+theme_override_styles/normal = ExtResource("4_f617o")
+text = "Main Menu
+"
+
+[node name="Button3" type="Button" parent="VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(10, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_q333b")
+theme_override_font_sizes/font_size = 36
+theme_override_styles/focus = ExtResource("3_cdprt")
+theme_override_styles/hover = ExtResource("3_cdprt")
+theme_override_styles/pressed = ExtResource("3_cdprt")
+theme_override_styles/normal = ExtResource("4_f617o")
+text = "Quit
+"
+
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Button2" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Button" to="." method="_on_menu_pressed"]
+[connection signal="pressed" from="VBoxContainer/VBoxContainer/Button3" to="." method="_on_quit_pressed"]

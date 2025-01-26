@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=5 format=3 uid="uid://c45r6ssq6rd8v"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_1eb4y"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_q8fmg"]
+
+[sub_resource type="Resource" id="Resource_6w00h"]
+script = ExtResource("1_1eb4y")
+effect = 0
+amount = 5
+next_turn = false
+
+[sub_resource type="Resource" id="Resource_l6q7v"]
+script = ExtResource("1_1eb4y")
+effect = 35
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_q8fmg")
+_name = "Infinite Strike"
+type = 0
+description = "Deal /damage damage. Can be used again this turn."
+cost = 1
+targeted = true
+effects = Array[ExtResource("1_1eb4y")]([SubResource("Resource_6w00h"), SubResource("Resource_l6q7v")])
+is_rare = true
+no_random_pool = false

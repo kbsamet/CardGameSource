@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RelicData" load_steps=2 format=3 uid="uid://ctqqfqann7kcs"]
+
+[ext_resource type="Script" path="res://Models/RelicData.gd" id="1_ih3yq"]
+
+[resource]
+script = ExtResource("1_ih3yq")
+_name = "Coin Pouch"
+description = "Coin Pouch:Gain 10 gold. Soulbound."
+cost = 25
+no_random_pool = true

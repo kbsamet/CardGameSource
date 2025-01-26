@@ -16,8 +16,9 @@ var deck : Array[CardData] = []
 var discardPile : Array[CardData] = []
 var relics : Array[RelicData] = []
 var ability : AbilityData 
-var gold : int = 60
+var gold : int = 10
 var keys : int = 1
+var last_played_card : String
 
 var next_turn_effects : Array[CardEffectData] = []
 
@@ -65,7 +66,9 @@ func add_relic(relic : RelicData,purchased: bool = false) -> void:
 			db.player_state_changed.emit()
 		"Night Lamp":
 			add_player_status_effect("permanent_ignore_first_ability_cost",1)
-			
+		"Coin Pouch":
+			gold += 10
+			db.player_state_changed.emit()
 			
 		
 	if purchased:
@@ -303,7 +306,28 @@ func add_to_deck(card : CardData) -> void:
 	deck.push_back(card)
 	deck_size += 1
 	db.player_state_changed.emit()
-
+	
+func remove_from_deck(card : CardData) -> void:
+	deck = deck.filter(func(deck_card : CardData) -> bool : return deck_card._name != card._name)
+	deck_size -= 1
+	db.player_state_changed.emit()
+	
+func calculate_damage(base:int , enemy: EnemyData) -> int:
+	var damage_amount : int = base
+	if "empowered" in db.player.status_effects:
+		damage_amount += db.player.status_effects["empowered"].amount
+	if "trained" in db.player.status_effects:
+		damage_amount += db.player.status_effects["trained"].amount
+	if "crippled" in db.player.status_effects:
+		damage_amount = max(1,damage_amount - db.player.status_effects["crippled"].amount)
+	if enemy != null && "crushing" in db.player.status_effects && enemy.get_status_effect("dazed") != -1:
+		damage_amount *= 2
+	if "doubledamage" in db.player.status_effects:
+		damage_amount *= 2
+	if "empowered_overcharged" in db.player.status_effects and "overcharged" in db.player.status_effects:
+		damage_amount *= 2
+	return damage_amount
+	
 func purchase_item(item: String) -> void:
 	var item_data : Dictionary = db.items[item]
 	for effect : db.ItemEffect in item_data:

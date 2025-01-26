@@ -1,0 +1,68 @@
+~ start
+if db.saveData.seen_hunter:
+	=> secondTime
+~ convo
+Good evening, what brings you here, are you lost?
+- Yes
+	Well, you are pretty deep in the forest. Not many people come around here these days.
+	Your best bet would be to turn around and head back but I have a feeling you won't do that.
+	=> Quest
+- No
+	Good then. You look like you can handle yourself well enough.
+	=> Quest
+~ Quest
+Doesn't matter if you meant to come here or not, fate has brought you here now.
+Fate has also brought you here for a reason. You see, I was looking for someone like you.
+There are rumors of a great wolf in these forests. I have been tracking her for weeks now but she evades me.
+You are clearly no tracker so I won't ask you to find her for me,
+but you do look like someone who can handle themselves in battle.
+If you happen to stumble onto her, could you bring me her pelt?
+- Yes
+	Excellent, now killing her with an ordinary knife will ruin it. You need to deal the fatal blow with a special knife.
+	Here, take it.
+	do db.player.add_to_deck(db.get_card("Skinning Knife"))
+	do db.saveData.soulbound_cards.append("Skinning Knife")
+	do db.saveData.save_game()
+	Come find me after it is done.
+	=> END
+- No
+	Get lost then, I don't need you.
+	=> END
+- I have already killed it
+	You have? 
+	Shit.
+	An amateur like you ruined my whole hunt.
+	Get out of my sight.
+=> END
+
+~ secondTime
+if "Skinning Knife" in db.saveData.soulbound_cards:
+	=> NotFound
+elif "Wolf Pelt" in db.saveData.soulbound_cards:
+	=> Found
+else:
+	=> convo
+	
+~ NotFound
+You're back. Do you have it?
+- Not Yet
+	Why did you come back here then?
+	You might be more useless than I thought.
+	Don't come back until you have it.
+=> END
+
+~ Found
+You're back. Do you have it?
+- Yes
+	Let me take a look.
+	It is in a decent enough coundition. Great work for a novice.
+	Here is your reward. It is quite generous.
+	I have things to do, you know the way out.
+
+do db.player.remove_from_deck(db.get_card("Wolf Pelt"))
+do db.saveData.soulbound_cards.erase("Wolf Pelt")
+do db.player.add_relic(db.get_relic("Coin Pouch"))
+do db.saveData.soulbound_relics.append("Coin Pouch")
+set db.saveData.hunter_done = true
+do db.saveData.save_game()
+=> END

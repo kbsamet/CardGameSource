@@ -12,10 +12,12 @@ func _ready() -> void:
 
 func boss_dead() -> void:
 	enemy.die()
+	if db.player.last_played_card == "Skinning Knife":
+		db.player.add_to_deck(db.get_card("Wolf Pelt"))
+		db.player.remove_from_deck(db.get_card("Skinning Knife"))
+		db.saveData.soulbound_cards.append("Wolf Pelt")
+		db.saveData.soulbound_cards.erase("Skinning Knife")
+		db.saveData.save_game()
 	db.player.health = db.player.max_health
 	db.player.mana = db.player.max_mana
 	db.player_state_changed.emit()
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass

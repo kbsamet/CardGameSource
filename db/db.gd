@@ -9,6 +9,7 @@ extends Node
 @onready var all_trials : ResourceGroup = preload("res://Resources/all_trials.tres")
 @onready var all_abilities : ResourceGroup = preload("res://Resources/all_abilities.tres")
 
+var weatherScene : PackedScene = preload("res://Scenes/screens/Weather.tscn")
 var pauseScreen : PackedScene = preload("res://Scenes/ui/PauseScreen.tscn")
 var activePauseScreen : PauseScreen
 
@@ -19,11 +20,13 @@ var relics : Array[RelicData]
 var trials : Array[TrialData]
 var abilities : Array[AbilityData]
 
+var weather : Weather
+var weather_level : int = 2
 var saveData : SaveData
 var settingsData : SettingsData
 var clickPlayer : AudioStreamPlayer
 var run_time : float = 0.0
-
+var run_started : bool = false
 var music : AudioStreamPlayer
 
 func _ready() -> void:
@@ -37,6 +40,8 @@ func _ready() -> void:
 	var click : AudioStreamPlayer = clickPlayerScene.instantiate()
 	add_child(click)
 	clickPlayer = click
+	weather = weatherScene.instantiate()
+	add_child(weather)
 	music = background_music.instantiate() 
 	add_child(music)
 	music.play()
@@ -44,18 +49,37 @@ func _ready() -> void:
 	saveData = SaveData.load_save()
 	settingsData = SettingsData.load_settings()
 	apply_settings()
-	
+
+func start_weather(weather_type : String) -> void:
+	if weather_level == 0:
+		return
+	weather.start(weather_type + str(weather_level))
+
+func change_weather_level() -> void:
+	var diff : int = randi_range(0,1) * 2 - 1
+	weather_level = min(3,max(0,diff))
+	if weather_level == 0:
+		stop_weather()
+	else:
+		if current_stage == 0:
+			start_weather("rain" if current_stage == 0 else "snow")
+
+func stop_weather() -> void:
+	weather.stop()
+
 func _process(delta : float) -> void:
-	if player.health > 0:
+	if player.health > 0 and run_started:
 		run_time += delta
 	if Input.is_action_just_released("ui_escape"):
-		if !get_tree().paused:
-			print("pausing")
-			var p : PauseScreen = pauseScreen.instantiate()
-			activePauseScreen = p
-			get_parent().add_child(p)
-			get_tree().paused = true
-	#print("FPS: " + str(Engine.get_frames_per_second()))
+		pause()
+		
+func pause() -> void:
+	if !get_tree().paused:
+		print("pausing")
+		var p : PauseScreen = pauseScreen.instantiate()
+		activePauseScreen = p
+		get_parent().add_child(p)
+		get_tree().paused = true
 func unpause() -> void:
 	print("unpausing")
 	get_parent().remove_child(activePauseScreen)
@@ -88,6 +112,7 @@ signal player_dead
 
 var player : Player = Player.new()
 var current_room : int = 1
+var current_stage : int = 0
 var current_turn : Turn = Turn.PlayerAction
 
 
@@ -103,7 +128,8 @@ enum CardEffect {
 	Damage,Block,Dodge,Daze,Bleed,Heal,DamageAll,ConvertAllAp,ConvertAllRp,Crushing,ShieldSlam,Riposte,Draw,
 	Empower,DiscardRandom,GainAp,GainRp,NoManaNextTurn,SwapActionReaction,DoubleDamageTurn,BleedAll,
 	BarbedArmor,GainApOnKill,DamageIfEnemyBleeding,DiscardAllReactionDrawEqual,BlockIfNoOtherReactionCards,DamageSelf,
-	GainEmpoweredOnKill,DoubleEmpowered,LoseAllEmpowered,GainMana,DamageEqualToMana,BlockEqualToMana,Energize
+	GainEmpoweredOnKill,DoubleEmpowered,LoseAllEmpowered,GainMana,DamageEqualToMana,BlockEqualToMana,Energize,
+	CounterAttack,DoNotDiscard
 }
 
 enum EnemyAttack {
@@ -148,8 +174,8 @@ const card_tooltips : Dictionary = {
 	CardEffect.Empower : "Empower:Your attacks will do _ more damage.",
 	CardEffect.NoManaNextTurn : "Overcharged:You wil lose 5 mana next turn. If you don't have enough mana you will be dazed.",
 	CardEffect.BarbedArmor : "Barbed Armor:Bleed is inflicted on attacking enemies equal to the damage you blocked.",
-	CardEffect.BleedAll : "Bleed:The enemy will receive _ damage per turn."
-	
+	CardEffect.BleedAll : "Bleed:The enemy will receive _ damage per turn.",
+	CardEffect.CounterAttack : "Counter Attack:After dodging deal the dodged damage amount to the enemy."
 }
 
 const dialogue_tooltips : Dictionary = {
@@ -208,7 +234,7 @@ const rewards : Array[Dictionary] = [
 		"reward" : "event",
 		"amount" : 1,
 		"tooltip" : "There is a random event after the next fight.",
-		"multiplier": 1
+		"multiplier": 2
 		
 	},
 	{
@@ -218,7 +244,13 @@ const rewards : Array[Dictionary] = [
 		"multiplier": 1
 		
 	},
-	
+	{
+		"reward" : "campfire",
+		"amount" : 1,
+		"tooltip" : "Have a chance to rest or train after the next fight.",
+		"multiplier": 3
+		
+	},
 	{
 		"reward" : "tavern",
 		"amount" : 1,
@@ -304,7 +336,7 @@ var npcs : Dictionary = {
 
 func setup_merchant_shop() -> void:
 	var relics : Array[RelicData] = []
-	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
+	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic) and !relic.no_random_pool)
 	for i in range(3):
 		var chosen_index : int = randi_range(0,relics_copy.size()-1)
 		var relic_data : RelicData = relics_copy[chosen_index]
@@ -322,6 +354,7 @@ func set_turn(newTurn : Turn) -> void:
 
 func  reset_player() -> void:
 	current_room = 1
+	current_stage = 1
 	current_turn = Turn.PlayerAction
 	player.reset()
 	level_changed.emit()
@@ -360,9 +393,15 @@ func get_reward(reward_name : String) -> RewardData:
 func get_ability(ability_name : String) -> AbilityData:
 	var filtered_abilities: Array[AbilityData] = abilities.filter(func(ability : AbilityData) -> bool: return ability._name == ability_name)
 	assert(filtered_abilities.size() != 0, ability_name + " not found !")
-	assert(filtered_abilities.size() < 2, "multiple rewards with the name " + ability_name + " found !")
+	assert(filtered_abilities.size() < 2, "multiple abilities with the name " + ability_name + " found !")
 	return filtered_abilities[0].duplicate(true)
 	
+func get_relic(relic_name : String) -> RelicData:
+	var filtered_relics: Array[RelicData] = relics.filter(func(relic : RelicData) -> bool: return relic._name == relic_name)
+	assert(filtered_relics.size() != 0, relic_name + " not found !")
+	assert(filtered_relics.size() < 2, "multiple relics with the name " + relic_name + " found !")
+	return filtered_relics[0].duplicate(true)
+		
 func get_status_effect(status_effect_name : String,amount:int) -> StatusEffectData:
 	var filtered_status_effects : Array[StatusEffectData] = status_effects.filter(func(effect : StatusEffectData) -> bool : return effect._name == status_effect_name)
 	assert(filtered_status_effects.size() != 0, status_effect_name + " not found !")

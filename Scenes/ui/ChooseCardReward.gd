@@ -13,7 +13,7 @@ func _ready() -> void:
 	$Button.disabled = disable_button_and_text
 	$Button.visible = !disable_button_and_text
 	var cards_copy : Array[CardData] = db.cards.duplicate(true)
-	cards_copy = cards_copy.filter(func(card : CardData) -> bool : return card._name != "Strike" and card._name != "Block" and card.type != db.CardType.Neutral)
+	cards_copy = cards_copy.filter(func(card : CardData) -> bool : return !card.no_random_pool)
 	if rare_only:
 		cards_copy = cards_copy.filter(func(card : CardData) -> bool : return card.is_rare)
 	for i in range(3):

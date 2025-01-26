@@ -84,15 +84,15 @@ func _on_card_hold(id : int) -> void:
 			arrow.make_visible(true)
 	dragged_card_id = id
 
-func enemy_hovered(enemy_id : int,enemy_position: Variant) -> void:
-	if enemy_id != -1 && dragged_card_id != -1 && cards[dragged_card_id].card_data.targeted && !("blind" in db.player.status_effects):
+func enemy_hovered(enemy_id : int,enemy_position: Variant, enemy_data: EnemyData) -> void:
+	if dragged_card_id != -1 && cards[dragged_card_id].card_data.targeted && !("blind" in db.player.status_effects):
 		#var animate = arrow.visible
 		selected_enemy_id = enemy_id
+		if dragged_card_id != -1:
+			cards[dragged_card_id].add_damage_color(enemy_data)
 		#arrow.visible = true
 		#arrow.set_data(cards[dragged_card_id].global_position,get_global_mouse_position(),animate)
-	else:
-		selected_enemy_id = -1
-		#arrow.visible = true
+
 
 func center_cards() -> Variant:
 	if cards.is_empty():

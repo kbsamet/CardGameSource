@@ -1,0 +1,127 @@
+[gd_scene load_steps=7 format=3 uid="uid://cr6fd7xi7miuq"]
+
+[ext_resource type="Script" path="res://Scenes/screens/fight_bg.gd" id="1_icsv5"]
+[ext_resource type="Texture2D" uid="uid://6nhx6bjh1dd7" path="res://Sprites/ui/screens/moon.png" id="2_qref8"]
+[ext_resource type="Texture2D" uid="uid://b7gc3g7ku7uu4" path="res://Sprites/ui/screens/forest_fight.png" id="3_8b0hd"]
+[ext_resource type="Texture2D" uid="uid://c8n5ra3wa0twl" path="res://Sprites/ui/light_map.webp" id="4_84d4g"]
+[ext_resource type="Script" path="res://Scenes/LightShadow.gd" id="5_egjmq"]
+[ext_resource type="Texture2D" uid="uid://b6onbyt8jhrbd" path="res://Sprites/ui/screens/snow_fight.png" id="6_xr8ck"]
+
+[node name="FightBg" type="Node2D"]
+position = Vector2(3, 0)
+script = ExtResource("1_icsv5")
+
+[node name="Forest" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -4.0
+offset_top = -2.0
+offset_right = 36.0
+offset_bottom = 38.0
+
+[node name="Moon" type="Sprite2D" parent="Forest"]
+position = Vector2(1616, 110)
+scale = Vector2(2.133, 2.133)
+texture = ExtResource("2_qref8")
+
+[node name="Background" type="Sprite2D" parent="Forest"]
+modulate = Color(0.317786, 0.316477, 0.397563, 1)
+light_mask = 7
+visibility_layer = 7
+position = Vector2(959, 569)
+scale = Vector2(2.1335, 2.19115)
+texture = ExtResource("3_8b0hd")
+
+[node name="light" type="Node2D" parent="Forest"]
+position = Vector2(1610, 113)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="Forest/light"]
+position = Vector2(-0.168238, 0.841135)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 1.03
+range_z_max = 7
+range_item_cull_mask = 2
+texture = ExtResource("4_84d4g")
+texture_scale = 1.15
+height = 30.0
+script = ExtResource("5_egjmq")
+
+[node name="UILight" type="PointLight2D" parent="Forest/light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.76
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("4_84d4g")
+texture_scale = 1.37
+script = ExtResource("5_egjmq")
+
+[node name="ShadowLight" type="PointLight2D" parent="Forest/light"]
+position = Vector2(-0.504686, 0.504683)
+color = Color(0.67451, 0.67451, 0.756863, 1)
+energy = 0.97
+range_z_max = 7
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("4_84d4g")
+texture_scale = 4.06
+height = 49.0
+script = ExtResource("5_egjmq")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Forest"]
+color = Color(0.631373, 0.690196, 0.772549, 1)
+
+[node name="Snow" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -3.0
+offset_top = -4.0
+offset_right = 37.0
+offset_bottom = 36.0
+
+[node name="Background" type="Sprite2D" parent="Snow"]
+modulate = Color(0.317786, 0.316477, 0.397563, 1)
+light_mask = 7
+visibility_layer = 7
+position = Vector2(959, 569)
+scale = Vector2(2.1335, 2.19115)
+texture = ExtResource("6_xr8ck")
+
+[node name="light" type="Node2D" parent="Snow"]
+position = Vector2(-32, -207)
+scale = Vector2(5.94433, 5.94433)
+
+[node name="SpriteLight" type="PointLight2D" parent="Snow/light"]
+position = Vector2(0.336455, -1.19209e-07)
+color = Color(0.75, 0.75, 0.75, 1)
+energy = 0.61
+range_z_max = 7
+range_item_cull_mask = 2
+texture = ExtResource("4_84d4g")
+texture_scale = 50.0
+height = 30.0
+script = ExtResource("5_egjmq")
+
+[node name="UILight" type="PointLight2D" parent="Snow/light"]
+position = Vector2(-1.02678e-05, -2.05356e-05)
+energy = 0.25
+range_z_max = 1000
+range_item_cull_mask = 4
+texture = ExtResource("4_84d4g")
+texture_scale = 50.0
+script = ExtResource("5_egjmq")
+
+[node name="ShadowLight" type="PointLight2D" parent="Snow/light"]
+position = Vector2(11.9442, 21.8696)
+energy = 0.55
+range_z_max = 7
+shadow_enabled = true
+shadow_filter = 2
+texture = ExtResource("4_84d4g")
+texture_scale = 50.0
+height = 49.0
+script = ExtResource("5_egjmq")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="Snow"]
+color = Color(0.631373, 0.690196, 0.772549, 1)

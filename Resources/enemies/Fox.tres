@@ -1,0 +1,106 @@
+[gd_resource type="Resource" script_class="EnemyData" load_steps=24 format=3 uid="uid://86qb4tfrirc0"]
+
+[ext_resource type="Script" path="res://Models/EnemyAttackData.gd" id="1_bkqud"]
+[ext_resource type="Script" path="res://Models/EnemySingleAttackData.gd" id="2_c4lyu"]
+[ext_resource type="OccluderPolygon2D" uid="uid://baiao60f47nfo" path="res://Resources/enemies/occluders/Owl Occluder.tres" id="3_nwc8h"]
+[ext_resource type="Script" path="res://Models/EnemyData.gd" id="4_vpk8v"]
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="5_uhuks"]
+
+[sub_resource type="Resource" id="Resource_yx1iy"]
+script = ExtResource("2_c4lyu")
+attack_type = 1
+amount = 6
+
+[sub_resource type="Resource" id="Resource_f7xsm"]
+script = ExtResource("2_c4lyu")
+attack_type = 12
+amount = 2
+
+[sub_resource type="Resource" id="Resource_qhjtb"]
+script = ExtResource("2_c4lyu")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_tc6ew"]
+script = ExtResource("1_bkqud")
+attacks = Array[ExtResource("2_c4lyu")]([SubResource("Resource_yx1iy"), SubResource("Resource_f7xsm"), SubResource("Resource_qhjtb")])
+
+[sub_resource type="Resource" id="Resource_1lmpr"]
+script = ExtResource("2_c4lyu")
+attack_type = 1
+amount = 6
+
+[sub_resource type="Resource" id="Resource_bubo8"]
+script = ExtResource("2_c4lyu")
+attack_type = 13
+amount = 2
+
+[sub_resource type="Resource" id="Resource_f3pbq"]
+script = ExtResource("2_c4lyu")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_ecs1s"]
+script = ExtResource("1_bkqud")
+attacks = Array[ExtResource("2_c4lyu")]([SubResource("Resource_1lmpr"), SubResource("Resource_bubo8"), SubResource("Resource_f3pbq")])
+
+[sub_resource type="Resource" id="Resource_300wv"]
+script = ExtResource("2_c4lyu")
+attack_type = 1
+amount = 6
+
+[sub_resource type="Resource" id="Resource_ywkv6"]
+script = ExtResource("2_c4lyu")
+attack_type = 16
+amount = 3
+
+[sub_resource type="Resource" id="Resource_4ah4g"]
+script = ExtResource("2_c4lyu")
+attack_type = 2
+amount = 3
+
+[sub_resource type="Resource" id="Resource_67awd"]
+script = ExtResource("1_bkqud")
+attacks = Array[ExtResource("2_c4lyu")]([SubResource("Resource_300wv"), SubResource("Resource_ywkv6"), SubResource("Resource_4ah4g")])
+
+[sub_resource type="Resource" id="Resource_0ybir"]
+script = ExtResource("2_c4lyu")
+attack_type = 10
+amount = 8
+
+[sub_resource type="Resource" id="Resource_det8j"]
+script = ExtResource("2_c4lyu")
+attack_type = 2
+amount = 2
+
+[sub_resource type="Resource" id="Resource_wnlxb"]
+script = ExtResource("1_bkqud")
+attacks = Array[ExtResource("2_c4lyu")]([SubResource("Resource_0ybir"), SubResource("Resource_det8j")])
+
+[sub_resource type="Resource" id="Resource_36ooj"]
+script = ExtResource("2_c4lyu")
+attack_type = 1
+amount = 6
+
+[sub_resource type="Resource" id="Resource_tefcr"]
+script = ExtResource("2_c4lyu")
+attack_type = 2
+amount = 1
+
+[sub_resource type="Resource" id="Resource_7dkfy"]
+script = ExtResource("1_bkqud")
+attacks = Array[ExtResource("2_c4lyu")]([SubResource("Resource_36ooj"), SubResource("Resource_tefcr")])
+
+[resource]
+script = ExtResource("4_vpk8v")
+_name = "Fox"
+health = 20
+max_health = 20
+stamina = 8
+max_stamina = 8
+difficulty = 4
+minimum_stage = 1
+maximum_stage = 1
+attacks = Array[ExtResource("1_bkqud")]([SubResource("Resource_tc6ew"), SubResource("Resource_ecs1s"), SubResource("Resource_67awd"), SubResource("Resource_wnlxb"), SubResource("Resource_7dkfy")])
+status_effects = Array[ExtResource("5_uhuks")]([])
+occluder = ExtResource("3_nwc8h")

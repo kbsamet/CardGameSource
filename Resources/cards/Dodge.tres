@@ -23,4 +23,5 @@ description = "Gain 2 dodge. Gain 1 overcharged."
 cost = 2
 targeted = false
 effects = Array[ExtResource("1_67wp4")]([SubResource("Resource_6w00h"), SubResource("Resource_2nm4o")])
-is_rare = true
+is_rare = false
+no_random_pool = false

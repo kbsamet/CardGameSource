@@ -7,4 +7,4 @@ script = ExtResource("1_6rf73")
 _name = "block"
 amount = 0
 tooltip = "Block:Block _ damage. Block is removed at the end of the round."
-hidden = true
+hidden = false

@@ -10,7 +10,7 @@ var relics : Array[RelicData]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	$Label.visible = !removeLabel
-	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic))
+	var relics_copy : Array[RelicData] = db.relics.duplicate(true).filter(func(relic: RelicData) -> bool : return !db.player.relics.has(relic) and !relic.no_random_pool)
 	for i in range(3):
 		var chosen_index : int = randi_range(0,relics_copy.size()-1)
 		var relic_data : RelicData = relics_copy[chosen_index]

@@ -41,7 +41,7 @@ func _ready() -> void:
 	add_description_colors()
 	original_text = descriptionLabel.text
 	if card_data.is_damage_card():
-		add_damage_color()
+		add_damage_color(null)
 	sprite.texture = load("res://Sprites/cards/"+card_data._name+".png")
 	if len(nameLabel.text) > 16:
 		nameLabel.scale = Vector2(0.7,0.7)
@@ -54,10 +54,10 @@ func add_description_colors()-> void:
 		if keyword_loc != -1:
 			descriptionLabel.text = descriptionLabel.text.insert(keyword_loc+len(keyword),"[/color]").insert(keyword_loc,"[color=e8c65b]")
 	
-func add_damage_color() -> void:
+func add_damage_color(enemy_data : EnemyData) -> void:
 	descriptionLabel.text = original_text
 		
-	if not ("empowered" in db.player.status_effects or "crippled" in db.player.status_effects):
+	if not ("empowered" in db.player.status_effects or "crippled" in db.player.status_effects or "trained" in db.player.status_effects):
 		for effect in card_data.effects:
 			if effect.effect == db.CardEffect.Damage:
 				descriptionLabel.text = descriptionLabel.text.replace("/damage",str(effect.amount))
@@ -68,12 +68,11 @@ func add_damage_color() -> void:
 		add_description_colors()
 		return
 	var new_damage : String = ""
-	var empowered_amount : int = 0 if "empowered" not in db.player.status_effects else db.player.status_effects["empowered"].amount
-	var crippled_amount : int = 0 if "crippled" not in db.player.status_effects else db.player.status_effects["crippled"].amount
 	
 	for effect in card_data.effects:
-		new_damage = str(max(1,effect.amount + empowered_amount - crippled_amount))
-		var color : String = "74ab74" if empowered_amount > crippled_amount else "ca5954"
+		var new_damage_amount : int = db.player.calculate_damage(effect.amount,enemy_data)
+		new_damage = str(new_damage_amount)
+		var color : String = "74ab74" if new_damage_amount > effect.amount else "ca5954"
 		if effect.effect == db.CardEffect.Damage:
 			descriptionLabel.text = descriptionLabel.text.replace("/damage","[color="+color+"]"+ new_damage + "[/color]")
 		elif effect.effect == db.CardEffect.DamageAll:
@@ -87,7 +86,7 @@ func _player_status_effect_changed()-> void:
 		disabled = true
 		sprite.material = disabledShader
 	if card_data.is_damage_card():
-		add_damage_color()
+		add_damage_color(null)
 		
 func _player_state_changed()-> void:
 	if "dazed" in db.player.status_effects:

@@ -26,6 +26,8 @@ func _ready() -> void:
 		add_child(relic_scene)
 	elif reward_data.reward == "tavern":
 		get_tree().change_scene_to_packed(tavern_scene)
+	elif reward_data.reward == "campfire":
+		get_tree().change_scene_to_packed(load("res://Scenes/screens/CampfireScene.tscn"))
 	reward.texture = load("res://Sprites/ui/rewardIcons/"+reward_data.reward+".png")
 
 func _go_to_select_reward() -> void:

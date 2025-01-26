@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="StatusEffectData" load_steps=2 format=3 uid="uid://dshcwom1nk3t4"]
+
+[ext_resource type="Script" path="res://Models/StatusEffectData.gd" id="1_5tq4m"]
+
+[resource]
+script = ExtResource("1_5tq4m")
+_name = "counter_attack"
+amount = 0
+tooltip = "Counter Attack:After dodging deal the dodged damage amount to the enemy."
+hidden = false

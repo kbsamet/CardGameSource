@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="CardData" load_steps=4 format=3 uid="uid://b3prdfjv3tmud"]
+
+[ext_resource type="Script" path="res://Models/CardEffectData.gd" id="1_eq1lr"]
+[ext_resource type="Script" path="res://Models/CardData.gd" id="2_5qfgk"]
+
+[sub_resource type="Resource" id="Resource_xt25f"]
+script = ExtResource("1_eq1lr")
+effect = 1
+amount = 1
+next_turn = false
+
+[resource]
+script = ExtResource("2_5qfgk")
+_name = "Wolf Pelt"
+type = 1
+description = "Block 1 damage. I should probably see the hunter again."
+cost = 1
+targeted = false
+effects = Array[ExtResource("1_eq1lr")]([SubResource("Resource_xt25f")])
+is_rare = false
+no_random_pool = true
